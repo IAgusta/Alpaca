@@ -7,21 +7,20 @@ use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ModuleContentController;
 use Illuminate\Support\Facades\Route;
 
+require __DIR__.'/auth.php';
 
-Route::get('/', function () { return view('welcome'); });
+Route::get('/', function () { return view('welcome'); })->name('home');
 Route::get('/about', function () { return view('about'); });
 Route::get('/contact', function () { return view('contact'); });
 Route::get('/price', function () { return view('prices'); });
 Route::get('/course-preview', function () { return view('preview'); });
 Route::get('/faqs', function () { return view('faqs'); });
+Route::get('/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
+Route::get('/monitoring', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
 
-Route::get('/dashboard', function () {
-    return view('user.dashboard');
-})->middleware(['auth', 'verified'])->name('user.dashboard');
-
-Route::get('/course', function () {
-    return view('user.course');
-})->middleware(['auth', 'verified'])->name('user.course');
+Route::get('/dashboard', function () { return view('user.dashboard'); })->middleware(['auth', 'verified'])->name('user.dashboard');
+Route::get('/course', function () { return view('user.course'); })->middleware(['auth', 'verified'])->name('user.course');
+Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,12 +32,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/course', [AdminController::class, 'course'])->name('admin.course');
 });
-
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-
-require __DIR__.'/auth.php';
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Course Routes

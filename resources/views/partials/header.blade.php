@@ -33,7 +33,7 @@
                 
                 <!-- Social Media Icons -->
                 <div class="order-lg-3 order-3 d-flex gap-2">
-                    <a href="https://github.com/IAgusta/AlphaTechTeam" class="text-dark me-3" target="_blank">
+                    <a href="https://github.com/IAgusta/Alpaca" class="text-dark me-3" target="_blank">
                         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="30" height="30" alt="GitHub">
                     </a>
                     <a href="https://discord.gg/ExzAJfgE" class="text-dark me-2" target="_blank">
