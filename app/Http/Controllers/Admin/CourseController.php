@@ -21,28 +21,26 @@ class CourseController extends Controller
         return view('admin.courses.create');
     }
     
-public function store(Request $request)
-{
+    public function store(Request $request)
+    {
 
-    $validated = $request->validate([
-        'name' => 'required|string|max:255', // Ensure 'name' is required
-        'description' => 'nullable|string',
-        'image' => 'nullable|image',
-    ]);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255', // Ensure 'name' is required
+            'description' => 'nullable|string',
+            'image' => 'nullable|image',
+        ]);
 
-    $imagePath = $request->file('image') ? $request->file('image')->store('courses', 'public') : null;
+        $imagePath = $request->file('image') ? $request->file('image')->store('courses', 'public') : null;
 
-    Course::create([
-        'name' => $request->input('name'), // ✅ Make sure 'name' is included
-        'description' => $request->input('description'),
-        'image' => $imagePath,
-        'author' => Auth::user()->name, // ✅ Ensure user is authenticated
-    ]);
+        Course::create([
+            'name' => $request->input('name'), // ✅ Make sure 'name' is included
+            'description' => $request->input('description'),
+            'image' => $imagePath,
+            'author' => Auth::user()->name, // ✅ Ensure user is authenticated
+        ]);
 
-    return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
-}
-
-    
+        return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
+    }
 
     public function destroy(Course $course)
     {
@@ -52,5 +50,41 @@ public function store(Request $request)
 
         $course->delete();
         return redirect()->route('admin.courses.index')->with('success', 'Course deleted successfully.');
+    }
+
+    public function edit($id)
+    {
+        $course = Course::findOrFail($id);
+        return view('admin.courses.edit', compact('course'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $course = Course::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $course->name = $request->name;
+        $course->description = $request->description;
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($course->image) {
+                Storage::delete('public/' . $course->image);
+            }
+
+            // Store new image
+            $imagePath = $request->file('image')->store('courses', 'public');
+            $course->image = $imagePath;
+        }
+
+        $course->save();
+
+        return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
     }
 }

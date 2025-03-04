@@ -41,6 +41,13 @@
                                 <td class="border p-2">{{ $course->author }}</td>
                                 <td class="border p-2 space-x-2">
                                     <div class="flex justify-center gap-6">
+                                        <!-- Edit Course Button -->
+                                        <a href="{{ route('admin.courses.edit', ['course' => $course->id]) }}">
+                                            <x-primary-button>
+                                                {{ __('Edit') }}
+                                            </x-primary-button>
+                                        </a>
+
                                         <!-- Manage Modules Button -->
                                         <a href="{{ route('admin.courses.modules.index', $course->id) }}">
                                             <x-primary-button>

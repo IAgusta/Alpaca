@@ -20,44 +20,98 @@ class ModuleContentController extends Controller
     public function store(Request $request, Course $course, Module $module)
     {
         $data = $request->validate([
-            'content_type' => 'required|in:text,image,video,code',
-            'content' => 'required|string',
-            'position' => 'required|integer',
+            'content_type' => 'required|in:content,exercise',
         ]);
     
-        // Ensure the module ID is set
-        $data['module_id'] = $module->id;
+        if ($request->content_type == 'content') {
+            // If "Isi" (Content), store it as plain HTML
+            $data['content'] = $request->validate([
+                'content' => 'required|string',
+            ])['content'];
+        } else {
+            // If "Latihan" (Exercise), convert data to JSON
+            $answers = [];
+            foreach ($request->input('answers') as $answer) {
+                $answers[] = [
+                    'text' => $answer['text'],
+                    'correct' => $answer['correct'] ?? false, // Ensure "correct" key exists
+                ];
+            }
     
-        // Create the content
-        $moduleContent = ModuleContent::create($data);
+            $data['content'] = json_encode([
+                'question' => $request->input('question'),
+                'answers' => $answers, // Use the processed answers array
+                'explanation' => $request->input('explanation'),
+            ]);
+        }
+    
+        // ✅ Assign the next position automatically
+        $lastPosition = $module->contents()->max('position') ?? 0;
+        $data['position'] = $lastPosition + 1;
+    
+        // ✅ Insert into database
+        $module->contents()->create($data);
     
         return back()->with('success', 'Content added successfully!');
     }
+
+    public function edit($course, $module, $moduleContent)
+    {
+        // Find the module content by ID
+        $content = ModuleContent::findOrFail($moduleContent);
+
+        // Pass the content, course, and module to the edit view
+        return view('admin.courses.modules.contents.edit', [
+            'course' => $course,
+            'module' => $module,
+            'content' => $content,
+        ]);
+    }
     
 
-    public function update(Request $request, ModuleContent $moduleContent)
+    public function update(Request $request, $course, $module, $moduleContent)
     {
-        $data = $request->validate([
-            'content_type' => 'required|in:text,image,video,code',
+        // Find the module content by ID
+        $content = ModuleContent::findOrFail($moduleContent);
+    
+        // Validate the request
+        $request->validate([
+            'content_type' => 'required|string',
             'content' => 'required|string',
-            'position' => 'required|integer',
         ]);
-
-        $moduleContent->update($data);
-        return back()->with('success', 'Content updated successfully!');
+    
+        // Update the content
+        $content->update([
+            'content_type' => $request->input('content_type'),
+            'content' => $request->input('content'),
+        ]);
+    
+        return redirect()->route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module])
+            ->with('success', 'Content updated successfully.');
     }
 
-    public function destroy(ModuleContent $moduleContent)
+    public function destroy(Course $course, Module $module, ModuleContent $moduleContent)
     {
-        $moduleContent->delete();
-        return back()->with('success', 'Content deleted successfully!');
-    }
-
-    public function reorder(Request $request)
-    {
-        foreach ($request->positions as $index => $id) {
-            ModuleContent::where('id', $id)->update(['position' => $index + 1]);
+        if ($moduleContent->module_id !== $module->id) {
+            return response()->json(['success' => false, 'error' => 'Unauthorized'], 403);
         }
+    
+        $moduleContent->delete();
         return response()->json(['success' => true]);
     }
+    
+
+    public function reorder(Request $request, Course $course, Module $module)
+    {
+        $positions = $request->input('positions');
+    
+        foreach ($positions as $position) {
+            ModuleContent::where('id', $position['id'])
+                ->where('module_id', $module->id)
+                ->update(['position' => $position['position']]);
+        }
+    
+        return response()->json(['success' => true]);
+    }
+    
 }

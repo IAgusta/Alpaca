@@ -12,7 +12,7 @@
                 <div class="flex justify-between mb-4">
                     <a href="{{ route('admin.courses.index') }}">
                         <x-secondary-button>
-                            {{ __('Back to Courses') }}
+                            {{ __('Back') }}
                         </x-secondary-button>
                     </a>
 

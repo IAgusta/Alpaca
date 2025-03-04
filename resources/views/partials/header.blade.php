@@ -3,8 +3,9 @@
         <!-- Logo -->
         <a class="navbar-brand" href="/">
             <img src="img/logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
-            <span>Alpaca</span>
+            <span style="font-family: 'FitGree', sans-serif; font-weight: 600;">Alpaca</span>
         </a>
+        
         
         <!-- Search Bar -->
         <form class="d-flex ms-3">
@@ -22,7 +23,7 @@
                 <!-- Navigasi List -->
                 <ul class="navbar-nav ms-lg-auto me-3 order-lg-1 order-2">
                     <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/course-preview">Our Course</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/news">Our News</a></li>
                 </ul>
                 
                 <div class="order-lg-2 order-1 me-3">

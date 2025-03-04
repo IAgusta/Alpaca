@@ -5,15 +5,17 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ModuleContentController;
+use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
 
+Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');
 Route::get('/', function () { return view('welcome'); })->name('home');
 Route::get('/about', function () { return view('about'); });
 Route::get('/contact', function () { return view('contact'); });
 Route::get('/price', function () { return view('prices'); });
-Route::get('/course-preview', function () { return view('preview'); });
+Route::get('/news', function () { return view('news'); });
 Route::get('/faqs', function () { return view('faqs'); });
 Route::get('/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
 Route::get('/monitoring', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
@@ -38,6 +40,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses.index');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
+    Route::get('/admin/courses/{course}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
+    Route::put('/admin/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
     // Module Routes (inside a course)
@@ -54,11 +58,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     ->name('admin.courses.modules.contents.')
     ->group(function () {
         Route::get('/', [ModuleContentController::class, 'index'])->name('index');
-        Route::get('/create', [ModuleContentController::class, 'create'])->name('create'); // Show create form
         Route::post('/', [ModuleContentController::class, 'store'])->name('store');
         Route::get('/{moduleContent}/edit', [ModuleContentController::class, 'edit'])->name('edit'); // Show edit form
         Route::patch('/{moduleContent}', [ModuleContentController::class, 'update'])->name('update'); // Update content
-        Route::delete('/{moduleContent}', [ModuleContentController::class, 'destroy'])->name('destroy'); // Delete content
+        Route::delete('/{moduleContent}', [ModuleContentController::class, 'destroy'])->name('destroy');// Delete content
         Route::post('/reorder', [ModuleContentController::class, 'reorder'])->name('reorder'); // Reorder content
     });
 });

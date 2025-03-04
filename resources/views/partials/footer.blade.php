@@ -16,9 +16,9 @@
       <div class="col-6 col-md-2 mb-3">
         <h5>Features</h5>
         <ul class="nav flex-column">
-          <li class="nav-item mb-2"><a href="/course-preview" class="nav-link p-0 text-body-secondary">Online Courses</a></li>
+          <li class="nav-item mb-2"><a href="/course" class="nav-link p-0 text-body-secondary">Online Courses</a></li>
           <li class="nav-item mb-2"><a href="/price" class="nav-link p-0 text-body-secondary">Tutor</a></li>
-          <li class="nav-item mb-2"><a href="/login" class="nav-link p-0 text-body-secondary">Session</a></li>
+          <li class="nav-item mb-2"><a href="/dashboard" class="nav-link p-0 text-body-secondary">Session</a></li>
           <li class="nav-item mb-2"><a href="https://wa.me/6282171639538" target="blank" class="nav-link p-0 text-body-secondary">Customer Service</a></li>
         </ul>
       </div>
