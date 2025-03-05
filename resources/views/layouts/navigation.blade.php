@@ -27,6 +27,13 @@
                             {{ __('Courses') }}
                         </x-nav-link>
 
+                        <!-- Admin Management User (For Admin Only)-->
+                        @if(auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')">
+                            {{ __('Manage User') }}
+                        </x-nav-link>
+                        @endif
+
                         <!-- Plugins Dropdown -->
                         <div class="relative">
                             <button @click="pluginsOpen = !pluginsOpen" 
@@ -156,6 +163,13 @@
                     :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
                     {{ __('Courses') }}
                 </x-responsive-nav-link>
+
+                <!-- Admin Management User (For Admin Only)-->
+                @if(auth()->user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')">
+                    {{ __('Manage User') }}
+                </x-responsive-nav-link>
+                @endif
 
                 <!-- Robot Control Link -->
                 <x-responsive-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')">

@@ -30,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'only.admin'])->group(function () {
+    Route::get('/admin/manage-users', [AdminController::class, 'manageUsers'])->name('admin.manage-user');
+});
+
 // Routes for admin and teach
 Route::middleware(['auth', 'admin'])->group(function () {
     // Admin Dashboard

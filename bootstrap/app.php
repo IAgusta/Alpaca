@@ -13,9 +13,11 @@ return Application::configure(basePath: dirname(__DIR__))
     
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'admin' => App\Http\Middleware\AdminMiddleware::class, // ✅ Register admin middleware
+            'admin' => App\Http\Middleware\AdminMiddleware::class, // ✅ Admin & Teach
+            'only.admin' => App\Http\Middleware\OnlyAdminMiddleware::class, // ✅ Only Admin
         ]);
     })
+    
 
     ->withExceptions(function (Exceptions $exceptions) {
         //

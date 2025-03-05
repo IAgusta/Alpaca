@@ -55,13 +55,14 @@
                                             </x-primary-button>
                                         </a>
 
-                                        <!-- Delete Course Form -->
+                                        <!-- Delete Course Button -->
                                         <x-danger-button
                                             x-data=""
-                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-course-deletion')"
-                                        >{{ __('Delete') }} </x-danger-button>
+                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-course-deletion-{{ $course->id }}')"
+                                        >{{ __('Delete') }}</x-danger-button>
 
-                                        <x-modal name="confirm-course-deletion" focusable>
+                                        <!-- Delete Course Modal -->
+                                        <x-modal name="confirm-course-deletion-{{ $course->id }}" focusable>
                                             <form method="post" action="{{ route('admin.courses.destroy', $course->id) }}" class="p-6">
                                                 @csrf
                                                 @method('delete')
@@ -75,10 +76,10 @@
                                                 </p>
                                         
                                                 <div class="mt-6">
-                                                    <x-input-label for="course_name" value="{{ __('Course Name') }}" class="sr-only" />
+                                                    <x-input-label for="course_name_{{ $course->id }}" value="{{ __('Course Name') }}" class="sr-only" />
                                         
                                                     <x-text-input
-                                                        id="course_name"
+                                                        id="course_name_{{ $course->id }}"
                                                         name="course_name"
                                                         type="text"
                                                         class="mt-1 block w-3/4"
