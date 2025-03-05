@@ -17,7 +17,7 @@
                         {{ __('Create New Course') }}
                     </x-primary-button>
                 </a>
-                
+
                 <table class="w-full border-collapse border border-gray-200 mt-4">
                     <thead>
                         <tr class="bg-gray-100">
@@ -38,11 +38,11 @@
                                     @endif
                                 </td>
                                 <td class="border p-2">{{ $course->name }}</td>
-                                <td class="border p-2">{{ $course->author }}</td>
+                                <td class="border p-2">{{ $course->authorUser->name ?? 'Unknown' }}</td>
                                 <td class="border p-2 space-x-2">
                                     <div class="flex justify-center gap-6">
                                         <!-- Edit Course Button -->
-                                        <a href="{{ route('admin.courses.edit', ['course' => $course->id]) }}">
+                                        <a href="{{ route('admin.courses.edit', $course->id) }}">
                                             <x-primary-button>
                                                 {{ __('Edit') }}
                                             </x-primary-button>

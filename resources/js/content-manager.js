@@ -43,11 +43,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        // Initialize Quill for the main content editor (if it exists)
         if (editorElement) {
             const quill = new Quill('#editor', quillConfig);
-
-            // Save Quill Editor Content
+        
+            // Set initial content after Quill initializes
+            quill.root.innerHTML = document.querySelector('#content-hidden').value;
+        
             quill.on('text-change', () => {
                 document.querySelector('#content-hidden').value = quill.root.innerHTML;
             });

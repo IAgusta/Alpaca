@@ -27,7 +27,7 @@
 
                 <!-- Content Editor (for "content" type) -->
                 @if ($content->content_type === 'content')
-                    <div id="content-editor" class="mb-2">
+                    <div class="mb-2">
                         <label class="block text-sm font-medium text-gray-700">Content</label>
                         <div id="editor" class="w-full border border-gray-300 rounded-md shadow-sm">{!! $content->content !!}</div>
                         <input type="hidden" name="content" id="content-hidden" value="{{ $content->content }}">
@@ -70,8 +70,13 @@
                     </div>
                 @endif
 
-                <!-- Submit Button -->
-                <x-primary-button type="submit">Update</x-primary-button>
+                <form method="POST" action="{{ route('admin.courses.modules.contents.update', [$course, $module, $content]) }}">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" id="content-hidden" name="content">
+                    <button type="submit">Save</button>
+                </form>
+                
             </form>
         </div>
     </div>

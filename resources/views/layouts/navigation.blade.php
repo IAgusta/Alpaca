@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ auth()->check() ? (auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard')) : route('home') }}" 
+                    <a href="{{ auth()->check() ? (auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.dashboard') : route('user.dashboard')) : route('home') }}" 
                        class="flex items-center space-x-2">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                         <span class="text-gray-800 font-semibold">Alpaca</span>
@@ -16,14 +16,14 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex items-center">
                     @auth
                         <!-- Dashboard Link -->
-                        <x-nav-link :href="auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard')" 
-                            :active="auth()->user()->role === 'admin' ? request()->routeIs('admin.dashboard') : request()->routeIs('user.dashboard')">
+                        <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.dashboard') : route('user.dashboard')" 
+                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.dashboard') : request()->routeIs('user.dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
 
                         <!-- Courses Link -->
-                        <x-nav-link :href="auth()->user()->role === 'admin' ? route('admin.courses.index') : route('user.course')" 
-                            :active="auth()->user()->role === 'admin' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
+                        <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.courses.index') : route('user.course')" 
+                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
                             {{ __('Courses') }}
                         </x-nav-link>
 
@@ -41,17 +41,17 @@
                             <div x-show="pluginsOpen" @click.away="pluginsOpen = false" 
                                 class="absolute left-0 top-full z-20 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                                 <div class="py-1">
-                                <!-- Robot Control Link -->
-                                <x-dropdown-link :href="route('plugins.robotControl')" 
-                                    :active="request()->routeIs('plugins.robotControl')">
-                                    {{ __('Robot Control') }}
-                                </x-dropdown-link>
+                                    <!-- Robot Control Link -->
+                                    <x-dropdown-link :href="route('plugins.robotControl')" 
+                                        :active="request()->routeIs('plugins.robotControl')">
+                                        {{ __('Robot Control') }}
+                                    </x-dropdown-link>
 
-                                <!-- monitoring Link -->
-                                <x-dropdown-link :href="route('plugins.monitoring')" 
-                                    :active="request()->routeIs('plugins.monitoring')">
-                                    {{ __('Monitoring') }}
-                                </x-dropdown-link>
+                                    <!-- Monitoring Link -->
+                                    <x-dropdown-link :href="route('plugins.monitoring')" 
+                                        :active="request()->routeIs('plugins.monitoring')">
+                                        {{ __('Monitoring') }}
+                                    </x-dropdown-link>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                             {{ __('Robot Control') }}
                         </x-nav-link>
 
-                        <!-- monitoring Link -->
+                        <!-- Monitoring Link -->
                         <x-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')">
                             {{ __('Monitoring') }}
                         </x-nav-link>
@@ -146,14 +146,14 @@
         <div class="pt-2 pb-3 space-y-0.5">
             @auth
                 <!-- Dashboard Link -->
-                <x-responsive-nav-link :href="auth()->user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard')" 
-                    :active="auth()->user()->role === 'admin' ? request()->routeIs('admin.dashboard') : request()->routeIs('user.dashboard')">
+                <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.dashboard') : route('user.dashboard')" 
+                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.dashboard') : request()->routeIs('user.dashboard')">
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
 
                 <!-- Courses Link -->
-                <x-responsive-nav-link :href="auth()->user()->role === 'admin' ? route('admin.courses.index') : route('user.course')" 
-                    :active="auth()->user()->role === 'admin' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
+                <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.courses.index') : route('user.course')" 
+                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
                     {{ __('Courses') }}
                 </x-responsive-nav-link>
 
@@ -162,21 +162,20 @@
                     {{ __('Robot Control') }}
                 </x-responsive-nav-link>
 
-                <!-- monitoring Link -->
+                <!-- Monitoring Link -->
                 <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')">
                     {{ __('Monitoring') }}
                 </x-responsive-nav-link>
+            @else
+                <!-- Robot Control Link -->
+                <x-responsive-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')">
+                    {{ __('Robot Control') }}
+                </x-responsive-nav-link>
 
-                @else
-                    <!-- Robot Control Link -->
-                    <x-responsive-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')">
-                        {{ __('Robot Control') }}
-                    </x-responsive-nav-link>
-
-                    <!-- monitoring Link -->
-                    <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')">
-                        {{ __('Monitoring') }}
-                    </x-responsive-nav-link>
+                <!-- Monitoring Link -->
+                <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')">
+                    {{ __('Monitoring') }}
+                </x-responsive-nav-link>
             @endauth
         </div>
 

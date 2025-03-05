@@ -86,8 +86,7 @@ class ModuleContentController extends Controller
             'content' => $request->input('content'),
         ]);
     
-        return redirect()->route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module])
-            ->with('success', 'Content updated successfully.');
+        return redirect()->route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module])->with('success', 'Content updated successfully.');
     }
 
     public function destroy(Course $course, Module $module, ModuleContent $moduleContent)

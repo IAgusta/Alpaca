@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Log; // ✅ Log for debugging
+use Illuminate\Support\Facades\Log;
 
 class AdminMiddleware
 {
@@ -15,7 +15,8 @@ class AdminMiddleware
         // Debugging: Log the current user details
         Log::info('AdminMiddleware Check', ['user' => Auth::user()]);
 
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        // Check if the user is authenticated and has the role of admin or teach
+        if (Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'teach')) {
             return $next($request);
         }
 

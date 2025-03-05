@@ -30,18 +30,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Routes for admin and teach
 Route::middleware(['auth', 'admin'])->group(function () {
+    // Admin Dashboard
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/course', [AdminController::class, 'course'])->name('admin.course');
-});
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Course Routes
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses.index');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
     Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
-    Route::get('/admin/courses/{course}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
-    Route::put('/admin/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
+    Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
+    Route::put('/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
     // Module Routes (inside a course)
@@ -54,15 +54,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::put('/{module}', [ModuleController::class, 'update'])->name('update'); // Update module
     });
 
+    // Module Content Routes
     Route::prefix('/courses/{course}/modules/{module}/contents')
-    ->name('admin.courses.modules.contents.')
-    ->group(function () {
-        Route::get('/', [ModuleContentController::class, 'index'])->name('index');
-        Route::post('/', [ModuleContentController::class, 'store'])->name('store');
-        Route::get('/{moduleContent}/edit', [ModuleContentController::class, 'edit'])->name('edit'); // Show edit form
-        Route::patch('/{moduleContent}', [ModuleContentController::class, 'update'])->name('update'); // Update content
-        Route::delete('/{moduleContent}', [ModuleContentController::class, 'destroy'])->name('destroy');// Delete content
-        Route::post('/reorder', [ModuleContentController::class, 'reorder'])->name('reorder'); // Reorder content
-    });
+        ->name('admin.courses.modules.contents.')
+        ->group(function () {
+            Route::get('/', [ModuleContentController::class, 'index'])->name('index');
+            Route::post('/', [ModuleContentController::class, 'store'])->name('store');
+            Route::get('/{moduleContent}/edit', [ModuleContentController::class, 'edit'])->name('edit'); // Show edit form
+            Route::patch('/{moduleContent}', [ModuleContentController::class, 'update'])->name('update'); // Update content
+            Route::delete('/{moduleContent}', [ModuleContentController::class, 'destroy'])->name('destroy'); // Delete content
+            Route::post('/reorder', [ModuleContentController::class, 'reorder'])->name('reorder'); // Reorder content
+        });
 });
-
