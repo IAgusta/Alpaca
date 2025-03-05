@@ -74,30 +74,63 @@ class ModuleContentController extends Controller
         // Find the module content by ID
         $content = ModuleContent::findOrFail($moduleContent);
     
-        // Validate the request
-        $request->validate([
-            'content_type' => 'required|string',
-            'content' => 'required|string',
-        ]);
+        // Validate the request based on content type
+        if ($content->content_type === 'content') {
+            $request->validate([
+                'content' => 'required|string',
+            ]);
     
-        // Update the content
-        $content->update([
-            'content_type' => $request->input('content_type'),
-            'content' => $request->input('content'),
-        ]);
+            // Update the content for 'content' type
+            $content->update([
+                'content' => $request->input('content'),
+            ]);
+        } elseif ($content->content_type === 'exercise') {
+            $request->validate([
+                'question' => 'required|string',
+                'answers' => 'required|array',
+                'answers.*.text' => 'required|string',
+                'answers.*.correct' => 'nullable|boolean',
+                'explanation' => 'nullable|string',
+            ]);
     
-        return redirect()->route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module])->with('success', 'Content updated successfully.');
+            // Prepare the exercise data
+            $exerciseData = [
+                'question' => $request->input('question'),
+                'answers' => $request->input('answers'),
+                'explanation' => $request->input('explanation'),
+            ];
+    
+            // Update the content for 'exercise' type
+            $content->update([
+                'content' => json_encode($exerciseData), // Store as JSON
+            ]);
+        }
+    
+        // Redirect with success message
+        return redirect()->route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module])
+                         ->with('success', 'Content updated successfully.');
     }
 
-    public function destroy(Course $course, Module $module, ModuleContent $moduleContent)
+    public function destroy(Request $request, Course $course, Module $module, ModuleContent $moduleContent)
     {
         if ($moduleContent->module_id !== $module->id) {
             return response()->json(['success' => false, 'error' => 'Unauthorized'], 403);
         }
     
         $moduleContent->delete();
-        return response()->json(['success' => true]);
+    
+        // If it's an AJAX request, return JSON
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+    
+        // Otherwise, redirect back to the content page with a success message
+        return redirect()->route('admin.courses.modules.contents.index', [
+            'course' => $course->id,
+            'module' => $module->id
+        ])->with('success', 'Content deleted successfully!');
     }
+    
     
 
     public function reorder(Request $request, Course $course, Module $module)

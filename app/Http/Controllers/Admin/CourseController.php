@@ -94,18 +94,27 @@ class CourseController extends Controller
         return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
     }
 
-    public function destroy(Course $course)
+    public function destroy(Request $request, Course $course)
     {
         // Allow only admins or course owners to delete
         if (Auth::user()->role !== 'admin' && intval($course->author) !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
     
+        // Validate the course name
+        $request->validate([
+            'course_name' => ['required', 'string', 'in:' . $course->name],
+        ]);
+    
+        // Delete the course image if it exists
         if ($course->image) {
             Storage::disk('public')->delete($course->image);
         }
     
+        // Delete the course
         $course->delete();
+    
+        // Redirect with a success message
         return redirect()->route('admin.courses.index')->with('success', 'Course deleted successfully.');
     }
 }

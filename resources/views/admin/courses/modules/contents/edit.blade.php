@@ -15,7 +15,8 @@
             </a>
 
             <!-- Edit Form -->
-            <form method="POST" action="{{ route('admin.courses.modules.contents.update', ['course' => $course, 'module' => $module, 'moduleContent' => $content->id]) }}">
+            <form method="POST" action="{{ route('admin.courses.modules.contents.update', ['course' => $course, 'module' => $module, 'moduleContent' => $content->id]) }}" 
+                  onsubmit="updateContentBeforeSubmit()">
                 @csrf
                 @method('PATCH')
 
@@ -70,13 +71,10 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('admin.courses.modules.contents.update', [$course, $module, $content]) }}">
-                    @csrf
-                    @method('PATCH')
-                    <input type="hidden" id="content-hidden" name="content">
-                    <button type="submit">Save</button>
-                </form>
-                
+                <!-- Save Button -->
+                <x-primary-button type="submit">
+                    {{ __('Save') }}
+                </x-primary-button>
             </form>
         </div>
     </div>

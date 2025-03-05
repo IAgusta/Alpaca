@@ -52,6 +52,9 @@
             <!-- Preview Section -->
             <div class="mt-6">
                 <h3 class="text-lg font-semibold">Preview</h3>
+                @if(session('success'))
+                <x-input-success :messages="[session('success')]" />
+                @endif
                 <!-- Exiting Content -->
                 <ul class="mt-2 space-y-2 sortable-list" data-url="{{ route('admin.courses.modules.contents.reorder', ['course' => $course->id, 'module' => $module->id]) }}">
                     @foreach ($module->contents->sortBy('position') as $content)
@@ -85,13 +88,47 @@
                                 @endif
                             </div>
                             <!-- Action Buttons -->
-                            <div class="flex gap-2">
-                                <a href="{{ route('admin.courses.modules.contents.edit', ['course' => $course->id, 'module' => $module->id, 'moduleContent' => $content->id]) }}" class="text-blue-600">Edit</a>
-                                <form action="{{ route('admin.courses.modules.contents.destroy', ['course' => $course->id, 'module' => $module->id, 'moduleContent' => $content->id]) }}" method="POST" class="delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 delete-btn">Delete</button>
-                                </form>
+                            <div>
+                                <a href="{{ route('admin.courses.modules.contents.edit', ['course' => $course->id, 'module' => $module->id, 'moduleContent' => $content->id]) }}">
+                                    <x-secondary-button>
+                                        {{ __('Edit') }}
+                                    </x-secondary-button>
+                                </a>
+
+                                <!-- Delete Content Button -->
+                                <x-danger-button
+                                    x-data=""
+                                    x-on:click.prevent="$dispatch('open-modal', 'confirm-content-deletion-{{ $content->id }}')"
+                                >
+                                    {{ __('Delete') }}
+                                </x-danger-button>
+
+                                <x-modal name="confirm-content-deletion-{{ $content->id }}" focusable>
+                                    <form method="post" action="{{ route('admin.courses.modules.contents.destroy', ['course' => $course->id, 'module' => $module->id, 'moduleContent' => $content->id]) }}" class="p-6">
+                                        @csrf
+                                        @method('delete')
+
+                                        <h2 class="text-lg font-medium text-gray-900">
+                                            {{ __('Are you sure you want to delete this content?') }}
+                                        </h2>
+
+                                        <p class="mt-1 text-sm text-gray-600">
+                                            {{ __('Once deleted, this content cannot be recovered.') }}
+                                        </p>
+
+                                        <div class="mt-6 flex justify-end">
+                                            <!-- Cancel button to close the modal -->
+                                            <x-secondary-button x-on:click="$dispatch('close')">
+                                                {{ __('Cancel') }}
+                                            </x-secondary-button>
+
+                                            <!-- Delete button to submit the form -->
+                                            <x-danger-button class="ms-3">
+                                                {{ __('Delete Content') }}
+                                            </x-danger-button>
+                                        </div>
+                                    </form>
+                                </x-modal>
                             </div>
                         </li>
                     @endforeach

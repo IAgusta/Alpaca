@@ -8,15 +8,15 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                @if(session('success'))
-                <x-input-success :messages="[session('success')]" />
-                @endif
-
                 <a href="{{ route('admin.courses.create') }}">
                     <x-primary-button type="button">
                         {{ __('Create New Course') }}
                     </x-primary-button>
                 </a>
+
+                @if(session('success'))
+                <x-input-success :messages="[session('success')]" />
+                @endif
 
                 <table class="w-full border-collapse border border-gray-200 mt-4">
                     <thead>
@@ -51,18 +51,57 @@
                                         <!-- Manage Modules Button -->
                                         <a href="{{ route('admin.courses.modules.index', $course->id) }}">
                                             <x-primary-button>
-                                                {{ __('Manage Modules') }}
+                                                {{ __('Manage') }}
                                             </x-primary-button>
                                         </a>
 
                                         <!-- Delete Course Form -->
-                                        <form action="{{ route('admin.courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course?');" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <x-danger-button>
-                                                {{ __('Delete') }}
-                                            </x-danger-button>
-                                        </form>
+                                        <x-danger-button
+                                            x-data=""
+                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-course-deletion')"
+                                        >{{ __('Delete') }} </x-danger-button>
+
+                                        <x-modal name="confirm-course-deletion" focusable>
+                                            <form method="post" action="{{ route('admin.courses.destroy', $course->id) }}" class="p-6">
+                                                @csrf
+                                                @method('delete')
+                                        
+                                                <h2 class="text-lg font-medium text-gray-900">
+                                                    {{ __('Are you sure you want to delete this course?') }}
+                                                </h2>
+                                        
+                                                <p class="mt-1 text-sm text-gray-600">
+                                                    {{ __('Once the course is deleted, all of its data will be permanently removed. Please type the course name to confirm.') }}
+                                                </p>
+                                        
+                                                <div class="mt-6">
+                                                    <x-input-label for="course_name" value="{{ __('Course Name') }}" class="sr-only" />
+                                        
+                                                    <x-text-input
+                                                        id="course_name"
+                                                        name="course_name"
+                                                        type="text"
+                                                        class="mt-1 block w-3/4"
+                                                        placeholder="{{ __('Enter the course name') }}"
+                                                    />
+                                        
+                                                    <!-- Error message for course name validation -->
+                                                    <x-input-error :messages="$errors->courseDeletion->get('course_name')" class="mt-2" />
+                                                </div>
+                                        
+                                                <div class="mt-6 flex justify-end">
+                                                    <!-- Cancel button to close the modal -->
+                                                    <x-secondary-button x-on:click="$dispatch('close')">
+                                                        {{ __('Cancel') }}
+                                                    </x-secondary-button>
+                                        
+                                                    <!-- Delete button to submit the form -->
+                                                    <x-danger-button class="ms-3">
+                                                        {{ __('Delete Course') }}
+                                                    </x-danger-button>
+                                                </div>
+                                            </form>
+                                        </x-modal>
                                     </div>
                                 </td>
                             </tr>

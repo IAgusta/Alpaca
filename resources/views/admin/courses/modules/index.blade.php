@@ -48,17 +48,44 @@
 
                                         <a href="{{ route('admin.courses.modules.contents.index', ['course' => $course->id, 'module' => $module->id]) }}">
                                             <x-primary-button>
-                                                {{ __('Manage Content') }}
+                                                {{ __('Manage') }}
                                             </x-primary-button>
                                         </a>
                                     
-                                        <form action="{{ route('admin.courses.modules.destroy', ['course' => $course->id, 'module' => $module->id]) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this module?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <x-danger-button>
-                                                {{ __('Delete') }}
-                                            </x-danger-button>
-                                        </form>
+                                        <!-- Delete Module Button -->
+                                        <x-danger-button
+                                            x-data=""
+                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-module-deletion-{{ $module->id }}')"
+                                        >
+                                            {{ __('Delete') }}
+                                        </x-danger-button>
+
+                                        <x-modal name="confirm-module-deletion-{{ $module->id }}" focusable>
+                                            <form method="post" action="{{ route('admin.courses.modules.destroy', ['course' => $course->id, 'module' => $module->id]) }}" class="p-6">
+                                                @csrf
+                                                @method('delete')
+
+                                                <h2 class="text-lg font-medium text-gray-900">
+                                                    {{ __('Are you sure you want to delete this module?') }}
+                                                </h2>
+
+                                                <p class="mt-1 text-sm text-gray-600">
+                                                    {{ __('Once deleted, this module and its contents will be permanently removed.') }}
+                                                </p>
+
+                                                <div class="mt-6 flex justify-end">
+                                                    <!-- Cancel button to close the modal -->
+                                                    <x-secondary-button x-on:click="$dispatch('close')">
+                                                        {{ __('Cancel') }}
+                                                    </x-secondary-button>
+
+                                                    <!-- Delete button to submit the form -->
+                                                    <x-danger-button class="ms-3">
+                                                        {{ __('Delete Module') }}
+                                                    </x-danger-button>
+                                                </div>
+                                            </form>
+                                        </x-modal>
                                     </td>
                                 </div>
                             </tr>
@@ -71,7 +98,6 @@
                         @endforelse
                     </tbody>
                 </table>
-
             </div>
         </div>
     </div>
