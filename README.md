@@ -8,60 +8,19 @@
   <strong>Created by: Ikraam Agusta</strong>
 </p>
 
-## About Laravel
+## About Alpaca
+  Alpaca or Alpa/Alfa Path Academy is an educational project purpose for educationg young generations, right now this project is solely for my last year assigment on computer engineering but i hope to continiue developing this project into a functional website.
+  
+  Maybe u will questioning why the computer engineering making a complicated website for the final year project, i just feels if i graduate only with simple projects as they are, and nothing special. i will wasted my tutition colagge that gifted by national goverment (KIP). So i make this instead.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+  the purpose for this web at first is only for monitoring an esp32 and for module study for elementary student for SD 1 Adzkia Padang, but i've got some troublesome idea's. what about making a complex website that have e-learning like, monitoring system, and controlling system on it. so my final years not become waste. and here it is.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+  But thanks to Documentation and help from ChatGPT and Deepseek AI (sometimes the documentations doesnt help) i dont need to study from zero to building this project. Thanks who ever that make the documentation and train the AI i appreciate you.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Feature on Alpaca
+  Like i said before we have an elearning system that having course, module, and the content on it. we have login with email verification,
+  some plugins and API for monitorings your lovely kids on studying the course or the robots.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Note
+  This project still need to development futher, so don't judge to much.
+  Because my major is not a computer science, but computer engineering instead *+*
