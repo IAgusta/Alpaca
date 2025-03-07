@@ -27,7 +27,7 @@
                 </ul>
                 
                 <div class="order-lg-2 order-1 me-3">
-                    <a href="/login" class="btn rounded-login-btn"> 
+                    <a href="/dashboard" class="btn rounded-login-btn"> 
                         <i class="bi bi-box-arrow-in-right"></i> Login
                     </a>
                 </div>

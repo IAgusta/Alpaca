@@ -1,34 +1,33 @@
 <nav x-data="{ open: false, pluginsOpen: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ auth()->check() ? (auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.dashboard') : route('user.dashboard')) : route('home') }}" 
-                       class="flex items-center space-x-2">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                        <span class="text-gray-800 font-semibold">Alpaca</span>
-                    </a>
+                    <a href="{{ auth()->check() ? route('dashboard') : route('home') }}"
+                        class="flex items-center space-x-2">
+                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                         <span class="text-gray-800 font-semibold">Alpaca</span>
+                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex items-center">
                     @auth
                         <!-- Dashboard Link -->
-                        <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.dashboard') : route('user.dashboard')" 
-                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.dashboard') : request()->routeIs('user.dashboard')">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
 
                         <!-- Courses Link -->
-                        <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.courses.index') : route('user.course')" 
-                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
+                        <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
+                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
                             {{ __('Courses') }}
                         </x-nav-link>
 
-                        <!-- Admin Management User (For Admin Only)-->
-                        @if(auth()->user()->role === 'admin')
+                        <!-- Admin Management User (For Admin and Owner Only)-->
+                        @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
                         <x-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')">
                             {{ __('Manage User') }}
                         </x-nav-link>
@@ -153,19 +152,18 @@
         <div class="pt-2 pb-3 space-y-0.5">
             @auth
                 <!-- Dashboard Link -->
-                <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.dashboard') : route('user.dashboard')" 
-                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.dashboard') : request()->routeIs('user.dashboard')">
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
-
+    
                 <!-- Courses Link -->
-                <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? route('admin.courses.index') : route('user.course')" 
-                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
+                <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
+                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
                     {{ __('Courses') }}
                 </x-responsive-nav-link>
-
-                <!-- Admin Management User (For Admin Only)-->
-                @if(auth()->user()->role === 'admin')
+    
+                <!-- Admin Management User (For Admin and Owner Only)-->
+                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
                 <x-responsive-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')">
                     {{ __('Manage User') }}
                 </x-responsive-nav-link>

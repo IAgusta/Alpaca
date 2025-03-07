@@ -17,10 +17,10 @@ Route::get('/contact', function () { return view('contact'); });
 Route::get('/price', function () { return view('prices'); });
 Route::get('/news', function () { return view('news'); });
 Route::get('/faqs', function () { return view('faqs'); });
-Route::get('/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
-Route::get('/monitoring', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
+Route::get('/plugins/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
+Route::get('/plugins/monitoring', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
 
-Route::get('/dashboard', function () { return view('user.dashboard'); })->middleware(['auth', 'verified'])->name('user.dashboard');
+Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/course', function () { return view('user.course'); })->middleware(['auth', 'verified'])->name('user.course');
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
 
@@ -39,10 +39,6 @@ Route::middleware(['auth', 'only.admin'])->group(function () {
 
 // Routes for admin and teach
 Route::middleware(['auth', 'admin'])->group(function () {
-    // Admin Dashboard
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/course', [AdminController::class, 'course'])->name('admin.course');
-
     // Course Routes
     Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses.index');
     Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');

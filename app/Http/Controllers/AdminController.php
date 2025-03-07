@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    public function dashboard()
-    {
-        return view('admin.dashboard');
-    }
-
     public function course()
     {
         return view('admin.course');
@@ -21,9 +16,15 @@ class AdminController extends Controller
 
     public function manageUsers()
     {
-        $users = User::where('id', '!=', Auth::user()->id)
-                        ->where('role', '!=', 'admin')
-                        ->get();
+        // Allow owner to see all users, including admins
+        if (Auth::user()->role === 'owner') {
+            $users = User::where('id', '!=', Auth::user()->id)->get();
+        } else {
+            // For admin, exclude other admins
+            $users = User::where('id', '!=', Auth::user()->id)
+                         ->where('role', '!=', 'admin')
+                         ->get();
+        }
 
         return view('admin.manage-user', compact('users'));
     }
@@ -31,22 +32,31 @@ class AdminController extends Controller
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-    
+
         // Validate the role input
         $request->validate([
-            'role' => 'required|in:teach,user', // Only allow 'teach' or 'user' roles
+            'role' => 'required|in:admin,teach,user', // Allow 'admin', 'teach', or 'user' roles
         ]);
-    
-        // Check if the role can be changed
-        if ($user->canChangeRole()) {
+
+        // Only allow owner to change roles to admin
+        if (Auth::user()->role === 'owner') {
             $user->role = $request->role;
             $user->last_role_change = Carbon::now();
             $user->save();
-    
+
             return redirect()->back()->with('success', 'User role updated successfully.');
         }
-    
-        return redirect()->back()->with('error', 'You can only change this user’s role once every 24 hours.');
+
+        // For admin, restrict role changes to only 'teach' or 'user'
+        if (Auth::user()->role === 'admin' && in_array($request->role, ['teach', 'user'])) {
+            $user->role = $request->role;
+            $user->last_role_change = Carbon::now();
+            $user->save();
+
+            return redirect()->back()->with('success', 'User role updated successfully.');
+        }
+
+        return redirect()->back()->with('error', 'You are not authorized to perform this action.');
     }
 
     public function toggleActive($id)
@@ -54,15 +64,21 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->active = !$user->active;
         $user->save();
-    
+
         return redirect()->back()->with('success', 'User status updated successfully.');
     }
 
     public function deleteUser($id)
     {
         $user = User::findOrFail($id);
+
+        // Prevent owner from deleting themselves
+        if ($user->id === Auth::user()->id) {
+            return redirect()->back()->with('error', 'You cannot delete yourself.');
+        }
+
         $user->delete();
-    
+
         return redirect()->back()->with('success', 'User deleted successfully.');
     }
 }

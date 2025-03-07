@@ -26,8 +26,8 @@
       <div class="col-6 col-md-2 mb-3">
         <h5>Plugins</h5>
         <ul class="nav flex-column">
-          <li class="nav-item mb-2"><a href="/robot-control" class="nav-link p-0 text-body-secondary">Controller</a></li>
-          <li class="nav-item mb-2"><a href="/monitoring" class="nav-link p-0 text-body-secondary">Monitoring</a></li>
+          <li class="nav-item mb-2"><a href="/plugins/robot-control" class="nav-link p-0 text-body-secondary">Controller</a></li>
+          <li class="nav-item mb-2"><a href="/plugins/monitoring" class="nav-link p-0 text-body-secondary">Monitoring</a></li>
         </ul>
       </div>
 
@@ -45,7 +45,7 @@
     </div>
 
     <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
-      <p>© 2025 Alpa Path Academy, Inc. All rights reserved.</p>
+      <p>© 2025 <a href="/" class="">Alpaca™</a>., Inc. All rights reserved.</p>
       <ul class="list-unstyled d-flex">
         <li class="ms-3">
           <a class="link-body-emphasis" href="https://www.x.com" target="blank">

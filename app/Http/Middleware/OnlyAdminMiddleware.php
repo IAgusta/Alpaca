@@ -11,8 +11,8 @@ class OnlyAdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Allow ONLY admin role
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        // Allow admin and owner roles
+        if (Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'owner')) {
             return $next($request);
         }
 

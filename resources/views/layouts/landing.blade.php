@@ -12,13 +12,13 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <link rel="stylesheet" href="resources/css/styles.css">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body>
+    <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-            
+
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white shadow">
@@ -28,6 +28,7 @@
                 </header>
             @endisset
 
+            <!-- Page Content -->
             <main>
                 {{ $slot }}
             </main>

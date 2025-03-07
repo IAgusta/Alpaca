@@ -14,11 +14,13 @@ class AdminMiddleware
     {
         // Debugging: Log the current user details
         Log::info('AdminMiddleware Check', ['user' => Auth::user()]);
-
-        // Check if the user is authenticated and has the role of admin or teach
-        if (Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'teach')) {
+    
+        // Check if the user is authenticated and has the role of owner, admin, or teach
+        if (Auth::check() && (Auth::user()->role === 'owner' || Auth::user()->role === 'admin' || Auth::user()->role === 'teach')) {
             return $next($request);
         }
-        return redirect('/dashboard');
+    
+        // Redirect or abort if the user is not authorized
+        abort(403, 'Unauthorized');
     }
 }

@@ -35,26 +35,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     modules: ['Resize', 'DisplaySize']
                 },
-                handlers: {
-                    image: function () {
-                        imageHandler(this.quill); // Pass the Quill instance to the handler
-                    }
-                }
             }
         };
 
+        // Initialize Quill for the content editor
         if (editorElement) {
             const quill = new Quill('#editor', quillConfig);
-        
+
             // Set initial content after Quill initializes
             quill.root.innerHTML = document.querySelector('#content-hidden').value;
-        
+
             quill.on('text-change', () => {
                 document.querySelector('#content-hidden').value = quill.root.innerHTML;
             });
         }
 
-        // Initialize Quill for the question editor (if it exists)
+        // Initialize Quill for the question editor
         if (questionEditorElement) {
             const questionQuill = new Quill('#question-editor', quillConfig);
 
@@ -133,36 +129,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
             };
         }
-
-        // 🗑 Delete Content
-        document.querySelectorAll('.delete-form').forEach(form => {
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                if (!confirm("Are you sure you want to delete this content?")) return;
-
-                const formAction = form.getAttribute('action');
-                const formMethod = form.querySelector('input[name="_method"]').value;
-
-                fetch(formAction, {
-                    method: formMethod,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Content deleted successfully!");
-                        form.closest('.content-item').remove();
-                    } else {
-                        alert("❌ Failed to delete content.");
-                    }
-                })
-                .catch(error => console.error("Error:", error));
-            });
-        });
 
         // Switch between Content & Exercise (only for create form)
         if (contentTypeSelect) {
