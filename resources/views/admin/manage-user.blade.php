@@ -27,7 +27,6 @@
                                     <th scope="col" class="px-6 py-3 text-center" id="sort-role">
                                         <div class="flex items-center justify-center">
                                             Role
-                                            <!-- Sorting Icon for Role -->
                                             <a href="#" class="ml-1" id="role-sort-icon">
                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                                     <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z"/>
@@ -49,7 +48,6 @@
                                             {{ $user->email }}
                                         </td>
                                         <td class="px-6 py-4 text-center">
-                                            <!-- Role Dropdown -->
                                             <div class="relative">
                                                 <button id="dropdownDefaultButton-{{ $user->id }}" data-dropdown-toggle="dropdown-{{ $user->id }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
                                                     {{ ucfirst($user->role) }}
@@ -58,16 +56,14 @@
                                                     </svg>
                                                 </button>
 
-                                                <!-- Dropdown menu -->
                                                 <div id="dropdown-{{ $user->id }}" class="absolute z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
                                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton-{{ $user->id }}">
-                                                        <!-- Show 'admin' option only for owner -->
                                                         @if(Auth::user()->role === 'owner')
                                                             <li>
                                                                 <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" 
                                                                    data-role="admin" 
                                                                    data-user-id="{{ $user->id }}"
-                                                                   x-on:click.prevent="$dispatch('open-modal', 'confirm-role-change')">
+                                                                   x-on:click.prevent="changeUserRole('{{ $user->id }}', 'admin')">
                                                                    Admin
                                                                 </a>
                                                             </li>
@@ -76,7 +72,7 @@
                                                             <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" 
                                                                data-role="teach" 
                                                                data-user-id="{{ $user->id }}"
-                                                               x-on:click.prevent="$dispatch('open-modal', 'confirm-role-change')">
+                                                               x-on:click.prevent="changeUserRole('{{ $user->id }}', 'teach')">
                                                                Teacher
                                                             </a>
                                                         </li>
@@ -84,46 +80,15 @@
                                                             <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" 
                                                                data-role="user" 
                                                                data-user-id="{{ $user->id }}"
-                                                               x-on:click.prevent="$dispatch('open-modal', 'confirm-role-change')">
+                                                               x-on:click.prevent="changeUserRole('{{ $user->id }}', 'user')">
                                                                User
                                                             </a>
                                                         </li>
                                                     </ul>
                                                 </div>
-                                                <!-- Role Change Modal -->
-                                                <x-modal name="confirm-role-change" focusable>
-                                                    <form id="role-change-form" method="POST" class="p-6">
-                                                        @csrf
-                                                        @method('PUT') <!-- Use PUT method for role update -->
-
-                                                        <h2 class="text-lg font-medium text-gray-900">
-                                                            {{ __('Are you sure you want to change the role?') }}
-                                                        </h2>
-
-                                                        <p class="mt-1 text-sm text-gray-600">
-                                                            {{ __('This will update the user\'s role.') }}
-                                                        </p>
-
-                                                        <!-- Hidden input for role -->
-                                                        <input type="hidden" id="modal-role-input" name="role">
-
-                                                        <div class="mt-6 flex justify-end">
-                                                            <!-- Cancel button to close the modal -->
-                                                            <x-secondary-button x-on:click="$dispatch('close')">
-                                                                {{ __('Cancel') }}
-                                                            </x-secondary-button>
-
-                                                            <!-- Confirm button to submit the form -->
-                                                            <x-danger-button class="ms-3">
-                                                                {{ __('Confirm') }}
-                                                            </x-danger-button>
-                                                        </div>
-                                                    </form>
-                                                </x-modal>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 text-center">
-                                            <!-- Status Toggle Button -->
                                             <form method="POST" action="{{ route('admin.toggleActive', $user->id) }}">
                                                 @csrf
                                                 @method('PUT')
@@ -133,7 +98,6 @@
                                             </form>
                                         </td>
                                         <td class="px-6 py-4 text-center">
-                                            <!-- Delete User Button -->
                                             <x-danger-button
                                                 x-data=""
                                                 x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion-{{ $user->id }}')"
@@ -141,7 +105,6 @@
                                                 {{ __('Delete') }}
                                             </x-danger-button>
 
-                                            <!-- Delete User Modal -->
                                             <x-modal name="confirm-user-deletion-{{ $user->id }}" focusable>
                                                 <form method="post" action="{{ route('admin.deleteUser', $user->id) }}" class="p-6">
                                                     @csrf
@@ -156,12 +119,9 @@
                                                     </p>
 
                                                     <div class="mt-6 flex justify-end">
-                                                        <!-- Cancel button to close the modal -->
                                                         <x-secondary-button x-on:click="$dispatch('close')">
                                                             {{ __('Cancel') }}
                                                         </x-secondary-button>
-
-                                                        <!-- Delete button to submit the form -->
                                                         <x-danger-button class="ms-3">
                                                             {{ __('Delete User') }}
                                                         </x-danger-button>
@@ -179,8 +139,5 @@
         </div>
     </div>
 
-    <!-- Include Flowbite JS for dropdown functionality -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     @vite(['resources/js/data-user.js'])
 </x-app-layout>

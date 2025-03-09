@@ -7,8 +7,14 @@ use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\ModuleContentController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RobotController;
 
 require __DIR__.'/auth.php';
+
+Route::post('/set-esp32-ip', [RobotController::class, 'setEsp32Ip']);
+Route::get('/robot/{command}', [RobotController::class, 'sendCommand']);
+Route::get('/robot/speed', [RobotController::class, 'updateSpeed']);
+Route::get('/robot/connect', [RobotController::class, 'connect']);
 
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');
 Route::get('/', function () { return view('welcome'); })->name('home');
@@ -19,6 +25,9 @@ Route::get('/news', function () { return view('news'); });
 Route::get('/faqs', function () { return view('faqs'); });
 Route::get('/plugins/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
 Route::get('/plugins/monitoring', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
+Route::get('/documentation', function(){ return view('plugins.documentation');})->name('documentation');
+Route::get('/documentation-esp32', function () { return view('plugins.documentation.esp32');})->name('documentation.esp32');
+Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');
 
 Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/course', function () { return view('user.course'); })->middleware(['auth', 'verified'])->name('user.course');

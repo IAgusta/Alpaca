@@ -1,7 +1,24 @@
+document.addEventListener('alpine:init', () => {
+    Alpine.data('roleChangeModal', () => ({
+        changeUserRole(userId, role) {
+            if (confirm('Are you sure you want to change the role?')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/users/${userId}`;
+                form.innerHTML = `
+                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="role" value="${role}">
+                `;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    }));
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     // Select modal, form, and input fields
-    const roleChangeForm = document.getElementById('role-change-form');
-    const modalRoleInput = document.getElementById('modal-role-input');
     const roleColumn = document.getElementById('sort-role');
     const roleSortIcon = document.getElementById('role-sort-icon');
     let sortAscending = true;
@@ -15,12 +32,19 @@ document.addEventListener('DOMContentLoaded', function () {
             const role = this.getAttribute('data-role');
             const userId = this.getAttribute('data-user-id');
 
-            // Update the modal form action and input field
-            roleChangeForm.action = `/admin/users/${userId}`; // Use your route
-            modalRoleInput.value = role;
-
-            // Open the modal using Alpine.js
-            Alpine.$dispatch('open-modal', 'confirm-role-change');
+            // Confirm role change
+            if (confirm('Are you sure you want to change the role?')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/users/${userId}`;
+                form.innerHTML = `
+                    <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="role" value="${role}">
+                `;
+                document.body.appendChild(form);
+                form.submit();
+            }
         });
     });
 

@@ -32,31 +32,29 @@ class AdminController extends Controller
     public function updateUser(Request $request, $id)
     {
         $user = User::findOrFail($id);
-
-        // Validate the role input
-        $request->validate([
-            'role' => 'required|in:admin,teach,user', // Allow 'admin', 'teach', or 'user' roles
-        ]);
-
-        // Only allow owner to change roles to admin
-        if (Auth::user()->role === 'owner') {
-            $user->role = $request->role;
-            $user->last_role_change = Carbon::now();
-            $user->save();
-
-            return redirect()->back()->with('success', 'User role updated successfully.');
+        $authUser = Auth::user();
+    
+        $request->validate(['role' => 'required|in:admin,teach,user']);
+    
+        if ($authUser->role === 'owner') {
+            // Owner can set any role
+            $user->update([
+                'role' => $request->role,
+                'last_role_change' => Carbon::now()
+            ]);
+            return back()->with('success', 'Role updated successfully');
         }
-
-        // For admin, restrict role changes to only 'teach' or 'user'
-        if (Auth::user()->role === 'admin' && in_array($request->role, ['teach', 'user'])) {
-            $user->role = $request->role;
-            $user->last_role_change = Carbon::now();
-            $user->save();
-
-            return redirect()->back()->with('success', 'User role updated successfully.');
+    
+        if ($authUser->role === 'admin' && in_array($request->role, ['teach', 'user'])) {
+            // Admin can only set teach/user
+            $user->update([
+                'role' => $request->role,
+                'last_role_change' => Carbon::now()
+            ]);
+            return back()->with('success', 'Role updated successfully');
         }
-
-        return redirect()->back()->with('error', 'You are not authorized to perform this action.');
+    
+        return back()->with('error', 'Unauthorized action');
     }
 
     public function toggleActive($id)

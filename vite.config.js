@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/content-manager.js',
                 'resources/js/data-user.js',
+                'resources/js/robot-control.js',
             ],
             refresh: true,
         }),
