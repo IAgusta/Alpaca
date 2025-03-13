@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Plugins - Robot Controller') }}
-            <a href="/documentation-esp32" class="ml-3" id="documentation-link">
+            <a href="{{ route('documentation')}}" class="ml-3" id="documentation-link">
                 <x-secondary-button> {{ __('Documentation') }}</x-secondary-button>
             </a>
         </h2>

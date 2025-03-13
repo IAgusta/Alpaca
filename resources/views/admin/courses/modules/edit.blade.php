@@ -1,38 +1,46 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Module: ') . $module->title }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <a href="{{ route('admin.courses.modules.index', $course->id) }}">
-                    <x-secondary-button>
-                        {{ __('Back to Modules') }}
-                    </x-secondary-button>
-                </a>
-
-                <form action="{{ route('admin.courses.modules.update', ['course' => $course->id, 'module' => $module->id]) }}" method="POST" class="mt-4">
-                    @csrf
-                    @method('PUT')
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Module Title</label>
-                        <input type="text" name="title" value="{{ $module->title }}" required class="w-full border rounded p-2">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Description</label>
-                        <textarea name="description" class="w-full border rounded p-2">{{ $module->description }}</textarea>
-                    </div>
-
-                    <x-primary-button type="submit">
-                        {{ __('Update Module') }}
-                    </x-primary-button>
-                </form>
-            </div>
-        </div>
+<div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Editing {{ $module->title }}
+        </h3>
+        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal-module-edit-{{ $module->id }}">
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+            <span class="sr-only">Close modal</span>
+        </button>
     </div>
-</x-app-layout>
+
+    @if($errors->any())
+        <x-input-error :messages="$errors->all()" class="mb-4" />
+    @endif
+
+    <div class="relative p-4 md:p-5">
+        <form action="{{ route('admin.courses.modules.update', ['course' => $course->id, 'module' => $module->id]) }}" method="POST">
+            @csrf
+            @method('PUT')
+
+            <!-- Module Title -->
+            <div>
+                <x-input-label class="mb-3" for="title" :value="__('Module Title')" />
+                <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $module->title)" required autofocus autocomplete="title" />
+                <x-input-error :messages="$errors->get('title')" class="mt-2" />
+            </div>
+
+            <!-- Description -->
+            <div class="mt-4">
+                <x-input-label for="description" :value="__('Description')" />
+                <textarea id="description" name="description" class="block mt-1 w-full border-gray-300 rounded">{{ old('description', $module->description) }}</textarea>
+                <x-input-error :messages="$errors->get('description')" class="mt-2" />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-4">
+                <x-primary-button>
+                    {{ __('Update Module') }}
+                </x-primary-button>
+            </div>
+        </form>
+    </div>
+</div>

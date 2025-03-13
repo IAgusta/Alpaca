@@ -30,7 +30,7 @@ Route::get('/documentation-esp32', function () { return view('plugins.documentat
 Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');
 
 Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/course', function () { return view('user.course'); })->middleware(['auth', 'verified'])->name('user.course');
+Route::get('/courses', function () { return view('user.course'); })->middleware(['auth', 'verified'])->name('user.course');
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
 
 Route::middleware('auth')->group(function () {
@@ -49,25 +49,20 @@ Route::middleware(['auth', 'only.admin'])->group(function () {
 // Routes for admin and teach
 Route::middleware(['auth', 'admin'])->group(function () {
     // Course Routes
-    Route::get('/courses', [CourseController::class, 'index'])->name('admin.courses.index');
-    Route::get('/courses/create', [CourseController::class, 'create'])->name('admin.courses.create');
+    Route::get('/courses-index', [CourseController::class, 'index'])->name('admin.courses.index');
     Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
-    Route::get('/courses/{course}/edit', [CourseController::class, 'edit'])->name('admin.courses.edit');
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
     // Module Routes (inside a course)
-    Route::prefix('/courses/{course}/modules')->name('admin.courses.modules.')->group(function () {
-        Route::get('/', [ModuleController::class, 'index'])->name('index'); // List modules
-        Route::get('/create', [ModuleController::class, 'create'])->name('create'); // Show create module form
+    Route::prefix('/courses-index/{course}/modules')->name('admin.courses.modules.')->group(function () {
         Route::post('/', [ModuleController::class, 'store'])->name('store'); // Store new module
         Route::delete('/{module}', [ModuleController::class, 'destroy'])->name('destroy'); // Delete module
-        Route::get('/{module}/edit', [ModuleController::class, 'edit'])->name('edit'); // Show edit module form
         Route::put('/{module}', [ModuleController::class, 'update'])->name('update'); // Update module
     });
 
     // Module Content Routes
-    Route::prefix('/courses/{course}/modules/{module}/contents')
+    Route::prefix('/courses-index/{course}/modules/{module}/contents')
         ->name('admin.courses.modules.contents.')
         ->group(function () {
             Route::get('/', [ModuleContentController::class, 'index'])->name('index');

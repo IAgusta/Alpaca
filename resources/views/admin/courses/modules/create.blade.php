@@ -1,37 +1,28 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Create Module for ') . $course->name }}
-        </h2>
-    </x-slot>
+<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            Create Module Chapter On Bellow
+        </h3>
+    </div>
+    <form action="{{ route('admin.courses.modules.store', $course->id) }}" method="POST" class="mt-4">
+        @csrf
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <a href="{{ route('admin.courses.modules.index', $course->id) }}">
-                    <x-secondary-button>
-                        {{ __('Back to Modules') }}
-                    </x-secondary-button>
-                </a>
+        <div class="flex flex-col md:flex-row md:space-x-4">
+            {{-- Module Title --}}
+            <div class="mb-4 md:mb-0 md:w-1/2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Module Title</label>
+                <input type="text" name="title" required class="w-full border rounded p-2">
+            </div>
 
-                <form action="{{ route('admin.courses.modules.store', $course->id) }}" method="POST" class="mt-4">
-                    @csrf
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Module Title</label>
-                        <input type="text" name="title" required class="w-full border rounded p-2">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Description</label>
-                        <textarea name="description" class="w-full border rounded p-2"></textarea>
-                    </div>
-
-                    <x-primary-button type="submit">
-                        {{ __('Create Module') }}
-                    </x-primary-button>
-                </form>
+            {{-- Module Description --}}
+            <div class="mb-4 md:mb-0 md:w-1/2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                <textarea name="description" class="w-full border rounded p-2"></textarea>
             </div>
         </div>
-    </div>
-</x-app-layout>
+
+        <x-primary-button class="my-4" type="submit">
+            {{ __('Create Module') }}
+        </x-primary-button>
+    </form>
+</div>

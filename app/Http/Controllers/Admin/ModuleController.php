@@ -30,13 +30,14 @@ class ModuleController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        Module::create([
+        $module = Module::create([
             'course_id' => $course_id,
             'title' => $request->title,
             'description' => $request->description,
         ]);
 
-        return redirect()->route('admin.courses.modules.index', $course_id)->with('success', 'Module created successfully.');
+        return redirect()->route('admin.courses.index', $course_id)
+        ->with('success', 'New Module Chapter is Added into ' . $module->course->name);
     }
 
     public function edit(Course $course, Module $module)
@@ -56,14 +57,14 @@ class ModuleController extends Controller
         $module->description = $request->description;
         $module->save();
 
-        return redirect()->route('admin.courses.modules.index', $course->id)->with('success', 'Module updated successfully!');
+        return redirect()->route('admin.courses.index', $course->id)->with('success', 'Module updated successfully!');
     }
 
     public function destroy(Course $course, Module $module)
     {
         $module->delete(); // Delete the module
 
-        return redirect()->route('admin.courses.modules.index', $course->id)
+        return redirect()->route('admin.courses.index', $course->id)
                         ->with('success', 'Module deleted successfully.');
     }
 }

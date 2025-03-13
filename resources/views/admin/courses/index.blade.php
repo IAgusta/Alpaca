@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Course Management') }}
-            <a class="ml-4" href="/course"><x-secondary-button>Preview</x-secondary-button></a>
+            <a class="ml-4" href="{{ route('user.course') }}"><x-secondary-button>Preview</x-secondary-button></a>
         </h2>
     </x-slot>
 
@@ -17,16 +17,24 @@
                 <!-- Course Cards -->
                 <div class="flex flex-wrap gap-4 justify-start">
                     <!-- Add New Course Card -->
-                    <a href="{{ route('admin.courses.create') }}" 
+                    <div data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create"
                     class="relative w-52 h-auto bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col items-center justify-center p-4">
                     
-                    <div class="flex flex-col items-center justify-center h-40">
-                        <svg class="w-16 h-16 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                        </svg>
-                        <p class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Add New Course</p>
+                        <div class="flex flex-col items-center justify-center h-40">
+                            <svg class="w-16 h-16 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            <p class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Add New Course</p>
+                        </div>
                     </div>
-                    </a>
+
+                    <!-- Main modal -->
+                    <div id="crud-modal-create" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                        <div class="relative p-4 w-full max-w-md max-h-full">
+                            @include('admin.courses.create')
+                        </div>
+                    </div>
+
                     @foreach($courses as $course)
                     <div class="relative w-52 h-auto bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition">
                             <!-- Course Image -->
@@ -43,9 +51,16 @@
                                 <div id="courseDropdown-{{ $course->id }}" class="hidden absolute right-2 top-10 z-10 w-44 bg-white rounded-lg shadow-lg dark:bg-gray-700">
                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                         <li>
-                                            <a href="{{ route('admin.courses.edit', $course->id) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
+                                            <div data-modal-target="crud-modal-update-{{ $course->id }}" data-modal-toggle="crud-modal-update-{{ $course->id }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</div>
                                         </li>
                                     </ul>
+                                </div>
+
+                                <!-- Main modal -->
+                                <div id="crud-modal-update-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    <div class="relative p-4 w-full max-w-md max-h-full">
+                                        @include('admin.courses.edit', ['course' => $course])
+                                    </div>
                                 </div>
                             </div>
 
@@ -103,10 +118,17 @@
 
                                 <div class="flex mt-2 mb-2 justify-center space-x-2">
                                     <!-- Open Button -->
-                                    <a href="{{ route('admin.courses.modules.index', $course->id) }}">
+                                    <div data-modal-target="crud-modal-module-{{ $course->id }}" data-modal-toggle="crud-modal-module-{{ $course->id }}">
                                         <x-primary-button class="mt-2 px-4 py-2 text-sm">Open</x-primary-button>
-                                    </a>
+                                    </div>
 
+                                    <!-- Main modal for modules -->
+                                    <div id="crud-modal-module-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                        <div class="relative p-4 w-full max-w-7xl max-h-full md:max-w-6xl">
+                                            @include('admin.courses.modules.index', ['course' => $course, 'modules' => $course->modules])
+                                        </div>
+                                    </div>
+                                    
                                     <!-- Delete Course Button -->
                                     <x-danger-button class="mt-2 px-4 py-2 text-sm" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-course-deletion-{{ $course->id }}')">
                                         {{ __('Delete') }}
@@ -160,4 +182,5 @@
             </div>
         </div>
     </div>
+    @vite(['resources/js/course-theme.js'])
 </x-app-layout>
