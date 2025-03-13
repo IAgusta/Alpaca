@@ -36,6 +36,7 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image',
+            'theme' => 'nullable|string|max:255',
         ]);
 
         $imagePath = $request->file('image') ? $request->file('image')->store('courses', 'public') : null;
@@ -44,7 +45,8 @@ class CourseController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'image' => $imagePath,
-            'author' => Auth::id(), // Store the user ID in the 'author' column
+            'author' => Auth::id(),
+            'theme' => $request->input('theme'),
         ]);
 
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
@@ -75,6 +77,7 @@ class CourseController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'theme' => 'nullable|string|max:255',
         ]);
     
         $course->name = $request->name;

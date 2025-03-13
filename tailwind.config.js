@@ -21,6 +21,6 @@ export default {
 
     plugins: [
         forms,
-        flowbite, // Add Flowbite as a plugin
+        require('flowbite/plugin'), // Add Flowbite as a plugin
     ],
 };

@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6 max-w-8xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
             <!-- Back Button -->
             <a href="{{ route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module]) }}" class="mb-4 inline-block">

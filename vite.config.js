@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/content-manager.js',
                 'resources/js/data-user.js',
                 'resources/js/robot-control.js',
+                'resources/js/course-theme.js',
             ],
             refresh: true,
         }),

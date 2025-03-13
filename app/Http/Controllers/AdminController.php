@@ -23,6 +23,7 @@ class AdminController extends Controller
             // For admin, exclude other admins
             $users = User::where('id', '!=', Auth::user()->id)
                          ->where('role', '!=', 'admin')
+                         ->where('role', '!=', 'owner')
                          ->get();
         }
 

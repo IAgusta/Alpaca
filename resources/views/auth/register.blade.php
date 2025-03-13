@@ -20,7 +20,25 @@
         <!-- Birth Date -->
         <div class="mt-4">
             <x-input-label class="mb-3" for="birth_date" :value="__('Birth Date')" />
-            <x-text-input id="birth_date" class="block mt-1 w-full" type="date" name="birth_date" :value="old('birth_date')" min="1950-01-01" max="2050-12-31" required />
+            <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                    </svg>
+                </div>
+                <input 
+                    id="birth_date" 
+                    type="text" 
+                    name="birth_date" 
+                    value="{{ old('birth_date') }}"
+                    required
+                    data-datepicker
+                    data-datepicker-buttons
+                    data-datepicker-autoselect-today
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                    placeholder="Select date"
+                >
+            </div>
             <x-input-error :messages="$errors->get('birth_date')" class="mt-2" />
         </div>
 
@@ -64,4 +82,16 @@
             </x-primary-button>
         </div>
     </form>
+<!-- Required Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
+<script>
+    // Initialize datepicker with proper options
+    document.addEventListener('DOMContentLoaded', function() {
+        new Datepicker(document.getElementById('birth_date'), {
+            // Optional configuration
+            format: 'yyyy-mm-dd', // Match your DB date format
+            autohide: true, // Auto-close after selection
+        });
+    });
+</script>
 </x-guest-layout>
