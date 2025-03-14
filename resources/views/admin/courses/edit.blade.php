@@ -35,12 +35,21 @@
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
             </div>
 
+            @if ($course->is_locked)
+                <div class="mt-4">
+                    <x-input-label :value="__('Current Lock Password')" />
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">
+                        {{ $course->lock_password ?? 'Password not available' }}
+                    </p>
+                </div>
+            @endif
+
             <!-- Course Theme Selection -->
             <div class="my-4">
-                <x-input-label for="theme" :value="__('Course Theme')" />
+                <x-input-label for="theme-{{ $course->id }}" :value="__('Course Theme')" />
 
                 <!-- Selected Themes + New Button -->
-                <div id="selected-themes" class="flex flex-wrap items-center gap-2">
+                <div id="selected-themes-{{ $course->id }}" class="flex flex-wrap items-center gap-2">
                     @if(old('theme', $course->theme))
                         @php
                             $themes = explode(',', old('theme', $course->theme));
@@ -49,28 +58,28 @@
                             @if(trim($theme))
                                 <div class="theme-badge inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm mr-2">
                                     {{ trim($theme) }}
-                                    <button type="button" onclick="removeTheme(this)" class="ml-1 text-blue-600 hover:text-blue-800">×</button>
+                                    <button type="button" onclick="removeTheme(this, '{{ $course->id }}')" class="ml-1 text-blue-600 hover:text-blue-800">×</button>
                                 </div>
                             @endif
                         @endforeach
                     @endif
-                    <span id="new-theme-trigger" class="text-blue-600 cursor-pointer hover:text-blue-800" onclick="showThemeInput()">
+                    <span id="new-theme-trigger-{{ $course->id }}" class="text-blue-600 cursor-pointer hover:text-blue-800" onclick="showThemeInput('{{ $course->id }}')">
                         New+
                     </span>
                 </div>
 
                 <!-- New Theme Input -->
-                <div id="new-theme-container" class="hidden items-center gap-2 mt-2">
-                    <input type="text" id="new-theme-input" 
+                <div id="new-theme-container-{{ $course->id }}" class="hidden items-center gap-2 mt-2">
+                    <input type="text" id="new-theme-input-{{ $course->id }}" 
                             class="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 w-40" 
                             placeholder="Enter theme">
-                    <x-secondary-button type="button" onclick="addTheme()">
+                    <x-secondary-button type="button" onclick="addTheme('{{ $course->id }}')">
                         {{ __('Add') }}
                     </x-secondary-button>
                 </div>
 
                 <!-- Hidden Input Field -->
-                <input type="hidden" id="theme-input" name="theme" value="{{ old('theme', $course->theme) }}">
+                <input type="hidden" id="theme-input-{{ $course->id }}" name="theme" value="{{ old('theme', $course->theme) }}">
 
                 <x-input-error :messages="$errors->get('theme')" class="mt-2" />
             </div>

@@ -15,14 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->enum('role', ['owner', 'admin', 'teach', 'user'])->default('user'); 
+            $table->enum('role', ['owner', 'admin', 'trainer', 'user'])->default('user'); 
             $table->date('birth_date')->nullable();
             $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->boolean('active')->default(true);
             $table->timestamp('last_role_change')->nullable();
         });
 

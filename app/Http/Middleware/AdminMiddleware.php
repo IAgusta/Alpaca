@@ -15,8 +15,8 @@ class AdminMiddleware
         // Debugging: Log the current user details
         Log::info('AdminMiddleware Check', ['user' => Auth::user()]);
     
-        // Check if the user is authenticated and has the role of owner, admin, or teach
-        if (Auth::check() && (Auth::user()->role === 'owner' || Auth::user()->role === 'admin' || Auth::user()->role === 'teach')) {
+        // Check if the user is authenticated and has the role of owner, admin, or trainer
+        if (Auth::check() && (Auth::user()->role === 'owner' || Auth::user()->role === 'admin' || Auth::user()->role === 'trainer')) {
             return $next($request);
         }
     

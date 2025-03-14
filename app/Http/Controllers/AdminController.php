@@ -35,7 +35,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $authUser = Auth::user();
     
-        $request->validate(['role' => 'required|in:admin,teach,user']);
+        $request->validate(['role' => 'required|in:admin,trainer,user']);
     
         if ($authUser->role === 'owner') {
             // Owner can set any role
@@ -46,8 +46,8 @@ class AdminController extends Controller
             return back()->with('success', 'Role updated successfully');
         }
     
-        if ($authUser->role === 'admin' && in_array($request->role, ['teach', 'user'])) {
-            // Admin can only set teach/user
+        if ($authUser->role === 'admin' && in_array($request->role, ['trainer', 'user'])) {
+            // Admin can only set trainer/user
             $user->update([
                 'role' => $request->role,
                 'last_role_change' => Carbon::now()

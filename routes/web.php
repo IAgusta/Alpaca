@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ModuleContentController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RobotController;
+use App\Http\Controllers\UserCourseController;
 
 require __DIR__.'/auth.php';
 
@@ -30,8 +31,16 @@ Route::get('/documentation-esp32', function () { return view('plugins.documentat
 Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');
 
 Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth', 'verified'])->name('dashboard');
-Route::get('/courses', function () { return view('user.course'); })->middleware(['auth', 'verified'])->name('user.course');
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/courses', [UserCourseController::class, 'index'])->name('user.course');
+    Route::post('/user/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
+    Route::get('/user/courses/preview/{courseId}', [UserCourseController::class, 'preview'])->name('user.course.preview');
+    Route::get('/user/courses/open/{courseId}', [UserCourseController::class, 'open'])->name('user.course.open');
+    Route::post('/user/courses/clear-history/{courseId}', [UserCourseController::class, 'clearHistory'])->name('user.course.clearHistory');
+    Route::delete('/user/courses/delete/{courseId}', [UserCourseController::class, 'delete'])->name('user.course.delete');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,12 +55,14 @@ Route::middleware(['auth', 'only.admin'])->group(function () {
     Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 });
 
-// Routes for admin and teach
+// Routes for admin and trainer
 Route::middleware(['auth', 'admin'])->group(function () {
     // Course Routes
     Route::get('/courses-index', [CourseController::class, 'index'])->name('admin.courses.index');
     Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
     Route::put('/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
+    Route::post('/courses/{course}/lock', [CourseController::class, 'lockCourse'])->name('course.lockCourse');
+    Route::post('/courses/{course}/unlock', [CourseController::class, 'unlockCourse'])->name('course.unlockCourse');
     Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
     // Module Routes (inside a course)

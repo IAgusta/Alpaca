@@ -40,7 +40,7 @@
         </div>
 
         <div class="flex flex-col space-y-4 mt-4">
-            <div class="text-center text-gray-600 justify-between flex items-center mb-4">
+            <div class="text-center text-gray-600 justify-between flex items-center">
                 <div>
                     <span class="text-sm text-gray-600">{{ 'Tidak Punya Akun?' }}</span>
                     <a href="{{ route('register') }}" class="underline text-sm text-indigo-600 hover:text-gray-900">

@@ -2,7 +2,9 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Course Management') }}
-            <a class="ml-4" href="{{ route('user.course') }}"><x-secondary-button>Preview</x-secondary-button></a>
+            <a class="ml-4" href="{{ route('user.course') }}">
+                <x-secondary-button>Preview</x-secondary-button>
+            </a>
         </h2>
     </x-slot>
 
@@ -18,7 +20,7 @@
                 <div class="flex flex-wrap gap-4 justify-start">
                     <!-- Add New Course Card -->
                     <div data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create"
-                    class="relative w-52 h-auto bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col items-center justify-center p-4">
+                    class="relative w-52 h-auto max-h-410px bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col items-center justify-center p-4">
                     
                         <div class="flex flex-col items-center justify-center h-40">
                             <svg class="w-16 h-16 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -36,7 +38,7 @@
                     </div>
 
                     @foreach($courses as $course)
-                    <div class="relative w-52 h-auto bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition">
+                    <div class="relative w-52 h-auto max-h-410px bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition">
                             <!-- Course Image -->
                             <div class="relative">
                                 <button data-dropdown-toggle="courseDropdown-{{ $course->id }}" class="absolute top-2 right-0 bg-transparent p-2 rounded-full hover:bg-gray-200">
@@ -51,15 +53,63 @@
                                 <div id="courseDropdown-{{ $course->id }}" class="hidden absolute right-2 top-10 z-10 w-44 bg-white rounded-lg shadow-lg dark:bg-gray-700">
                                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                         <li>
-                                            <div data-modal-target="crud-modal-update-{{ $course->id }}" data-modal-toggle="crud-modal-update-{{ $course->id }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</div>
+                                            <div data-modal-target="crud-modal-update-{{ $course->id }}" data-modal-toggle="crud-modal-update-{{ $course->id }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Info</div>
                                         </li>
+                                        @if($course->is_locked)
+                                        <li>
+                                            <div data-modal-target="crud-modal-unlock-{{ $course->id }}" data-modal-toggle="crud-modal-unlock-{{ $course->id }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Unlock</div>
+                                        </li>
+                                        @else
+                                        <li>
+                                            <div data-modal-target="crud-modal-lock-{{ $course->id }}" data-modal-toggle="crud-modal-lock-{{ $course->id }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Lock</div>
+                                        </li>
+                                        @endif
                                     </ul>
                                 </div>
 
-                                <!-- Main modal -->
+                                <!-- Edit modal -->
                                 <div id="crud-modal-update-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                     <div class="relative p-4 w-full max-w-md max-h-full">
                                         @include('admin.courses.edit', ['course' => $course])
+                                    </div>
+                                </div>
+
+                                <!-- Lock modal -->
+                                <div id="crud-modal-lock-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    @include('admin.courses.lock')
+                                </div>
+
+                                <!-- Unlock modal -->
+                                <div id="crud-modal-unlock-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    <div class="relative p-4 w-full max-w-md max-h-full">
+                                        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                                            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+                                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                                    Unlock Course
+                                                </h3>
+                                                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal-unlock-{{ $course->id }}">
+                                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                    </svg>
+                                                    <span class="sr-only">Close modal</span>
+                                                </button>
+                                            </div>
+                                            <div class="relative p-4 md:p-5">
+                                                <form action="{{ route('course.unlockCourse', $course->id) }}" method="POST">
+                                                    @csrf
+                                                    <div>
+                                                        <x-input-label for="lock_password" :value="__('Enter Your Course Password')" />
+                                                        <x-text-input id="lock_password" class="block mt-1 w-full" type="text" name="lock_password" required />
+                                                        <x-input-error :messages="$errors->get('lock_password')" class="mt-2" />
+                                                    </div>
+                                                    <div class="mt-4">
+                                                        <x-primary-button>
+                                                            {{ __('Unlock') }}
+                                                        </x-primary-button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -67,9 +117,9 @@
                             <!-- Course Details -->
                             <div class="p-2 text-center">
                                 <h5 class="text-sm font-medium text-gray-900 dark:text-white mx-auto text-center w-40">
-                                    {{ Str::limit($course->name, 20, '...') }}
+                                    {{ ucwords(strtolower(Str::limit($course->name, 20, '...'))) }}
                                 </h5>
-                                <span class="text-xs text-gray-500 dark:text-gray-400">by {{ $course->authorUser->name ?? 'Unknown' }}</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">by {{ Str::limit($course->authorUser->name, 32, '...') ?? 'Unknown' }}</span>
 
                                <!-- Module Theme -->
                                @php
@@ -114,7 +164,7 @@
                                @endif
 
                                 <!-- Module Count -->
-                                <div class="mt-2 text-sm font-semibold">Modules: {{ $course->modules->count() }}</div>
+                                <div class="mt-2 text-sm font-semibold">Chapter : {{ $course->modules->count() }}</div>
 
                                 <div class="flex mt-2 mb-2 justify-center space-x-2">
                                     <!-- Open Button -->

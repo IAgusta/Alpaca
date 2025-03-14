@@ -36,27 +36,27 @@
 
             <!-- Course Theme Selection -->
             <div class="my-4">
-                <x-input-label for="theme" :value="__('Course Theme')" />
+                <x-input-label for="theme-create" :value="__('Course Theme')" />
 
                 <!-- Selected Themes + New Button -->
-                <div id="selected-themes" class="flex flex-wrap items-center gap-2">
+                <div id="selected-themes-create" class="flex flex-wrap items-center gap-2">
                     <!-- Existing themes will be added here -->
-                    <span id="new-theme-trigger" class="text-blue-600 cursor-pointer hover:text-blue-800" onclick="showThemeInput()">
+                    <span id="new-theme-trigger-create" class="text-blue-600 cursor-pointer hover:text-blue-800" onclick="showThemeInput('create')">
                         New+
                     </span>
                 </div>
 
                 <!-- New Theme Input (hidden by default) -->
-                <div id="new-theme-container" class="hidden items-center gap-2 mt-2">
-                    <input type="text" id="new-theme-input" 
+                <div id="new-theme-container-create" class="hidden items-center gap-2 mt-2">
+                    <input type="text" id="new-theme-input-create" 
                         class="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 w-40" 
                         placeholder="Enter theme">
-                    <x-secondary-button type="button" onclick="addTheme()">
+                    <x-secondary-button type="button" onclick="addTheme('create')">
                         {{ __('Add') }}
                     </x-secondary-button>
                 </div>
 
-                <input type="hidden" id="theme-input" name="theme" value="">
+                <input type="hidden" id="theme-input-create" name="theme" value="">
                 <x-input-error :messages="$errors->get('theme')" class="mt-2" />
             </div>
 

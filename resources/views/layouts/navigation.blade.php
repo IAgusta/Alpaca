@@ -21,8 +21,8 @@
                         </x-nav-link>
 
                         <!-- Courses Link -->
-                        <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
-                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
+                        <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
+                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
                             {{ __('Courses') }}
                         </x-nav-link>
 
@@ -157,8 +157,8 @@
                 </x-responsive-nav-link>
     
                 <!-- Courses Link -->
-                <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
-                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'teach' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
+                <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
+                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
                     {{ __('Courses') }}
                 </x-responsive-nav-link>
     

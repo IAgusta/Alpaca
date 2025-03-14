@@ -10,6 +10,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->integer('completed_modules')->default(0);
             $table->timestamps();
         });
 

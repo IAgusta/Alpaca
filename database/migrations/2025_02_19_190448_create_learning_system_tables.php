@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->string('image')->nullable();
             $table->string('author');
             $table->string('theme')->nullable();
+            $table->boolean('is_locked')->default(false);
+            $table->string('lock_password')->nullable();
             $table->timestamps();
         });
 

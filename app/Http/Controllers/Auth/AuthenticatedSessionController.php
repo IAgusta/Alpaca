@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -26,6 +27,17 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
+
+        // Get authenticated user
+        $user = Auth::user();
+
+        if ($user instanceof User) { // Ensure it's a User instance
+            $user->update([
+                'active' => true, // Mark user as online
+                'last_seen' => now(), // Set last activity timestamp
+            ]);
+        }
+
         return redirect()->route('dashboard'); // Redirect normal users
     }
 
@@ -35,6 +47,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $user = Auth::user();
+
+        if ($user instanceof User) { // Ensure it's a User instance
+            $user->update([
+                'active' => false, // Mark user as offline
+                'last_seen' => now(), // Update last seen timestamp
+            ]);
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
