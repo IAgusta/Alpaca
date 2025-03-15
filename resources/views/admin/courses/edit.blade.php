@@ -108,7 +108,7 @@
             <!-- Submit Button -->
             <div class="mt-4">
                 <x-primary-button>
-                    {{ __('Update Course') }}
+                    {{ __('Update') }}
                 </x-primary-button>
             </div>
         </form>

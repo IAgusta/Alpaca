@@ -55,12 +55,12 @@ class UserCourseController extends Controller
     }
 
     public function preview($courseId) {
-        $course = Course::findOrFail($courseId);
+        $course = Course::with('modules.contents')->findOrFail($courseId);
         return view('user.course_preview', compact('course'));
     }
 
     public function open($courseId) {
-        $course = Course::findOrFail($courseId);
+        $course = Course::with('modules.contents')->findOrFail($courseId);
         return view('user.course_open', compact('course'));
     }
 

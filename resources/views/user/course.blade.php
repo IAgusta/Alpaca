@@ -31,7 +31,7 @@
                                         </svg>
                                     </button>
                                     <!-- Dropdown Menu -->
-                                    <div id="courseDropdown-{{ $userCourse->course->id }}" class="hidden absolute right-2 top-10 z-10 w-44 bg-white rounded-lg shadow-lg dark:bg-gray-700">
+                                    <div id="courseDropdown-{{ $userCourse->course->id }}" class="hidden absolute right-2 top-10 z-10 w-fit bg-white rounded-lg shadow-lg dark:bg-gray-700">
                                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
                                             <li>
                                                 <form method="POST" action="{{ route('user.course.clearHistory', $userCourse->course->id) }}">

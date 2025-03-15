@@ -1,7 +1,7 @@
 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            Create Module Chapter On Bellow
+            Create Module Chapter
         </h3>
     </div>
     <form action="{{ route('admin.courses.modules.store', $course->id) }}" method="POST" class="mt-4">
@@ -22,7 +22,7 @@
         </div>
 
         <x-primary-button class="my-4" type="submit">
-            {{ __('Create Module') }}
+            {{ __('Create') }}
         </x-primary-button>
     </form>
 </div>
