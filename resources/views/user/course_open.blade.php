@@ -94,6 +94,23 @@
                 });
             });
 
+            // Center-align images within Quill editor content
+            document.querySelectorAll(".ql-editor img").forEach(img => {
+                img.style.display = "block";
+                img.style.margin = "0 auto";
+            });
+
+            // Center-align and resize videos within Quill editor content
+            document.querySelectorAll(".ql-editor .ql-video").forEach(video => {
+                video.style.display = "block";
+                video.style.margin = "0 auto";
+                video.style.width = "80%"; // Adjust the width as needed
+                video.style.maxWidth = "800px"; // Set a maximum width
+                video.style.height = "auto"; // Maintain aspect ratio
+                video.style.maxHeight = "450px"; // Set a maximum height
+                video.style.height = "450px"; // Set height to fit full HD
+            });
+
             // Toggle sidebar visibility on mobile
             document.getElementById("sidebar-toggle").addEventListener("click", function () {
                 var sidebar = document.getElementById("sidebar");

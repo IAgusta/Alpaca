@@ -60,6 +60,13 @@ class UserCourseController extends Controller
     }
 
     public function open($courseId) {
+        $userId = Auth::id();
+        $userCourse = UserCourse::where('user_id', $userId)->where('course_id', $courseId)->first();
+
+        if (!$userCourse) {
+            return redirect()->route('user.course')->with('error', 'You do not have access to this course.');
+        }
+
         $course = Course::with('modules.contents')->findOrFail($courseId);
         return view('user.course_open', compact('course'));
     }

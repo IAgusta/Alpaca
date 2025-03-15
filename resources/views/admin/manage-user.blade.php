@@ -5,20 +5,11 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="relative overflow-x-auto">
-                        <div class="flex items-center">
-                            <h1 class="font-semibold text-lg text-gray-800 dark:text-white mb-6 mr-2">{{ __('Table Users :') }}</h1>
-                            @if(session('success'))
-                                <x-input-success :messages="[session('success')]" />
-                            @endif
-                            @if(session('error'))
-                                <x-input-error :messages="[session('error')]" />
-                            @endif
-                        </div>
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>

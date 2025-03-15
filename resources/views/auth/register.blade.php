@@ -82,16 +82,16 @@
             </x-primary-button>
         </div>
     </form>
-<!-- Required Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
-<script>
-    // Initialize datepicker with proper options
-    document.addEventListener('DOMContentLoaded', function() {
-        new Datepicker(document.getElementById('birth_date'), {
-            // Optional configuration
-            format: 'yyyy-mm-dd', // Match your DB date format
-            autohide: true, // Auto-close after selection
+    <!-- Required Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
+    <script>
+        // Initialize datepicker with proper options
+        document.addEventListener('DOMContentLoaded', function() {
+            new Datepicker(document.getElementById('birth_date'), {
+                // Optional configuration
+                format: 'yyyy-mm-dd', // Match your DB date format
+                autohide: true, // Auto-close after selection
+            });
         });
-    });
-</script>
+    </script>
 </x-guest-layout>

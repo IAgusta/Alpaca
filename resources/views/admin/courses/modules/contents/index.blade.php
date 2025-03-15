@@ -80,9 +80,6 @@
             <!-- Preview Section -->
             <div class="mt-6">
                 <h3 class="text-lg font-semibold">Preview</h3>
-                @if(session('success'))
-                <x-input-success :messages="[session('success')]" />
-                @endif
                 <!-- Exiting Content -->
                 <ul class="mt-2 space-y-2 sortable-list" data-url="{{ route('admin.courses.modules.contents.reorder', ['course' => $course->id, 'module' => $module->id]) }}">
                     @foreach ($module->contents->sortBy('position') as $content)

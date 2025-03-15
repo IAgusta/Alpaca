@@ -4,20 +4,22 @@
             {{ __('Courses') }} 
             @if (Auth::user()->role != 'user')
                 <a href="{{ route('admin.courses.index') }}">
-                    <x-secondary-button class="ml-4">Back</x-secondary-button>
+                    <x-secondary-button class="ml-4 gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-slash-fill" viewBox="0 0 16 16">
+                            <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
+                            <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
+                        </svg>    
+                        {{ __('Back') }}
+                    </x-secondary-button>
                 </a>
             @endif
         </h2>
     </x-slot>
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="mx-auto p-4 bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 {{-- Your Course Section --}}
                 <h2 class="text-md font-semibold mb-3">Your Course</h2>
-                <!-- Success Message -->
-                @if(session('success'))
-                    <x-input-success :messages="[session('success')]" class="mt-4" />
-                @endif
                 <div class="flex flex-wrap gap-4 justify-start">
                     @foreach ($userCourses as $userCourse)
                         <div class="relative w-52 h-auto max-h-410px bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition">
@@ -43,7 +45,7 @@
                                                 <form method="POST" action="{{ route('user.course.delete', $userCourse->course->id) }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="block px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete</button>
+                                                    <button type="submit" class="block w-full px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete</button>
                                                 </form>
                                             </li>
                                         </ul>
@@ -60,11 +62,10 @@
                                 $themeString = !empty(trim($userCourse->course->theme)) ? $userCourse->course->theme : 'umum';
                                 $themes = explode(',', $themeString);
                                 $totalThemes = count($themes);
-                                $displayThemes = array_slice($themes, 0, 3);
+                                $displayThemes = array_slice($themes, 0, 2);
                                 
                                 $colors = [
                                     'bg-blue-100 text-blue-800',
-                                    'bg-gray-100 text-gray-800',
                                     'bg-red-100 text-red-800',
                                     'bg-green-100 text-green-800',
                                     'bg-yellow-100 text-yellow-800'
@@ -86,9 +87,9 @@
                                             </span>
                                         @endforeach
                                         
-                                        @if($totalThemes > 3)
+                                        @if($totalThemes > 2)
                                             <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-sm">
-                                                +{{ $totalThemes - 3 }} more
+                                                +{{ $totalThemes - 2 }} more
                                             </span>
                                         @endif
                                     </div>
@@ -102,11 +103,11 @@
                                 <div class="w-full bg-gray-300 rounded-full h-2 mt-1">
                                     <div class="bg-green-500 h-2 rounded-full" style="width: {{ $progressPercentage }}%;"></div>
                                 </div>
-                                <div class="mt-1 text-xs">{{ $userCourse->completed_modules }}/{{ $totalModules }} Complete</div>
+                                <div class="my-1 text-xs">{{ $userCourse->completed_modules }}/{{ $totalModules }} Complete</div>
                                 {{-- Open Button --}}
-                                <x-primary-button class="mt-2">
-                                    <a href="{{ route('user.course.open', $userCourse->course->id) }}">Open</a>
-                                </x-primary-button>
+                                <a class="mt-2" href="{{ route('user.course.open', $userCourse->course->id) }}">
+                                    <x-primary-button >Open</x-primary-button>
+                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -114,10 +115,6 @@
 
                 {{-- Available Courses Section --}}
                 <h2 class="text-md font-semibold mt-4 mb-3">Available Courses</h2>
-                <!-- Error Message -->
-                @if(session('error'))
-                    <x-input-error :messages="[session('error')]" />
-                @endif
                 <div class="flex flex-wrap gap-4 justify-start">
                     @foreach ($availableCourses as $course)
                         @if ($course->id != 1) <!-- Exclude Course 1 from available courses -->
@@ -136,11 +133,10 @@
                                     $themeString = !empty(trim($course->theme)) ? $course->theme : 'umum';
                                     $themes = explode(',', $themeString);
                                     $totalThemes = count($themes);
-                                    $displayThemes = array_slice($themes, 0, 3);
+                                    $displayThemes = array_slice($themes, 0, 2);
                                     
                                     $colors = [
                                         'bg-blue-100 text-blue-800',
-                                        'bg-gray-100 text-gray-800',
                                         'bg-red-100 text-red-800',
                                         'bg-green-100 text-green-800',
                                         'bg-yellow-100 text-yellow-800'
@@ -162,9 +158,9 @@
                                                 </span>
                                             @endforeach
                                             
-                                            @if($totalThemes > 3)
+                                            @if($totalThemes > 2)
                                                 <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-sm">
-                                                    +{{ $totalThemes - 3 }} more
+                                                    +{{ $totalThemes - 2 }} more
                                                 </span>
                                             @endif
                                         </div>
@@ -173,7 +169,9 @@
                                     <p class="text-xs mt-1">Total: <span class="font-bold">{{ $course->modules->count() }} Chapters</span></p>
                                     {{-- Add & Preview Buttons --}}
                                     <div class="flex mt-2 mb-2 justify-center space-x-2">
-                                        <x-secondary-button href="{{ route('user.course.preview', $course->id) }}">Preview</x-secondary-button>
+                                        <a href="{{ route('user.course.preview', $course->id) }}">
+                                            <x-secondary-button>Preview</x-secondary-button>
+                                        </a>
                                         @if($course->is_locked)
                                             <x-primary-button data-modal-target="unlock-modal-{{ $course->id }}" data-modal-toggle="unlock-modal-{{ $course->id }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
@@ -213,16 +211,17 @@
                                                 <input type="hidden" name="course_id" value="{{ $course->id }}">
                                                 <div>
                                                     <x-input-label for="lock_password" :value="__('Enter Your Course Password')" />
-                                                    <x-text-input id="lock_password" class="block mt-1 w-full" type="password" name="lock_password" required />
-                                                    <x-input-error :messages="$errors->get('lock_password')" class="mt-2" />
-                                                </div>
-                                                <div class="mt-4">
-                                                    <x-primary-button type="submit">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
-                                                            <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z"/>
-                                                          </svg>
-                                                        {{ __('Unlock') }}
-                                                    </x-primary-button>
+                                                    <div class="flex my-2">
+                                                        <x-text-input id="lock_password" class="block mt-1 w-full" type="password" name="lock_password" required />
+                                                        <x-input-error :messages="$errors->get('lock_password')" class="mt-2" />
+                                                        <x-primary-button class="ml-2" type="submit">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+                                                                <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z"/>
+                                                            </svg>
+                                                            {{ __('Unlock') }}
+                                                        </x-primary-button>
+                                                    </div>
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400">Tidak Punya Password? <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Minta Izin</a></span>
                                                 </div>
                                             </form>
                                         </div>

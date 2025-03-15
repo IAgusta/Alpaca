@@ -1,4 +1,7 @@
-<nav x-data="{ open: false, pluginsOpen: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false, pluginsOpen: false, loading: false }" class="bg-white border-b border-gray-100">
+    <!-- Loading Bar -->
+    <div x-show="loading" class="fixed top-0 left-0 w-full h-1 bg-blue-500 z-50" x-transition></div>
+
     <!-- Primary Navigation Menu -->
     <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -6,7 +9,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ auth()->check() ? route('dashboard') : route('home') }}"
-                        class="flex items-center space-x-2">
+                        class="flex items-center space-x-2" @click="loading = true">
                          <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                          <span class="text-gray-800 font-semibold">Alpaca</span>
                      </a>
@@ -16,19 +19,19 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex items-center">
                     @auth
                         <!-- Dashboard Link -->
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" @click="loading = true">
                             {{ __('Dashboard') }}
                         </x-nav-link>
 
                         <!-- Courses Link -->
                         <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
-                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
+                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')" @click="loading = true">
                             {{ __('Courses') }}
                         </x-nav-link>
 
                         <!-- Admin Management User (For Admin and Owner Only)-->
                         @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
-                        <x-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')">
+                        <x-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')" @click="loading = true">
                             {{ __('Manage User') }}
                         </x-nav-link>
                         @endif
@@ -49,13 +52,13 @@
                                 <div class="py-1">
                                     <!-- Robot Control Link -->
                                     <x-dropdown-link :href="route('plugins.robotControl')" 
-                                        :active="request()->routeIs('plugins.robotControl')">
+                                        :active="request()->routeIs('plugins.robotControl')" @click="loading = true">
                                         {{ __('Robot Control') }}
                                     </x-dropdown-link>
 
                                     <!-- Monitoring Link -->
                                     <x-dropdown-link :href="route('plugins.monitoring')" 
-                                        :active="request()->routeIs('plugins.monitoring')">
+                                        :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
                                         {{ __('Monitoring') }}
                                     </x-dropdown-link>
                                 </div>
@@ -63,12 +66,12 @@
                         </div>
                     @else
                         <!-- Robot Control Link -->
-                        <x-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')">
+                        <x-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')" @click="loading = true">
                             {{ __('Robot Control') }}
                         </x-nav-link>
 
                         <!-- Monitoring Link -->
-                        <x-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')">
+                        <x-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
                             {{ __('Monitoring') }}
                         </x-nav-link>
                     @endauth
@@ -93,14 +96,14 @@
 
                         <x-slot name="content">
                             <!-- Profile Link -->
-                            <x-dropdown-link :href="route('profile.edit')">
+                            <x-dropdown-link :href="route('profile.edit')" @click="loading = true">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
 
                             <!-- Log Out -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit(); loading = true;">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
                             </form>
@@ -122,12 +125,12 @@
 
                         <x-slot name="content">
                             <!-- Login Link -->
-                            <x-dropdown-link :href="route('login')">
+                            <x-dropdown-link :href="route('login')" @click="loading = true">
                                 {{ __('Login') }}
                             </x-dropdown-link>
 
                             <!-- Register Link -->
-                            <x-dropdown-link :href="route('register')">
+                            <x-dropdown-link :href="route('register')" @click="loading = true">
                                 {{ __('Register') }}
                             </x-dropdown-link>
                         </x-slot>
@@ -152,40 +155,40 @@
         <div class="pt-2 pb-3 space-y-0.5">
             @auth
                 <!-- Dashboard Link -->
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" @click="loading = true">
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
     
                 <!-- Courses Link -->
                 <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
-                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')">
+                    :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')" @click="loading = true">
                     {{ __('Courses') }}
                 </x-responsive-nav-link>
     
                 <!-- Admin Management User (For Admin and Owner Only)-->
                 @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
-                <x-responsive-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')">
+                <x-responsive-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')" @click="loading = true">
                     {{ __('Manage User') }}
                 </x-responsive-nav-link>
                 @endif
 
                 <!-- Robot Control Link -->
-                <x-responsive-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')">
+                <x-responsive-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')" @click="loading = true">
                     {{ __('Robot Control') }}
                 </x-responsive-nav-link>
 
                 <!-- Monitoring Link -->
-                <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')">
+                <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
                     {{ __('Monitoring') }}
                 </x-responsive-nav-link>
             @else
                 <!-- Robot Control Link -->
-                <x-responsive-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')">
+                <x-responsive-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')" @click="loading = true">
                     {{ __('Robot Control') }}
                 </x-responsive-nav-link>
 
                 <!-- Monitoring Link -->
-                <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')">
+                <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
                     {{ __('Monitoring') }}
                 </x-responsive-nav-link>
             @endauth
@@ -200,14 +203,14 @@
                         <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
                     </div>
                     <!-- Profile Link -->
-                    <x-responsive-nav-link :href="route('profile.edit')">
+                    <x-responsive-nav-link :href="route('profile.edit')" @click="loading = true">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
 
                     <!-- Log Out -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">
+                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit(); loading = true;">
                             {{ __('Log Out') }}
                         </x-responsive-nav-link>
                     </form>
@@ -217,12 +220,12 @@
                         <div class="font-medium text-sm text-gray-500">{{ "Silahkan login dengan menekan tombol login atau register" }}</div>
                     </div>
                     <!-- Login Link -->
-                    <x-responsive-nav-link :href="route('login')">
+                    <x-responsive-nav-link :href="route('login')" @click="loading = true">
                         {{ __('Login') }}
                     </x-responsive-nav-link>
 
                     <!-- Register Link -->
-                    <x-responsive-nav-link :href="route('register')">
+                    <x-responsive-nav-link :href="route('register')" @click="loading = true">
                         {{ __('Register') }}
                     </x-responsive-nav-link>
                 @endauth

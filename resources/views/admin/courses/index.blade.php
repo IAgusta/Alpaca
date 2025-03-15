@@ -1,21 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Course Management') }}
+            {{ __('Courses') }}
             <a class="ml-4" href="{{ route('user.course') }}">
-                <x-secondary-button>Preview</x-secondary-button>
+                <x-secondary-button class="gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                    </svg> {{ __('Preview') }}
+                </x-secondary-button>
             </a>
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <!-- Success Message -->
-                @if(session('success'))
-                <x-input-success :messages="[session('success')]" class="mt-4" />
-                @endif
-
                 <!-- Course Cards -->
                 <div class="flex flex-wrap gap-4 justify-start">
                     <!-- Add New Course Card -->
@@ -31,7 +31,7 @@
                     </div>
 
                     <!-- Main modal -->
-                    <div id="crud-modal-create" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div id="crud-modal-create" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                         <div class="relative p-4 w-full max-w-md max-h-full">
                             @include('admin.courses.create')
                         </div>
@@ -68,7 +68,7 @@
                                 </div>
 
                                 <!-- Edit modal -->
-                                <div id="crud-modal-update-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                <div id="crud-modal-update-{{ $course->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                     <div class="relative p-4 w-full max-w-md max-h-full">
                                         @include('admin.courses.edit', ['course' => $course])
                                     </div>
@@ -127,11 +127,10 @@
                                $themeString = !empty(trim($course->theme)) ? $course->theme : 'umum';
                                $themes = explode(',', $themeString);
                                $totalThemes = count($themes);
-                               $displayThemes = array_slice($themes, 0, 3);
+                               $displayThemes = array_slice($themes, 0, 2);
                                
                                $colors = [
                                    'bg-blue-100 text-blue-800',
-                                   'bg-gray-100 text-gray-800',
                                    'bg-red-100 text-red-800',
                                    'bg-green-100 text-green-800',
                                    'bg-yellow-100 text-yellow-800'
@@ -155,9 +154,9 @@
                                            </span>
                                        @endforeach
                                        
-                                       @if($totalThemes > 3)
+                                       @if($totalThemes > 2)
                                            <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-sm">
-                                               +{{ $totalThemes - 3 }} more
+                                               +{{ $totalThemes - 2 }} more
                                            </span>
                                        @endif
                                    </div>
@@ -173,7 +172,7 @@
                                     </div>
 
                                     <!-- Main modal for modules -->
-                                    <div id="crud-modal-module-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                    <div id="crud-modal-module-{{ $course->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                                         <div class="relative p-4 w-full max-w-7xl max-h-full md:max-w-6xl">
                                             @include('admin.courses.modules.index', ['course' => $course, 'modules' => $course->modules])
                                         </div>

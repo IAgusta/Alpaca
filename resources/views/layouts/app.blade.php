@@ -10,7 +10,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> <!-- Include Quill CSS -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <link rel="stylesheet" href="resources/css/styles.css">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -27,6 +27,16 @@
                     </div>
                 </header>
             @endisset
+
+            <!-- Success and Error Messages -->
+            <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+                @if(session('success'))
+                    <x-input-success :messages="[session('success')]" class="mb-4" />
+                @endif
+                @if(session('error'))
+                    <x-input-error :messages="[session('error')]" class="mb-4" />
+                @endif
+            </div>
 
             <!-- Page Content -->
             <main>
