@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Courses') }} 
+            {{ __('Kelas') }} 
             @if (Auth::user()->role != 'user')
                 <a href="{{ route('admin.courses.index') }}">
                     <x-secondary-button class="ml-4 gap-2">
@@ -9,7 +9,7 @@
                             <path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/>
                             <path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/>
                         </svg>    
-                        {{ __('Back') }}
+                        {{ __('Kembali') }}
                     </x-secondary-button>
                 </a>
             @endif
@@ -28,8 +28,8 @@
                                 <img class="w-full h-35 object-cover rounded-t-lg" src="{{ $userCourse->course->image ? asset('storage/'.$userCourse->course->image) : asset('img/logo.png') }}" alt="Course Image"/>
                                 @if ($userCourse->course_id != 1) <!-- Exclude dropdown for quickstart course -->
                                     <button data-dropdown-toggle="courseDropdown-{{ $userCourse->course->id }}" class="absolute top-2 right-0 bg-transparent p-2 rounded-full hover:bg-gray-200">
-                                        <svg class="w-5 h-5 text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
-                                            <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
                                         </svg>
                                     </button>
                                     <!-- Dropdown Menu -->
@@ -38,14 +38,14 @@
                                             <li>
                                                 <form method="POST" action="{{ route('user.course.clearHistory', $userCourse->course->id) }}">
                                                     @csrf
-                                                    <button type="submit" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Clear History</button>
+                                                    <button type="submit" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Hapus Riwayat</button>
                                                 </form>
                                             </li>
                                             <li>
                                                 <form method="POST" action="{{ route('user.course.delete', $userCourse->course->id) }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="block w-full px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete</button>
+                                                    <button type="submit" class="block w-full px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Lupakan Kelas</button>
                                                 </form>
                                             </li>
                                         </ul>
@@ -106,7 +106,7 @@
                                 <div class="my-1 text-xs">{{ $userCourse->completed_modules }}/{{ $totalModules }} Complete</div>
                                 {{-- Open Button --}}
                                 <a class="mt-2" href="{{ route('user.course.open', $userCourse->course->id) }}">
-                                    <x-primary-button >Open</x-primary-button>
+                                    <x-primary-button >Buka</x-primary-button>
                                 </a>
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                                         </div>
                                     @endif
 
-                                    <p class="text-xs mt-1">Total: <span class="font-bold">{{ $course->modules->count() }} Chapters</span></p>
+                                    <p class="text-xs mt-1">Total: <span class="font-bold">{{ $course->modules->count() }} Bagian</span></p>
                                     {{-- Add & Preview Buttons --}}
                                     <div class="flex mt-2 mb-2 justify-center space-x-2">
                                         <a href="{{ route('user.course.preview', $course->id) }}">
@@ -177,13 +177,13 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
                                                     <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
                                                   </svg>
-                                                Lock
+                                                Kunci
                                             </x-primary-button>
                                         @else
                                             <form method="POST" action="{{ route('user.course.add', $course->id) }}">
                                                 @csrf
                                                 <input type="hidden" name="course_id" value="{{ $course->id }}">
-                                                <x-primary-button type="submit">Add</x-primary-button>
+                                                <x-primary-button type="submit">Tambah</x-primary-button>
                                             </form>
                                         @endif
                                     </div>
@@ -196,7 +196,7 @@
                                     <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
                                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
                                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                                Unlock Course
+                                                Buka Course
                                             </h3>
                                             <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="unlock-modal-{{ $course->id }}">
                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -218,7 +218,7 @@
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
                                                                 <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z"/>
                                                             </svg>
-                                                            {{ __('Unlock') }}
+                                                            {{ __('Buka') }}
                                                         </x-primary-button>
                                                     </div>
                                                     <span class="text-xs text-gray-500 dark:text-gray-400">Tidak Punya Password? <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Minta Izin</a></span>

@@ -10,7 +10,7 @@ class Module extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['course_id', 'title', 'description'];
+    protected $fillable = ['course_id', 'title', 'description', 'author']; // Add 'author' to fillable fields
 
     // Relationship with Course
     public function course()

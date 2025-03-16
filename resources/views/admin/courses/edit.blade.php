@@ -2,7 +2,7 @@
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            Info Course
+            Info Kelas
         </h3>
         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal-update-{{ $course->id }}">
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -23,21 +23,21 @@
 
             <!-- Course Name -->
             <div>
-                <x-input-label class="mb-3" for="name" :value="__('Course Name')" />
+                <x-input-label class="mb-3" for="name" :value="__('Nama Kelas')" />
                 <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $course->name)" required autofocus autocomplete="name" />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
 
             <!-- Description -->
             <div class="mt-4">
-                <x-input-label for="description" :value="__('Description')" />
+                <x-input-label for="description" :value="__('Deskripsi')" />
                 <textarea id="description" name="description" class="block mt-1 w-full border-gray-300 rounded">{{ old('description', $course->description) }}</textarea>
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
             </div>
 
             @if ($course->is_locked)
                 <div class="mt-4">
-                    <x-input-label :value="__('Course Password')" />
+                    <x-input-label :value="__('Password Kelas')" />
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">
                         {{ $course->lock_password ?? 'Password not available' }}
                     </p>
@@ -46,7 +46,7 @@
 
             <!-- Course Theme Selection -->
             <div class="my-4">
-                <x-input-label for="theme-{{ $course->id }}" :value="__('Course Theme')" />
+                <x-input-label for="theme-{{ $course->id }}" :value="__('Tema Kelas')" />
 
                 <!-- Selected Themes + New Button -->
                 <div id="selected-themes-{{ $course->id }}" class="flex flex-wrap items-center gap-2">
@@ -64,7 +64,7 @@
                         @endforeach
                     @endif
                     <span id="new-theme-trigger-{{ $course->id }}" class="text-blue-600 cursor-pointer hover:text-blue-800" onclick="showThemeInput('{{ $course->id }}')">
-                        New+
+                        Baru +
                     </span>
                 </div>
 
@@ -74,7 +74,7 @@
                             class="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 w-40" 
                             placeholder="Enter theme">
                     <x-secondary-button type="button" onclick="addTheme('{{ $course->id }}')">
-                        {{ __('Add') }}
+                        {{ __('Tambah') }}
                     </x-secondary-button>
                 </div>
 
@@ -108,7 +108,7 @@
             <!-- Submit Button -->
             <div class="mt-4">
                 <x-primary-button>
-                    {{ __('Update') }}
+                    {{ __('Perbarui') }}
                 </x-primary-button>
             </div>
         </form>

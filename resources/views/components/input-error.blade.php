@@ -18,14 +18,4 @@
             </svg>
         </button>
     </div>
-
-    <script>
-        setTimeout(function() {
-            let message = document.getElementById('alert');
-            if (message) {
-                message.style.opacity = '0';
-                setTimeout(() => message.style.display = 'none', 500); // Fade out effect
-            }
-        }, 5000); // 5 seconds
-    </script>
 @endif

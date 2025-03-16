@@ -163,6 +163,81 @@ document.addEventListener('DOMContentLoaded', function () {
                 div.remove();
             });
         });
+
+        // Function to update content positions
+        function updateContentPositions() {
+            let positions = [];
+            document.querySelectorAll('.content-item').forEach((item, index) => {
+                positions.push({ id: item.dataset.id, position: index + 1 });
+                item.dataset.position = index + 1;
+            });
+
+            let reorderUrl = document.querySelector('.sortable-list').dataset.url;
+
+            fetch(reorderUrl, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ positions: positions }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("✅ Order updated successfully!");
+                } else {
+                    console.error("❌ Failed to update order", data);
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        // Function to handle up and down button visibility
+        function updateButtonVisibility() {
+            document.querySelectorAll('.content-item').forEach((item, index, items) => {
+                const buttonUp = item.querySelector('#button-up');
+                const buttonDown = item.querySelector('#button-down');
+                if (index === 0) {
+                    buttonUp.classList.add('hidden');
+                } else {
+                    buttonUp.classList.remove('hidden');
+                }
+                if (index === items.length - 1) {
+                    buttonDown.classList.add('hidden');
+                } else {
+                    buttonDown.classList.remove('hidden');
+                }
+            });
+        }
+
+        // Event listeners for up and down buttons
+        document.querySelectorAll('#button-up').forEach(button => {
+            button.addEventListener('click', function () {
+                const item = this.closest('.content-item');
+                const prevItem = item.previousElementSibling;
+                if (prevItem) {
+                    item.parentNode.insertBefore(item, prevItem);
+                    updateContentPositions();
+                    updateButtonVisibility();
+                }
+            });
+        });
+
+        document.querySelectorAll('#button-down').forEach(button => {
+            button.addEventListener('click', function () {
+                const item = this.closest('.content-item');
+                const nextItem = item.nextElementSibling;
+                if (nextItem) {
+                    item.parentNode.insertBefore(nextItem, item);
+                    updateContentPositions();
+                    updateButtonVisibility();
+                }
+            });
+        });
+
+        // Initial button visibility update
+        updateButtonVisibility();
     } else {
         console.error("❌ Quill initialization failed: #editor or #question-editor not found!");
     }

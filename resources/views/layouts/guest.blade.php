@@ -14,11 +14,11 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased" style="background-image: url('img/background.png'); background-size: cover;">
+    <body class="font-sans text-gray-900 antialiased" style="background-image: url('{{ asset('img/background.png') }}'); background-size: cover;">
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
                 <a href="/" class="justify-center flex">
-                    <img src="img/logo.png" class="w-20 h-20 fill-current text-gray-500" />
+                    <img src="{{ asset('img/logo.png') }}" class="w-20 h-20 fill-current text-gray-500" />
                 </a>
             </div>
 

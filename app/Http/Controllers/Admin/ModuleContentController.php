@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ModuleContent;
 use App\Models\Module;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 
 class ModuleContentController extends Controller
 {
@@ -48,14 +49,18 @@ class ModuleContentController extends Controller
         // ✅ Assign the next position automatically
         $lastPosition = $module->contents()->max('position') ?? 0;
         $data['position'] = $lastPosition + 1;
+        $data['author'] = Auth::id(); // Set the author to the logged-in user
     
         // ✅ Insert into database
         $module->contents()->create($data);
+
+        // ✅ Update the module's updated_at timestamp
+        $module->touch();
     
         return back()->with('success', 'Content added successfully!');
     }
 
-    public function edit($course, $module, $moduleContent)
+    public function edit(Course $course, Module $module, $moduleContent)
     {
         // Find the module content by ID
         $content = ModuleContent::findOrFail($moduleContent);
@@ -69,7 +74,7 @@ class ModuleContentController extends Controller
     }
     
 
-    public function update(Request $request, $course, $module, $moduleContent)
+    public function update(Request $request, Course $course, Module $module, $moduleContent)
     {
         // Find the module content by ID
         $content = ModuleContent::findOrFail($moduleContent);
@@ -106,6 +111,9 @@ class ModuleContentController extends Controller
             ]);
         }
     
+        // ✅ Update the module's updated_at timestamp
+        $module->touch();
+    
         // Redirect with success message
         return redirect()->route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module])
                          ->with('success', 'Content updated successfully.');
@@ -118,6 +126,9 @@ class ModuleContentController extends Controller
         }
     
         $moduleContent->delete();
+    
+        // ✅ Update the module's updated_at timestamp
+        $module->touch();
     
         // If it's an AJAX request, return JSON
         if ($request->expectsJson()) {

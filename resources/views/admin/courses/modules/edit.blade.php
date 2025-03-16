@@ -2,7 +2,7 @@
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-            Editing {{ $module->title }}
+            {{ __('Ubah Bagian : ') }} {{ $module->title }}
         </h3>
         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal-module-edit-{{ $module->id }}">
             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -23,14 +23,14 @@
 
             <!-- Module Title -->
             <div>
-                <x-input-label class="mb-3" for="title" :value="__('Module Title')" />
+                <x-input-label class="mb-3" for="title" :value="__('Nama Bagian')" />
                 <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title', $module->title)" required autofocus autocomplete="title" />
                 <x-input-error :messages="$errors->get('title')" class="mt-2" />
             </div>
 
             <!-- Description -->
             <div class="mt-4">
-                <x-input-label for="description" :value="__('Description')" />
+                <x-input-label for="description" :value="__('Deskripsi')" />
                 <textarea id="description" name="description" class="block mt-1 w-full border-gray-300 rounded">{{ old('description', $module->description) }}</textarea>
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
             </div>
@@ -38,7 +38,7 @@
             <!-- Submit Button -->
             <div class="mt-4">
                 <x-primary-button>
-                    {{ __('Update Module') }}
+                    {{ __('Ubah') }}
                 </x-primary-button>
             </div>
         </form>

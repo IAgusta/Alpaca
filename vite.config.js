@@ -11,6 +11,7 @@ export default defineConfig({
                 'resources/js/data-user.js',
                 'resources/js/robot-control.js',
                 'resources/js/course-theme.js',
+                'resources/js/content.js',
             ],
             refresh: true,
         }),
