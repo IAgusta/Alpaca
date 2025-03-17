@@ -3,7 +3,17 @@
     margin: 0 auto;}
 
 
-    .module-content img {
-        display: block;
-        margin: 0 auto;
-    }
+.module-content img {
+    display: block;
+    margin: 0 auto;
+}
+
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield; /* Hide spinner in Firefox */
+}

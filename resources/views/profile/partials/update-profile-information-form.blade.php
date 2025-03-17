@@ -26,7 +26,7 @@
             <div class="w-1/3 flex flex-col items-center">
                 <div class="relative w-38 h-38">
                     <!-- Profile Image -->
-                    <img id="profile-preview" src="{{ $user->image ? asset('storage/' .$user->image) : asset('img/logo.png') }}" 
+                    <img id="profile-preview" src="{{ $user->image ? asset('storage/' .$user->image) : asset('storage/profiles/default-profile.png') }}" 
                          class="w-32 h-32 rounded-full border border-gray-300 object-cover" 
                          alt="Profile Image">
                 
@@ -82,7 +82,7 @@
                 <!-- Phone Number -->
                 <div class="mt-4">
                     <x-input-label for="phone" :value="__('Phone Number')" />
-                    <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" 
+                    <x-text-input id="phone" name="phone" type="number" class="mt-1 block w-full no-spinner"  
                                   :value="old('phone', $user->phone)" placeholder="Optional" />
                     <x-input-error class="mt-2" :messages="$errors->get('phone')" />
                 </div>

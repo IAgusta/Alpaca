@@ -10,14 +10,17 @@
         <div class="flex flex-col md:flex-row md:space-x-4">
             {{-- Module Title --}}
             <div class="mb-4 md:mb-0 md:w-1/2">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Nama Bagian</label>
-                <input type="text" name="title" required class="w-full border rounded p-2">
+                <x-input-label for="title" :value="__('Nama Bagian')" />
+                <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autocomplete="title" />
+                <x-input-error :messages="$errors->get('title')" class="mt-2" />
             </div>
 
             {{-- Module Description --}}
             <div class="mb-4 md:mb-0 md:w-1/2">
-                <label class="block text-gray-700 text-sm font-bold mb-2">Deskripsi</label>
-                <textarea name="description" class="w-full border rounded p-2"></textarea>
+                <x-input-label for="description" :value="__('Deskripsi')" />
+                <textarea id="description" name="description" rows="2"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
+                placeholder="Description is an optional, you can just ignore it if doesn't want to make the description"></textarea>
             </div>
         </div>
 

@@ -27,7 +27,26 @@
                     @if($course->modules)
                         @foreach($course->modules as $module)
                             <div class="mt-4">
-                                <h3 class="text-md font-semibold">{{ $module->title }}</h3>
+                                <div class="flex">
+                                    <h3 class="text-md font-semibold">{{ $module->title }}</h3>
+                                    <!-- Tooltip Button with Info Icon -->
+                                    <button data-tooltip-target="tooltip-right-{{ $module->id }}" data-tooltip-placement="right" type="button" class="ml-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle text-gray-400 hover:text-gray-500" viewBox="0 0 16 16"> 
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                        </svg>
+                                    </button>
+                                
+                                    <!-- Tooltip Content with Text Wrapping -->
+                                    <div id="tooltip-right-{{ $module->id }}" role="tooltip" 
+                                        class="absolute z-10 invisible px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700 w-48 whitespace-normal break-words">
+                                        <p class="leading-tight">
+                                            {{ $module->description ?? 'Bagian ini tidak memiliki deskripsi apapun' }}
+                                        </p>
+                                        <div class="tooltip-arrow" data-popper-arrow></div>
+                                    </div>
+                                </div>
+                                
                                 <ul class="pl-4 mt-2">
                                     @if($module->contents)
                                         @foreach($module->contents as $content)

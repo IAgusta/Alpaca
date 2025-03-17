@@ -86,7 +86,7 @@
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                                 <div class="flex items-center space-x-3 px-4 gap-4">
-                                    <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('default-profile.png') }}" 
+                                    <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('storage/profiles/default-profile.png') }}" 
                                     alt="Profile Picture" 
                                     class="w-8 h-8 rounded-full border border-gray-300 shadow-sm">
                                     {{ implode(' ', array_slice(explode(' ', Auth::user()->name), 0, 2)) }}
@@ -205,7 +205,7 @@
                 @auth
                     <div class="flex items-center space-x-3 px-4">
                         <!-- Profile Image -->
-                        <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('default-profile.png') }}" 
+                        <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('storage/profiles/default-profile.png') }}" 
                             alt="Profile Picture" 
                             class="w-10 h-10 rounded-full border border-gray-300 shadow-sm">
                         
