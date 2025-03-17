@@ -64,7 +64,7 @@
                                                                data-role="teach" 
                                                                data-user-id="{{ $user->id }}"
                                                                x-on:click.prevent="changeUserRole('{{ $user->id }}', 'teach')">
-                                                               Teacher
+                                                               Trainer
                                                             </a>
                                                         </li>
                                                         <li>
@@ -80,13 +80,18 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 text-center">
-                                            <form method="POST" action="{{ route('admin.toggleActive', $user->id) }}">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="{{ $user->active ? 'bg-green-500' : 'bg-red-500' }} text-white px-3 py-1 rounded">
-                                                    {{ $user->active ? 'Active' : 'Inactive' }}
-                                                </button>
-                                            </form>
+                                            <div class="flex items-center gap-3"> 
+                                                @if ($user->active)
+                                                    <div class="flex items-center">
+                                                        <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Online
+                                                    </div>
+                                                @else
+                                                    <div class="flex items-center">
+                                                        <div class="h-2.5 w-2.5 rounded-full bg-gray-700 me-2"></div> Offline
+                                                    </div>
+                                                @endif
+                                                    {{ __('last Online : ') }}{{ ($user->last_seen) }}
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 text-center">
                                             <x-danger-button

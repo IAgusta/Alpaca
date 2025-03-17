@@ -58,15 +58,6 @@ class AdminController extends Controller
         return back()->with('error', 'Unauthorized action');
     }
 
-    public function toggleActive($id)
-    {
-        $user = User::findOrFail($id);
-        $user->active = !$user->active;
-        $user->save();
-
-        return redirect()->back()->with('success', 'User status updated successfully.');
-    }
-
     public function deleteUser($id)
     {
         $user = User::findOrFail($id);
