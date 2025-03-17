@@ -1,5 +1,5 @@
 <h2 class="text-md font-semibold mt-4 mb-3">Available Courses</h2>
-<div class="flex flex-wrap gap-4 justify-start">
+<div class="flex flex-wrap gap-7 justify-start">
     @foreach ($availableCourses as $course)
         @if ($course->id != 1) <!-- Exclude Course 1 from available courses -->
         <div class="relative bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col" style="width: 208px; height: 373px;">

@@ -15,9 +15,9 @@
 
     <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-7">
                 <!-- Course Cards -->
-                <div class="flex flex-wrap gap-4 justify-start">
+                <div class="flex flex-wrap gap-7 justify-start">
                     <!-- Add New Course Card -->
                     <div data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create"
                     class="cursor-pointer bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col items-center justify-center p-4" style="width: 208px; height: 373px;">

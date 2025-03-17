@@ -20,7 +20,7 @@
         </nav>
     </x-slot>
 
-    <div class="py-6 max-w-8xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-7 max-w-8xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
             <!-- Back Button -->
             <a href="#" onclick="window.history.back();" class="mb-4 inline-block">

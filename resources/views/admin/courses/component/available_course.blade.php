@@ -121,7 +121,7 @@
 
     <div class="p-2 flex flex-col items-center">
         <!-- Module Count -->
-        <div class="mt-2 text-sm font-semibold">Bagian : {{ $course->modules->count() }}</div>
+        <div class="mt-2 text-sm font-semibold">Total Bagian : {{ $course->modules->count() }}</div>
             <div class="flex mt-2 mb-2 justify-center space-x-2">
             <!-- Open Button -->
             <div data-modal-target="crud-modal-module-{{ $course->id }}" data-modal-toggle="crud-modal-module-{{ $course->id }}">
