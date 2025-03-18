@@ -121,7 +121,7 @@
     </form>
 
     <!-- Cropping Modal -->
-    <div id="cropper-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div id="cropper-modal" class="fixed inset-0 z-50 items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white p-4 rounded-lg">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-medium text-gray-900">Crop Image</h2>
