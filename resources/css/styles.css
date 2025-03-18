@@ -21,3 +21,7 @@
 .modal-container:hover {
   border-color: cornflowerblue;
 }
+
+.highlight {
+  background-color: cyan;
+}

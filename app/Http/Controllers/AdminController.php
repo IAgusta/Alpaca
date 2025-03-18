@@ -27,7 +27,9 @@ class AdminController extends Controller
                          ->get();
         }
 
-        return view('admin.manage-user', compact('users'));
+        $totalUsers = $users->count();
+
+        return view('admin.manage-user', compact('users', 'totalUsers'));
     }
 
     public function updateUser(Request $request, $id)

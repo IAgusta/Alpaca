@@ -2,17 +2,7 @@
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
             <th scope="col" class="px-4 py-3">User Detail</th>
-            <th scope="col" class="px-4 py-3">Phone</th>
-            <th scope="col" class="px-6 py-3" id="sort-role">
-                <div class="flex">
-                    Role
-                    <a class="ml-1" id="role-sort-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
-                            <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/>
-                        </svg>
-                    </a>
-                </div>
-            </th>
+            <th scope="col" class="px-6 py-3" id="sort-role">Role</th>
             <th scope="col" class="px-4 py-3">Status</th>
             <th scope="col" class="px-4 py-3">Last Online</th>
             <th scope="col" class="px-4 py-3">
@@ -25,16 +15,33 @@
             <tr class="border-b dark:border-gray-700">
                 <th scope="row" class="flex px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     <img class="w-10 h-10 rounded-full" src="{{ $user->image ? asset('storage/' .$user->image) : asset('storage/profiles/default-profile.png') }}" alt="Profile Image">
-                    <div class="ps-3">
-                        <div class="text-base font-semibold">{{ $user->name }}</div>
-                        <div class="font-normal text-gray-500">{{ $user->email }}</div>
-                    </div>  
+                    <div class="ps-3 gap-0">
+                        <div class="text-base font-semibold">
+                            <span class="block">{{ $user->name }}</span>
+                            <span class="block font-normal text-gray-500">{{ $user->email }}</span>
+                        </div>
                 </th>
                 <td class="px-4 py-3">
-                    {{ $user->phone ?? ('No Data') }}
-                </td>
-                <td class="px-4 py-3">
-                    {{ ucfirst($user->role) }}
+                    <div class="flex gap-1">
+                        @if ($user->role == 'user')
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 -2 16 16">
+                                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                            </svg>
+                        @elseif ($user->role == 'trainer') 
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="currentColor" class="bi bi-journal-bookmark-fill" viewBox="0 -1 16 16">
+                                <path fill-rule="evenodd" d="M6 1h6v7a.5.5 0 0 1-.757.429L9 7.083 6.757 8.43A.5.5 0 0 1 6 8z"/>
+                                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                                <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/>
+                            </svg> 
+                        @elseif ($user->role == 'admin')
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" class="_LEQ7KnyAAfYD56ApfaU c5fvORiJNDhWS_5erJz4 b7Lf_ucBvHbZEidPjF8t" viewBox="0 -1 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z"></path>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.672 1.911a1 1 0 10-1.932.518l.259.966a1 1 0 001.932-.518l-.26-.966zM2.429 4.74a1 1 0 10-.517 1.932l.966.259a1 1 0 00.517-1.932l-.966-.26zm8.814-.569a1 1 0 00-1.415-1.414l-.707.707a1 1 0 101.415 1.415l.707-.708zm-7.071 7.072l.707-.707A1 1 0 003.465 9.12l-.708.707a1 1 0 001.415 1.415zm3.2-5.171a1 1 0 00-1.3 1.3l4 10a1 1 0 001.823.075l1.38-2.759 3.018 3.02a1 1 0 001.414-1.415l-3.019-3.02 2.76-1.379a1 1 0 00-.076-1.822l-10-4z"></path>
+                        </svg>
+                        @endif
+                        {{ ucfirst($user->role) }}
+                    </div>
                 </td>
                 <td class="px-4 py-3">
                     <div class="flex items-center gap-3"> 
@@ -78,5 +85,10 @@
                 </td>
             </tr>
         @endforeach
+        @for ($i = count($users); $i < 10; $i++)
+            <tr class="border-b dark:border-gray-700">
+                <td class="px-4 py-3" colspan="5">&nbsp;</td>
+            </tr>
+        @endfor
     </tbody>
 </table>
