@@ -47,7 +47,7 @@
     </div>
 
     <!-- Course Details -->
-    <div class="p-2 text-center flex-grow">
+    <div class="p-3 text-center flex-grow">
         <div class="relative flex flex-col items-center">
             <!-- Course Title with Popover Button -->
             <h5 class="text-sm font-medium text-gray-900 dark:text-white mx-auto text-center w-40">
@@ -125,7 +125,7 @@
             <div class="flex mt-2 mb-2 justify-center space-x-2">
             <!-- Open Button -->
             <div data-modal-target="crud-modal-module-{{ $course->id }}" data-modal-toggle="crud-modal-module-{{ $course->id }}">
-                <x-primary-button class="mt-2 px-4 py-2 text-sm">Lihat</x-primary-button>
+                <x-primary-button class=" px-4 py-2 text-sm">Lihat</x-primary-button>
             </div>
 
             <!-- Main modal for modules -->
@@ -136,7 +136,7 @@
             </div>
             
             <!-- Delete Course Button -->
-            <x-danger-button class="mt-2 px-4 py-2 text-sm" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-course-deletion-{{ $course->id }}')">
+            <x-danger-button class="px-4 py-2 text-sm" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-course-deletion-{{ $course->id }}')">
                 {{ __('Hapus') }}
             </x-danger-button>
         </div>

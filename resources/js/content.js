@@ -19,7 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
         link.addEventListener("click", function (e) {
             e.stopPropagation();
             e.preventDefault(); // Prevent Laravel from interpreting it as a relative path
-            window.open(this.href, '_blank');
+            const url = new URL(this.href.replace(/“|”/g, '"'));
+            window.open(url.href, '_blank');
         });
     });
 

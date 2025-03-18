@@ -17,3 +17,7 @@
 .no-spinner {
   -moz-appearance: textfield; /* Hide spinner in Firefox */
 }
+
+.modal-container:hover {
+  border-color: cornflowerblue;
+}

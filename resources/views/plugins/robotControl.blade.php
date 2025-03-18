@@ -10,7 +10,7 @@
 
     <div class="py-6">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden">
                 <!-- IP Address Form -->
                 <div class="p-6 text-gray-900 flex justify-center items-center">
                     <form id="ip-form" class="w-8xl max-w-md">

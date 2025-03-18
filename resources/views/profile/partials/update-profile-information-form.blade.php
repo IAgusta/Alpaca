@@ -23,7 +23,7 @@
     
         <div class="flex gap-6">
             <!-- Profile Image Section -->
-            <div class="w-1/3 flex flex-col items-center">
+            <div class="flex-1 flex flex-col items-center">
                 <div class="relative w-38 h-38">
                     <!-- Profile Image -->
                     <img id="profile-preview" src="{{ $user->image ? asset('storage/' .$user->image) : asset('storage/profiles/default-profile.png') }}" 
@@ -44,7 +44,7 @@
                 <x-input-error class="mt-2" :messages="$errors->get('image')" />
 
                 <!-- Bio (About) -->
-                <div class="mt-4 h-full">
+                <div class="mt-4 h-full w-full">
                     <x-input-label for="about" :value="__('Bio')" />
                     <textarea id="about" name="about" rows="5"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
@@ -53,7 +53,7 @@
                 </div>
             </div>
     
-            <div class="w-2/3">
+            <div class="flex-1">
                 <div>
                     <x-input-label for="name" :value="__('Name')" />
                     <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
@@ -115,30 +115,118 @@
         </div>
     
         <!-- Save Button -->
-        <div class="flex items-center gap-4">
+        <div class="flex justify-center mt-6">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
         </div>
     </form>
+
+    <!-- Cropping Modal -->
+    <div id="cropper-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-4 rounded-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-medium text-gray-900">Crop Image</h2>
+                <button id="cropper-close" class="text-gray-600 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="w-full h-64">
+                <img id="cropper-image" class="w-full h-full object-cover">
+            </div>
+            <div class="flex justify-end mt-4">
+                <button id="cropper-crop" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Crop</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Required Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
-<script>
-    // Initialize datepicker with proper options
-    document.addEventListener('DOMContentLoaded', function() {
-        new Datepicker(document.getElementById('birth_date'), {
-            // Optional configuration
-            format: 'yyyy-mm-dd', // Match your DB date format
-            autohide: true, // Auto-close after selection
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.0.7/compressor.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
+
+    <script>
+        // Initialize datepicker with proper options
+        document.addEventListener('DOMContentLoaded', function() {
+            new Datepicker(document.getElementById('birth_date'), {
+                // Optional configuration
+                format: 'yyyy-mm-dd', // Match your DB date format
+                autohide: true, // Auto-close after selection
+            });
         });
-    });
 
-    
+        let cropper;
+        const imageInput = document.getElementById('image');
+        const cropperModal = document.getElementById('cropper-modal');
+        const cropperImage = document.getElementById('cropper-image');
+        const cropperClose = document.getElementById('cropper-close');
+        const cropperCrop = document.getElementById('cropper-crop');
+        const profilePreview = document.getElementById('profile-preview');
 
-    document.getElementById('image').addEventListener('change', function(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            document.getElementById('profile-preview').src = reader.result;
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) { // Check if file is larger than 2MB
+                    new Compressor(file, {
+                        quality: 0.6, // Adjust quality as needed
+                        maxWidth: 1920, // Adjust max width as needed
+                        maxHeight: 1920, // Adjust max height as needed
+                        success(result) {
+                            handleFile(result);
+                        },
+                        error(err) {
+                            console.error(err.message);
+                        },
+                    });
+                } else {
+                    handleFile(file);
+                }
+            }
+        });
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                cropperImage.src = e.target.result;
+                cropperModal.classList.remove('hidden');
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                });
+            };
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(event.target.files[0]);
-    });
-</script>
+
+        cropperClose.addEventListener('click', function() {
+            cropper.destroy();
+            cropperModal.classList.add('hidden');
+        });
+
+        cropperCrop.addEventListener('click', function() {
+            const canvas = cropper.getCroppedCanvas();
+            canvas.toBlob(function(blob) {
+                if (blob.size > 2 * 1024 * 1024) { // Re-compress if still larger than 2MB
+                    new Compressor(blob, {
+                        quality: 0.6, // Adjust quality as needed
+                        success(result) {
+                            updateImageInput(result);
+                        },
+                        error(err) {
+                            console.error(err.message);
+                        },
+                    });
+                } else {
+                    updateImageInput(blob);
+                }
+            });
+        });
+
+        function updateImageInput(blob) {
+            const url = URL.createObjectURL(blob);
+            profilePreview.src = url;
+            const fileInput = new File([blob], 'cropped.jpg', { type: 'image/jpeg' });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(fileInput);
+            imageInput.files = dataTransfer.files;
+            cropper.destroy();
+            cropperModal.classList.add('hidden');
+        }
+    </script>
 </section>

@@ -17,7 +17,7 @@
     </x-slot>
     <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="mx-auto p-7 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="mx-auto p-7 bg-white overflow-hidden sm:rounded-lg">
                 {{-- Your Course Section --}}
                 @include('user.component.user_course')
 

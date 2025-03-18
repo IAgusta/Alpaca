@@ -15,7 +15,7 @@
 
     <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-7">
+            <div class="bg-white overflow-hidden p-7">
                 <!-- Course Cards -->
                 <div class="flex flex-wrap gap-7 justify-start">
                     <!-- Add New Course Card -->

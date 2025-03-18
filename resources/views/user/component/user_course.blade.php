@@ -1,7 +1,7 @@
 <h2 class="text-md font-semibold mb-3">Your Course</h2>
 <div class="flex flex-wrap gap-7 justify-start">
     @foreach ($userCourses as $userCourse)
-    <div class="relative bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col" style="width: 208px; height: 373px;">
+        <div class="relative bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col" style="width: 208px; height: 373px;">
             {{-- Course Image --}}
             <div class="relative">
                 <img class="w-full h-35 object-cover rounded-t-lg" src="{{ $userCourse->course->image ? asset('storage/'.$userCourse->course->image) : asset('storage/courses/default-course.png') }}" alt="Course Image" style="width: 206px; height: 154px; object-fit: cover;"/>
@@ -32,7 +32,7 @@
                 @endif
             </div>
             {{-- Course Details --}}
-            <div class="p-2 text-center flex-grow">
+            <div class="p-3 text-center flex-grow">
                 <div class="relative flex flex-col items-center">
                     <h5 class="text-sm font-medium text-gray-900 dark:text-white mx-auto text-center w-40">
                         {{ $userCourse->course->name }}
@@ -76,7 +76,7 @@
                 @endphp
                 
                 @if(count($themes) > 0)
-                    <div class="flex flex-wrap gap-2 my-2 justify-center">
+                    <div class="flex flex-wrap gap-2 mt-2 justify-center">
                         @foreach($displayThemes as $theme)
                             @php
                                 $formattedTheme = ucwords(trim($theme));
@@ -104,12 +104,12 @@
                 $totalModules = $userCourse->course->modules->count();
                 $progressPercentage = $totalModules > 0 ? ($userCourse->completed_modules / $totalModules) * 100 : 0;
                 @endphp
-                <div class="w-full bg-gray-300 rounded-full h-2 mt-1">
+                <div class="w-full bg-gray-300 rounded-full h-2">
                     <div class="bg-green-500 h-2 rounded-full" style="width: {{ $progressPercentage }}%;"></div>
                 </div>
                 <div class="my-1 text-xs">{{ $userCourse->completed_modules }}/{{ $totalModules }} Complete</div>
                 {{-- Open Button --}}
-                <a class="mt-2" href="{{ route('user.course.open', $userCourse->course->id) }}">
+                <a href="{{ route('user.course.open', $userCourse->course->id) }}">
                     <x-primary-button>Buka</x-primary-button>
                 </a>
             </div>

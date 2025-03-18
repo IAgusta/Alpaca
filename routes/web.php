@@ -9,6 +9,7 @@ use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RobotController;
 use App\Http\Controllers\UserCourseController;
+use App\Http\Controllers\DashboardController;
 
 require __DIR__.'/auth.php';
 
@@ -30,7 +31,7 @@ Route::get('/documentation', function(){ return view('plugins.documentation');})
 Route::get('/documentation-esp32', function () { return view('plugins.documentation.esp32');})->name('documentation.esp32');
 Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');
 
-Route::get('/dashboard', function () { return view('dashboard'); })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
 
 Route::middleware(['auth'])->group(function () {
