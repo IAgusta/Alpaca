@@ -1,20 +1,9 @@
 <footer class="relative bottom-0 left-0 z-0 w-full p-4 bg-white border-t border-gray-200 shadow-sm md:flex md:flex-col md:items-center justify-center md:p-6 dark:bg-gray-800 dark:border-gray-600">
-    <ul class="flex items-center mb-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mb-0 justify-center">
-        <li>
-            <a href="{{ route('dashboard') }}" class="hover:underline me-4 md:me-6">Dashboard</a>
-        </li>
-        <li>
-            <a href="{{ route('user.course') }}" class="hover:underline me-4 md:me-6">Course</a>
-        </li>
-        <li>
-            <a href="{{ route('plugins.robotControl') }}" class="hover:underline me-4 md:me-6">Robot Control</a>
-        </li>
-        <li>
-            <a href="{{ route('plugins.monitoring') }}" class="hover:underline me-4 md:me-6">Monitoring</a>
-        </li>
-    </ul>
-    <div class="flex flex-col md:flex-row justify-center items-center w-full mt-4 gap-2 lg:gap-8">
+    <div class="flex items-center mb-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mb-0 justify-center">
         <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2025 <a href="{{ route('home') }}" class="hover:underline">Alpaca™</a>. All Rights Reserved.</span>
+    </div>
+    <div class="flex flex-col md:flex-row justify-center items-center w-full mt-4 gap-2 lg:gap-8">
+        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">Email : ikraamagusta91@gmail.com</span>
         <div class="flex space-x-5 rtl:space-x-reverse">
             <a href="mailto:ikraamagusta91@gmail.com" class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-at" viewBox="0 0 16 16">

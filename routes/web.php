@@ -23,6 +23,9 @@ Route::get('/', function () { return view('welcome'); })->name('home');
 Route::get('/about', function () { return view('about'); })->name('about');
 Route::get('/contact', function () { return view('contact');})->name('contact');
 Route::get('/price', function () { return view('prices');})->name('prices');
+Route::get('/faq', function () { return view('faqs');})->name('faq');
+Route::get('/terms', function () { return view('terms');})->name('terms');
+Route::get('/privacy-policy', function () { return view('privacy-policy');})->name('privacy-policy');
 Route::get('/news', function () { return view('news');})->name('news');
 Route::get('/plugins/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
 Route::get('/plugins/monitoring', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
@@ -34,7 +37,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['au
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/user/courses', [UserCourseController::class, 'index'])->name('user.course');
+    Route::get('/courses', [UserCourseController::class, 'index'])->name('user.course');
     Route::post('/user/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
     Route::get('/user/courses/preview/{courseId}', [UserCourseController::class, 'preview'])->name('user.course.preview');
     Route::get('/user/courses/open/{courseId}', [UserCourseController::class, 'open'])->name('user.course.open');
@@ -58,11 +61,11 @@ Route::middleware(['auth', 'only.admin'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     // Course Routes
     Route::get('/courses-index', [CourseController::class, 'index'])->name('admin.courses.index');
-    Route::post('/courses', [CourseController::class, 'store'])->name('admin.courses.store');
-    Route::put('/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
+    Route::post('/courses/store', [CourseController::class, 'store'])->name('admin.courses.store');
+    Route::put('/courses/{course}/update', [CourseController::class, 'update'])->name('admin.courses.update');
     Route::post('/courses/{course}/lock', [CourseController::class, 'lockCourse'])->name('course.lockCourse');
     Route::post('/courses/{course}/unlock', [CourseController::class, 'unlockCourse'])->name('course.unlockCourse');
-    Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
+    Route::delete('/courses/{course}/destroy', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
     // Module Routes (inside a course)
     Route::prefix('/courses-index/{course}/modules')->name('admin.courses.modules.')->group(function () {
