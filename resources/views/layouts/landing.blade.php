@@ -12,13 +12,12 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
         <link rel="stylesheet" href="resources/css/styles.css">
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-
+    <body class="font-sans antialiased pt-16" style="background-image: url('{{ asset('img/background.png') }}'); background-size: cover;">
+        <div class="min-h-screen flex flex-col">
+            @include('partials.header')
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white shadow">
@@ -33,5 +32,7 @@
                 {{ $slot }}
             </main>
         </div>
+        @include('partials.footer')
+        @include('layouts.footer')
     </body>
 </html>

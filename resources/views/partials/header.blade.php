@@ -1,53 +1,127 @@
-<header class="navbar navbar-expand-lg navbar-light fixed-top" style="background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid rgba(0,0,0,0.1);">
-    <div class="container-fluid">
-        <!-- Logo -->
-        <a class="navbar-brand" href="/">
-            <img src="img/logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
-            <span style="font-family: 'FitGree', sans-serif; font-weight: 600;">Alpaca</span>
-        </a>
-        
-        
-        <!-- Search Bar -->
-        <form class="d-flex ms-3 position-relative">
-            <input class="form-control search-bar me-2 ps-5" type="search" placeholder="Search" aria-label="Search" style="background: rgba(255, 255, 255, 0.5); border: none;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search position-absolute" viewBox="0 0 16 16" style="left: 10px; top: 50%; transform: translateY(-50%);">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-            </svg>
-        </form>
+<nav x-data="{ open: false, loading: false }" class="bg-white border-b border-gray-100 fixed top-0 left-0 w-full z-10">
+    <!-- Loading Bar -->
+    <div x-show="loading" class="fixed top-0 left-0 w-full h-1 bg-blue-500 z-50" x-transition></div>
 
-        <!-- Navbar Toggler (for Mobile) -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <!-- Primary Navigation Menu -->
+    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Left Section: Logo & Navigation -->
+            <div class="flex items-center space-x-8">
+                <!-- Logo -->
+                <a href="{{ route('home') }}" class="flex items-center space-x-2" @click="loading = true">
+                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <span class="text-gray-800 font-semibold">Alpaca</span>
+                </a>
 
-        <!-- Navbar Items -->
-        <div class="collapse navbar-collapse w-100" id="navbarNav">
-            <div class="d-flex flex-lg-row flex-column w-100 align-items-lg-center align-items-start">
-                <!-- Navigasi List -->
-                <ul class="navbar-nav ms-lg-auto me-3 order-lg-1 order-2">
-                    <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/news">Our News</a></li>
-                </ul>
-                
-                <div class="order-lg-2 order-1 me-3">
-                    <a href="/dashboard" class="btn rounded-login-btn"> 
-                        <i class="bi bi-box-arrow-in-right"></i> Login
-                    </a>
+                <!-- Navigation Links -->
+                <div class="hidden sm:flex space-x-8">
+                    <x-nav-link :href="route('about')" :active="request()->routeIs('about')" @click="loading = true">
+                        {{ __('About Us') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('news')" :active="request()->routeIs('news')" @click="loading = true">
+                        {{ __('Our News') }}
+                    </x-nav-link>
                 </div>
-                
+            </div>
+
+            <!-- Right Section: Login & Social Media -->
+            <div class="hidden sm:flex items-center space-x-4">
+                <!-- Login Button -->
+                <a href="/dashboard" class="flex bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 transition">
+                    @auth
+                        {{ __('Back To Dashboard') }}
+                    @else
+                        {{ __('Login') }}
+                    @endauth
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="25" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0z"/>
+                        <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+                    </svg>
+                </a>
+
                 <!-- Social Media Icons -->
-                <div class="order-lg-3 order-3 d-flex gap-2">
-                    <a href="https://github.com/IAgusta/Alpaca" class="text-dark me-3" target="_blank">
+                <div class="flex items-center gap-3">
+                    <a href="https://github.com/IAgusta/Alpaca" target="_blank">
                         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="30" height="30" alt="GitHub">
                     </a>
-                    <a href="https://discord.gg/ExzAJfgE" class="text-dark me-2" target="_blank">
+                    <a href="https://discord.gg/ExzAJfgE" target="_blank">
                         <img src="https://img.icons8.com/?size=100&id=30888&format=png&color=000000" width="30" height="30" alt="Discord">
                     </a>
-                    <a href="https://trakteer.id/eiko_hachiichi/tip" class="text-dark me-3" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 15 90 90" alt="trakteer"><path d="M89.04 32.915h-2.762v-1.638a5.125 5.125 0 0 0-5.118-5.119H49.17a5.125 5.125 0 0 0-5.118 5.119v1.638H41.29a1.751 1.751 0 0 0-1.75 1.75v9a1.751 1.751 0 0 0 1.75 1.75h3.026l.623 7.314 1.382 16.241 2.335 27.436a1.749 1.749 0 0 0 1.744 1.6h29.652a1.749 1.749 0 0 0 1.743-1.6l1.264-14.841 1.161-13.648 1.916-22.5h2.9a1.751 1.751 0 0 0 1.75-1.75v-9a1.751 1.751 0 0 0-1.746-1.752zm-41.488-1.638a1.62 1.62 0 0 1 1.618-1.619h31.99a1.62 1.62 0 0 1 1.618 1.619v1.638H47.552zm33.159 36.6-1 11.79H50.744l-.964-11.33-1.192-14.005h33.276zm-28.7 26.633-.965-11.343H79.41l-.966 11.343zm30.151-43.678H48.29l-.461-5.417h34.794zm5.128-8.917H43.04v-5.5h44.25z"/></svg>
+                    <a href="https://trakteer.id/eiko_hachiichi/tip" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cup-hot-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M.5 6a.5.5 0 0 0-.488.608l1.652 7.434A2.5 2.5 0 0 0 4.104 16h5.792a2.5 2.5 0 0 0 2.44-1.958l.131-.59a3 3 0 0 0 1.3-5.854l.221-.99A.5.5 0 0 0 13.5 6zM13 12.5a2 2 0 0 1-.316-.025l.867-3.898A2.001 2.001 0 0 1 13 12.5"/>
+                            <path d="m4.4.8-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 3.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 6.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 9.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8"/>
+                        </svg>
                     </a>
                 </div>
             </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="sm:hidden">
+                <button @click="open = !open" class="p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100 focus:outline-none transition">
+                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path :class="{'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        <path :class="{'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
-</header>
+
+    <!-- Responsive Navigation Menu -->
+    <div :class="{'block': open, 'hidden': !open}" class="hidden sm:hidden">
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')" @click="loading = true">
+                {{ __('About Us') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('news')" :active="request()->routeIs('news')" @click="loading = true">
+                {{ __('Our News') }}
+            </x-responsive-nav-link>
+        </div>
+
+        <!-- Responsive Login & Social Media -->
+        <div class="pt-4 pb-1 border-t border-gray-200">
+            @auth
+            <div class="flex items-center space-x-3 px-4">
+                <!-- Profile Image -->
+                <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('storage/profiles/default-profile.png') }}" 
+                    alt="Profile Picture" 
+                    class="w-10 h-10 rounded-full border border-gray-300 shadow-sm">
+                
+                <!-- User Info -->
+                <div>
+                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                </div>
+                </div>
+                <!-- Profile Link -->
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" @click="loading = true">
+                    {{ __('Back To Dashboard') }}
+                </x-responsive-nav-link>
+
+                <!-- Log Out -->
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit(); loading = true;">
+                        {{ __('Log Out') }}
+                    </x-responsive-nav-link>
+                </form>
+            @else
+                <div class="px-4" style="cursor: default;">
+                    <div class="font-medium text-base text-gray-800">{{ "Belum Login" }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ "Silahkan login dengan menekan tombol login atau register" }}</div>
+                </div>
+                <!-- Login Link -->
+                <x-responsive-nav-link :href="route('login')" @click="loading = true">
+                    {{ __('Login') }}
+                </x-responsive-nav-link>
+
+                <!-- Register Link -->
+                <x-responsive-nav-link :href="route('register')" @click="loading = true">
+                    {{ __('Register') }}
+                </x-responsive-nav-link>
+            @endauth
+        </div>
+    </div>
+</nav>

@@ -20,11 +20,10 @@ Route::get('/robot/connect', [RobotController::class, 'connect']);
 
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');
 Route::get('/', function () { return view('welcome'); })->name('home');
-Route::get('/about', function () { return view('about'); });
-Route::get('/contact', function () { return view('contact'); });
-Route::get('/price', function () { return view('prices'); });
-Route::get('/news', function () { return view('news'); });
-Route::get('/faqs', function () { return view('faqs'); });
+Route::get('/about', function () { return view('about'); })->name('about');
+Route::get('/contact', function () { return view('contact');})->name('contact');
+Route::get('/price', function () { return view('prices');})->name('prices');
+Route::get('/news', function () { return view('news');})->name('news');
 Route::get('/plugins/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
 Route::get('/plugins/monitoring', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
 Route::get('/documentation', function(){ return view('plugins.documentation');})->name('documentation');
