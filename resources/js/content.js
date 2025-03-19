@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
         copyBtn.style.color = "#fff";
         copyBtn.style.border = "none";
         copyBtn.style.borderRadius = "3px";
-        copyBtn.style.zIndex = "10";
+        copyBtn.style.zIndex = "5";
 
         // Copy function with fallback method
         copyBtn.addEventListener("click", function () {

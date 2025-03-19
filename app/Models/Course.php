@@ -11,7 +11,16 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'image', 'author', 'theme', 'is_locked', 'lock_password'];
+    protected $fillable = [
+        'name',
+        'description',
+        'image',
+        'author',
+        'theme',
+        'is_locked',
+        'lock_password',
+        'popularity',
+    ];
 
     // Relationship with Modules
     public function modules()

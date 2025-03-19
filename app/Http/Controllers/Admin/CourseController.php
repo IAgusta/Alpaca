@@ -18,10 +18,10 @@ class CourseController extends Controller
 
         if ($user->role === 'trainer') {
             // Show only courses created by the logged-in trainer
-            $courses = Course::where('author', $user->id)->get();
+            $courses = Course::where('author', $user->id)->with('authorUser')->get();
         } else {
             // Admin sees all courses
-            $courses = Course::all();
+            $courses = Course::with('authorUser')->get();
         }
 
         return view('admin.courses.index', compact('courses'));

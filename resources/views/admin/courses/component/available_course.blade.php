@@ -79,18 +79,18 @@
 
        <!-- Module Theme -->
        @php
-       // Handle null/empty theme and format display
-       $themeString = !empty(trim($course->theme)) ? $course->theme : 'umum';
-       $themes = explode(',', $themeString);
-       $totalThemes = count($themes);
-       $displayThemes = array_slice($themes, 0, 2);
-       
-       $colors = [
-           'bg-blue-100 text-blue-800',
-           'bg-red-100 text-red-800',
-           'bg-green-100 text-green-800',
-           'bg-yellow-100 text-yellow-800'
-       ];
+        // Handle null/empty theme and format display
+        $themeString = !empty(trim($course->theme)) ? $course->theme : 'umum';
+        $themes = explode(',', $themeString);
+        $totalThemes = count($themes);
+        $displayThemes = array_slice($themes, 0, 2);
+        
+        $colors = [
+            'bg-blue-100 text-blue-800',
+            'bg-red-100 text-red-800',
+            'bg-green-100 text-green-800',
+            'bg-yellow-100 text-yellow-800'
+        ];
        @endphp
        
        @if(count($themes) > 0)

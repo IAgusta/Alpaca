@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RobotController;
 use App\Http\Controllers\UserCourseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LandingPageController;
 
 require __DIR__.'/auth.php';
 
@@ -19,7 +20,7 @@ Route::get('/robot/speed', [RobotController::class, 'updateSpeed']);
 Route::get('/robot/connect', [RobotController::class, 'connect']);
 
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');
-Route::get('/', function () { return view('welcome'); })->name('home');
+Route::get('/', [LandingPageController::class, 'index'])->name('home');
 Route::get('/about', function () { return view('about'); })->name('about');
 Route::get('/contact', function () { return view('contact');})->name('contact');
 Route::get('/price', function () { return view('prices');})->name('prices');
@@ -61,17 +62,17 @@ Route::middleware(['auth', 'only.admin'])->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     // Course Routes
     Route::get('/courses-index', [CourseController::class, 'index'])->name('admin.courses.index');
-    Route::post('/courses/store', [CourseController::class, 'store'])->name('admin.courses.store');
-    Route::put('/courses/{course}/update', [CourseController::class, 'update'])->name('admin.courses.update');
-    Route::post('/courses/{course}/lock', [CourseController::class, 'lockCourse'])->name('course.lockCourse');
+    Route::post('/courses/storedtoDB', [CourseController::class, 'store'])->name('admin.courses.store');
+    Route::put('/courses/{course}/updatefromDB', [CourseController::class, 'update'])->name('admin.courses.update');
+    Route::post('/courses/{course}/locked', [CourseController::class, 'lockCourse'])->name('course.lockCourse');
     Route::post('/courses/{course}/unlock', [CourseController::class, 'unlockCourse'])->name('course.unlockCourse');
-    Route::delete('/courses/{course}/destroy', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
+    Route::delete('/courses/{course}/destroyfromDB', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
     // Module Routes (inside a course)
     Route::prefix('/courses-index/{course}/modules')->name('admin.courses.modules.')->group(function () {
         Route::post('/', [ModuleController::class, 'store'])->name('store'); // Store new module
-        Route::delete('/{module}', [ModuleController::class, 'destroy'])->name('destroy'); // Delete module
-        Route::put('/{module}', [ModuleController::class, 'update'])->name('update'); // Update module
+        Route::delete('/{module}/destroyfromDB', [ModuleController::class, 'destroy'])->name('destroy'); // Delete module
+        Route::put('/{module}/updatedfromDB', [ModuleController::class, 'update'])->name('update'); // Update module
     });
 
     // Module Content Routes
@@ -81,8 +82,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::get('/', [ModuleContentController::class, 'index'])->name('index');
             Route::post('/', [ModuleContentController::class, 'store'])->name('store');
             Route::get('/{moduleContent}/edit', [ModuleContentController::class, 'edit'])->name('edit'); // Show edit form
-            Route::patch('/{moduleContent}', [ModuleContentController::class, 'update'])->name('update'); // Update content
-            Route::delete('/{moduleContent}', [ModuleContentController::class, 'destroy'])->name('destroy'); // Delete content
-            Route::post('/reorder', [ModuleContentController::class, 'reorder'])->name('reorder'); // Reorder content
+            Route::patch('/{moduleContent}/updatedfromDB', [ModuleContentController::class, 'update'])->name('update'); // Update content
+            Route::delete('/{moduleContent}/destroyfromDB', [ModuleContentController::class, 'destroy'])->name('destroy'); // Delete content
+            Route::post('/reorder/changePlace', [ModuleContentController::class, 'reorder'])->name('reorder'); // Reorder content
         });
 });

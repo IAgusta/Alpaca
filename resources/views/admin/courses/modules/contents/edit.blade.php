@@ -20,8 +20,8 @@
         </nav>
     </x-slot>
 
-    <div class="py-7 max-w-8xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+    <div class="py-7 max-w-6xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden sm:rounded-lg p-6">
             <!-- Back Button -->
             <a href="#" onclick="window.history.back();" class="mb-4 inline-block">
                 <x-secondary-button>
@@ -45,7 +45,7 @@
                 @if ($content->content_type === 'content')
                     <div class="mb-2">
                         <label class="block text-sm font-medium text-gray-700">Content</label>
-                        <div id="editor" class="w-full border border-gray-300 rounded-md shadow-sm">{!! $content->content !!}</div>
+                        <div id="editor" class="w-full border border-gray-300 shadow-sm">{!! $content->content !!}</div>
                         <input type="hidden" name="content" id="content-hidden" value="{{ $content->content }}">
                     </div>
                 @endif
@@ -59,7 +59,7 @@
                     <!-- Question Editor -->
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Question</label>
-                        <div id="question-editor" class="w-full border border-gray-300 rounded-md shadow-sm">{!! $exercise['question'] ?? '' !!}</div>
+                        <div id="question-editor" class="w-full border border-gray-300 shadow-sm">{!! $exercise['question'] ?? '' !!}</div>
                         <input type="hidden" name="question" id="question-hidden" value="{{ $exercise['question'] ?? '' }}">
                     </div>
 

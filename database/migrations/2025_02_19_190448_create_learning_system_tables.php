@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('theme')->nullable();
             $table->boolean('is_locked')->default(false);
             $table->string('lock_password')->nullable();
+            $table->integer('popularity')->default(0);
             $table->timestamps();
         });
 

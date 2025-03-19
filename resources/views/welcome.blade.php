@@ -22,7 +22,7 @@
     </div>
 
     <!-- Feature Section -->
-    <div class="overflow-hidden bg-white py-24 sm:py-32">
+    <div class="overflow-hidden py-24 sm:py-32">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
           <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
             <div class="lg:pt-4 lg:pr-8">
@@ -67,52 +67,13 @@
         </div>
     </div>
 
-    <!-- Blog Section -->
-    <div class="bg-white py-16 sm:py-16">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-          <div class="mx-auto max-w-2xl lg:mx-0">
-            <h2 class="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">From the blog</h2>
-            <p class="mt-2 text-lg/8 text-gray-600">Learn how to grow your business with our expert advice.</p>
-          </div>
-          <div class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <article class="flex max-w-xl flex-col items-start justify-between">
-              <div class="flex items-center gap-x-4 text-xs">
-                <time datetime="2020-03-16" class="text-gray-500">Mar 16, 2020</time>
-                <a href="#" class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 hover:bg-gray-100">Marketing</a>
-              </div>
-              <div class="group relative">
-                <h3 class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
-                  <a href="#">
-                    <span class="absolute inset-0"></span>
-                    Boost your conversion rate
-                  </a>
-                </h3>
-                <p class="mt-5 line-clamp-3 text-sm/6 text-gray-600">Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel. Iusto corrupti dicta.</p>
-              </div>
-              <div class="relative mt-8 flex items-center gap-x-4">
-                <img src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full bg-gray-50">
-                <div class="text-sm/6">
-                  <p class="font-semibold text-gray-900">
-                    <a href="#">
-                      <span class="absolute inset-0"></span>
-                      Michael Foster
-                    </a>
-                  </p>
-                  <p class="text-gray-600">Co-Founder / CTO</p>
-                </div>
-              </div>
-            </article>
-      
-            <!-- More posts... -->
-          </div>
-        </div>
-    </div>
+    @include('partials.top-courses')
 
     <!-- Bento Grid -->
-    <div class="bg-gray-50 py-24 sm:py-32">
+    <div class=" py-24 sm:py-32">
         <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-            <h2 class="text-center text-base/7 font-semibold text-indigo-600">Deploy faster</h2>
-            <p class="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl">Everything you need to deploy your app</p>
+            <h2 class="text-center text-base/7 font-semibold text-indigo-600">Alpaca Features</h2>
+            <p class="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl">We offer you with much features</p>
             <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
             <div class="relative lg:row-span-2">
                 <div class="absolute inset-px rounded-lg bg-white lg:rounded-l-[2rem]"></div>
@@ -133,11 +94,11 @@
                 <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem]"></div>
                 <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
                 <div class="px-8 pt-8 sm:px-10 sm:pt-10">
-                    <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Performance</p>
-                    <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Lorem ipsum, dolor sit amet consectetur adipisicing elit maiores impedit.</p>
+                    <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Many Courses</p>
+                    <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">We provide a variety of free courses.</p>
                 </div>
                 <div class="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
-                    <img class="w-full max-lg:max-w-xs" src="https://tailwindcss.com/plus-assets/img/component-images/bento-03-performance.png" alt="">
+                    <img class="w-full max-lg:max-w-xs" src="img/course-selection-user.png" alt="courses-image">
                 </div>
                 </div>
                 <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-t-[2rem]"></div>
@@ -146,11 +107,11 @@
                 <div class="absolute inset-px rounded-lg bg-white"></div>
                 <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)]">
                 <div class="px-8 pt-8 sm:px-10 sm:pt-10">
-                    <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Security</p>
-                    <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi.</p>
+                    <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">User Tracking</p>
+                    <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">You have full control to keep your records private or share them as you choose.</p>
                 </div>
-                <div class="@container flex flex-1 items-center max-lg:py-6 lg:pb-2">
-                    <img class="h-[min(152px,40cqw)] object-cover" src="https://tailwindcss.com/plus-assets/img/component-images/bento-03-security.png" alt="">
+                <div class="@container flex flex-1 items-center justify-center max-lg:py-6 lg:pb-2">
+                    <img class="h-[min(152px,40cqw)] object-cover" src="img/user-tracking.png" alt="">
                 </div>
                 </div>
                 <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5"></div>

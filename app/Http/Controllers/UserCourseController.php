@@ -50,6 +50,9 @@ class UserCourseController extends Controller
             'user_id' => Auth::id(),
             'course_id' => $request->course_id,
         ]);
+
+        // Increment the popularity of the course
+        $course->increment('popularity');
     
         return redirect()->route('user.course')->with('success', 'Course added successfully.');
     }
