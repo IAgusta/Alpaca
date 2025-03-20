@@ -31,7 +31,10 @@
         <!-- Edit modal -->
         <div id="crud-modal-update-{{ $course->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-md max-h-full">
-                @include('admin.courses.edit', ['course' => $course])
+                @php
+                    $plainPassword = $course->lock_password ? \Illuminate\Support\Facades\Crypt::decryptString($course->lock_password) : null;
+                @endphp
+                @include('admin.courses.edit', ['course' => $course, 'plainPassword' => $plainPassword])
             </div>
         </div>
 

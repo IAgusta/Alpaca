@@ -88,9 +88,31 @@
                             @if($module->contents)
                                 @foreach($module->contents as $content)
                                     <div id="content-{{ $content->id }}"> <!-- Remove ql-editor class -->
-                                        <div class="ql-editor p-0 border-0 shadow-none"> <!-- Add ql-editor class here -->
-                                            {!! $content->content !!} <!-- Quill-formatted content -->
-                                        </div>
+                                        @if($content->content_type === 'exercise')
+                                            @php
+                                                $exercise = json_decode($content->content, true);
+                                            @endphp
+                                            <div class="exercise-container mx-auto my-4 p-4 border border-gray-300 rounded-lg bg-gray-50">
+                                                <form class="exercise-form" data-explanation="{{ $exercise['explanation'] }}">
+                                                    <p class="font-semibold">{!! $exercise['question'] !!}</p>
+                                                    @foreach($exercise['answers'] as $index => $answer)
+                                                        <div class="my-2">
+                                                            <input type="radio" id="answer-{{ $content->id }}-{{ $index }}" name="answer-{{ $content->id }}" value="{{ $answer['correct'] }}">
+                                                            <label for="answer-{{ $content->id }}-{{ $index }}">{{ $answer['text'] }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                    <button type="button" class="submit-answer mt-2 px-4 py-2 bg-blue-500 text-white rounded">Submit</button>
+                                                </form>
+                                                <div class="explanation hidden mt-4 p-2 border-t border-gray-200">
+                                                    <span class="icon"></span>
+                                                    <span class="explanation-text"></span>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="ql-editor p-0 border-0 shadow-none"> <!-- Add ql-editor class here -->
+                                                {!! $content->content !!} <!-- Quill-formatted content -->
+                                            </div>
+                                        @endif
                                     </div>
                                 @endforeach
                             @endif

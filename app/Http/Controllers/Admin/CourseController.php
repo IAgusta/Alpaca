@@ -7,8 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class CourseController extends Controller
 {
@@ -57,16 +58,22 @@ class CourseController extends Controller
     public function edit($id)
     {
         $course = Course::findOrFail($id);
-        
-        // Allow only admins or course owners to edit
+    
         if (Auth::user()->role !== 'admin' && intval($course->author) !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
-
-        // Retrieve the plain text password from the session if it exists
-        $plainPassword = session('current_lock_password_' . $course->id, null);
-    
-        return view('admin.courses.edit', compact('course', 'plainPassword'));
+        
+        try {
+            $plainPassword = $course->lock_password ? Crypt::decryptString($course->lock_password) : null;
+            Log::info('Decrypted password: ' . $plainPassword); // Log the decrypted password
+        } catch (\Exception $e) {
+            $plainPassword = null;
+            Log::error('Decryption failed: ' . $e->getMessage()); // Log any decryption errors
+        }
+        return view('admin.courses.edit', [
+            'course' => $course,
+            'plainPassword' => $plainPassword // Ensure this is passed to the view
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -130,37 +137,43 @@ class CourseController extends Controller
     public function lockCourse(Request $request, $id)
     {
         $course = Course::findOrFail($id);
-
+    
         // Allow only course owners to lock
         if (intval($course->author) !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
-
+    
         $password = $request->lock_password ?: Str::random(8);
-
+    
         $course->update([
             'is_locked' => true,
-            'lock_password' => $password, // Store plain password
+            'lock_password' => Crypt::encryptString($password), // Encrypt password
         ]);
-
+    
         return redirect()->route('admin.courses.index')->with('success', 'Course locked successfully. Password: ' . $password);
     }
 
     public function unlockCourse(Request $request, $id)
     {
         $course = Course::findOrFail($id);
-
+    
         // Allow only course owners to unlock
         if (intval($course->author) !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
-
-        if ($request->lock_password === $course->lock_password) {
+    
+        try {
+            $decryptedPassword = Crypt::decryptString($course->lock_password);
+        } catch (\Exception $e) {
+            return redirect()->route('admin.courses.index')->with('error', 'Decryption failed.');
+        }
+    
+        if ($request->lock_password === $decryptedPassword) {
             $course->update([
                 'is_locked' => false,
                 'lock_password' => null,
             ]);
-
+    
             return redirect()->route('admin.courses.index')->with('success', 'Course unlocked successfully.');
         } else {
             return redirect()->route('admin.courses.index')->with('error', 'Incorrect password.');

@@ -130,4 +130,29 @@ document.addEventListener("DOMContentLoaded", function () {
             mainContent.classList.remove("lg:ml-1/5");
         }
     });
+
+    // Handle exercise form submission
+    document.querySelectorAll(".exercise-form").forEach(form => {
+        form.querySelector(".submit-answer").addEventListener("click", function () {
+            const selectedAnswer = form.querySelector('input[name^="answer-"]:checked');
+            const explanationDiv = form.nextElementSibling;
+            const iconSpan = explanationDiv.querySelector(".icon");
+            const explanationTextSpan = explanationDiv.querySelector(".explanation-text");
+
+            if (selectedAnswer) {
+                const isCorrect = selectedAnswer.value === "1";
+                explanationTextSpan.innerHTML = form.dataset.explanation;
+                explanationDiv.classList.remove("hidden");
+                explanationDiv.classList.add(isCorrect ? "text-green-500" : "text-red-500");
+
+                if (isCorrect) {
+                    iconSpan.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Correct: ';
+                } else {
+                    iconSpan.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="inline w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg> Wrong: ';
+                }
+            } else {
+                alert("Please select an answer.");
+            }
+        });
+    });
 });

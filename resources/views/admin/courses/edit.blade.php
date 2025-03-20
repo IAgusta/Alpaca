@@ -41,10 +41,11 @@
                 <div class="mt-4">
                     <x-input-label :value="__('Password Kelas')" />
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">
-                        {{ $course->lock_password ?? 'Password not available' }}
+                        {{ $plainPassword ?? 'Password not available' }}
                     </p>
                 </div>
             @endif
+        
 
             <!-- Course Theme Selection -->
             <div class="my-4">

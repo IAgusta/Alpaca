@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\UserCourse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 
 class UserCourseController extends Controller
 {
@@ -40,9 +41,16 @@ class UserCourseController extends Controller
     
         $course = Course::findOrFail($request->course_id);
     
-        // Check if the course is locked and if the provided password matches
-        if ($course->is_locked && $request->lock_password !== $course->lock_password) {
-            return redirect()->route('user.course')->with('error', 'Incorrect password.');
+        // Added Courses if it locked
+        if ($course->is_locked) {
+            try {
+                $decryptedPassword = Crypt::decryptString($course->lock_password);
+            } catch (\Exception $e) {
+                return back()->with('error', 'Password decryption failed.');
+            }
+            if ($request->lock_password !== $decryptedPassword) {
+                return back()->with('error', 'Incorrect password.');
+            }
         }
     
         // Add the course to the user's courses
