@@ -56,6 +56,7 @@ class ModuleContentController extends Controller
 
         // ✅ Update the module's updated_at timestamp
         $module->touch();
+        $course->touch();
     
         return back()->with('success', 'Content added successfully!');
     }
@@ -64,6 +65,10 @@ class ModuleContentController extends Controller
     {
         // Find the module content by ID
         $content = ModuleContent::findOrFail($moduleContent);
+
+        // ✅ Update the module's updated_at timestamp
+        $module->touch();
+        $course->touch();
 
         // Pass the content, course, and module to the edit view
         return view('admin.courses.modules.contents.edit', [
@@ -111,8 +116,9 @@ class ModuleContentController extends Controller
             ]);
         }
     
-        // ✅ Update the module's updated_at timestamp
+        // ✅ Update the course and module's updated_at timestamp
         $module->touch();
+        $course->touch();
     
         // Redirect with success message
         return redirect()->route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module])
@@ -129,6 +135,7 @@ class ModuleContentController extends Controller
     
         // ✅ Update the module's updated_at timestamp
         $module->touch();
+        $course->touch();
     
         // If it's an AJAX request, return JSON
         if ($request->expectsJson()) {
@@ -153,6 +160,10 @@ class ModuleContentController extends Controller
                 ->where('module_id', $module->id)
                 ->update(['position' => $position['position']]);
         }
+
+        // ✅ Update the module's updated_at timestamp
+        $module->touch();
+        $course->touch();
     
         return response()->json(['success' => true]);
     }

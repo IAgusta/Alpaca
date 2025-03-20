@@ -29,7 +29,7 @@ Route::get('/terms', function () { return view('terms');})->name('terms');
 Route::get('/privacy-policy', function () { return view('privacy-policy');})->name('privacy-policy');
 Route::get('/news', function () { return view('news');})->name('news');
 Route::get('/plugins/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
-Route::get('/plugins/monitoring', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
+Route::get('/plugins/search-users', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
 Route::get('/documentation', function(){ return view('plugins.documentation');})->name('documentation');
 Route::get('/documentation-esp32', function () { return view('plugins.documentation.esp32');})->name('documentation.esp32');
 Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');

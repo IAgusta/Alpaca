@@ -6,53 +6,85 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-9xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden">
-                <div class="grid gap-8 mb-6 lg:mb-16 md:grid-cols-2">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Top Courses Swiper -->
+                    @include('user.component.top_courses')
+
+                    <!-- Last Update Courses -->
                     <div>
-                        <header>
-                            <h2 class="text-lg font-medium text-gray-900 mb-2">{{ __('Profile Information') }}
-                                <button data-popover-target="popover-description" data-popover-placement="bottom-end" type="button">
-                                    <svg class="w-3 h-3 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" 
-                                        clip-rule="evenodd"></path></svg>
-                                        <span class="sr-only">Show information</span>
-                                    </button>
-                                </p>
-                            </h2>
-                            <div data-popover id="popover-description" role="tooltip" class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-xs opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400">
-                                <div class="p-3 space-y-2">
-                                    <h3 class="font-semibold text-gray-900 dark:text-white">Profile Information</h3>
-                                    <p class="text-sm text-gray-600">
-                                        {{ __('Click, Image or Account Name to go into Profile, ') }}
-                                        {{ __('Or you can') }} <a class="hover:text-blue-600 hover:underline" href="{{ route('profile.edit') }}">{{ __('Click Here') }}</a>
-                                    </p>
-                                </div>
-                                <div data-popper-arrow></div>
-                            </div>
-                        </header>
-                        
-                        <div class="items-center bg-gray-50 rounded-lg shadow sm:flex dark:bg-gray-800 dark:border-gray-700">
-                            <a href="{{ route('profile.edit') }}">
-                                <img class="w-full rounded-lg sm:rounded-none sm:rounded-l-lg" src="{{ $user->image ? asset('storage/' .$user->image) : asset('storage/profiles/default-profile.png') }}" alt="Profile Image" style="width: 205px; height: 205px; object-fit: cover;">
+                        <h3 class="text-lg font-medium text-gray-900">Last Update Courses</h3>
+
+                        <div class="mt-4 grid grid-cols-2 gap-4">
+                            @foreach ($latestCourses as $course) <!-- Show only 5 items -->
+                                <a href="{{ route('user.course.preview', $course->id) }}" class="block">
+                                    <div class="border p-3 rounded-lg shadow-md bg-white flex flex-col group hover:bg-slate-500">
+                                        <!-- Course Image (Smaller) -->
+                                        <div class="relative h-20 w-full rounded-md bg-cover bg-center" 
+                                            style="background-image: url('{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}');">
+                                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 rounded-md"></div>
+                                        </div>
+                            
+                                        <!-- Course Details -->
+                                        <div class="mt-2">
+                                            <h4 class="text-sm font-semibold text-gray-900 group-hover:text-amber-100 line-clamp-1">
+                                                {{ $course->name }}
+                                            </h4>
+                                            <p class="text-xs text-gray-500 group-hover:text-gray-200 line-clamp-1">
+                                                {{ $course->authorUser->name }}
+                                            </p>
+                                            <p class="text-xs text-gray-500 group-hover:text-gray-200">
+                                                {{ \Carbon\Carbon::parse($course->updated_at)->format('d M Y') }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </a>
+                            @endforeach
+
+                            <!-- "More" Button -->
+                            <a href="{{ route('user.course') }}" class="hover:bg-slate-500 hover:text-white flex items-center justify-center border p-3 rounded-lg shadow-md bg-gray-100 text-blue-400 font-medium text-sm">
+                                More
                             </a>
-                            <div class="p-5">
-                                <h3 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                    <a href="{{ route('profile.edit') }}">{{ ($user->name) }}</a>
-                                </h3>
-                                <span class="text-gray-500 dark:text-gray-400">{{ ($user->email) }}</span>
-                                <div class="flex items-center gap-3 text-gray-500 dark:text-gray-400 mt-3 mb-4"> 
-                                    @if ($user->active)
-                                        <div class="flex items-center">
-                                            <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> {{ __('Online') }}
-                                        </div>
-                                    @else
-                                        <div class="flex items-center">
-                                            <div class="h-2.5 w-2.5 rounded-full bg-gray-700 me-2"></div> {{ __('Offline') }}
-                                        </div>
-                                    @endif
-                                </div>
-                                <p class="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">{{ ($user->about ?? "This user doesn't have any bio") }}</p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <div class="col-span-2">
+                        <h3 class="text-lg font-medium text-gray-900">Your Courses Progress</h3>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div class="border p-4 rounded-lg">
+                                <h4 class="text-sm font-medium text-gray-900">User Courses</h4>
+                                <p class="text-sm text-gray-500">Total</p>
+                                <p class="text-sm text-gray-500">Completed :</p>
+                                <p class="text-sm text-gray-500">Chapter :</p>
+                            </div>
+                            <div class="border p-4 rounded-lg">
+                                <h4 class="text-sm font-medium text-gray-900">User Courses</h4>
+                                <p class="text-sm text-gray-500">Total</p>
+                                <p class="text-sm text-gray-500">Completed :</p>
+                                <p class="text-sm text-gray-500">Chapter :</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900">Plugins</h3>
+                        <div class="mt-4 space-y-4">
+                            <div class="border p-4 rounded-lg">
+                                <h4 class="text-sm font-medium text-gray-900">
+                                    <span class="material-symbols-outlined">
+                                        stadia_controller
+                                        </span>
+                                    Robot Control</h4>
+                            </div>
+                            <div class="border p-4 rounded-lg">
+                                <h4 class="text-sm font-medium text-gray-900">
+                                    <span class="material-symbols-outlined">
+                                        person_search
+                                        </span>
+                                    Find Users</h4>
                             </div>
                         </div>
                     </div>
@@ -60,4 +92,6 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </x-app-layout>

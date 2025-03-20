@@ -36,6 +36,9 @@ class ModuleController extends Controller
             'description' => $request->description,
         ]);
 
+        // Update the course's updated_at timestamp
+        $module->course->touch();
+
         return back()->with('success', 'New Module Chapter is Added into ' . $module->course->name);
     }
 
@@ -56,12 +59,18 @@ class ModuleController extends Controller
         $module->description = $request->description;
         $module->save();
 
+        // Update the course's updated_at timestamp
+        $course->touch();
+
         return back()->with('success', 'Module updated successfully!');
     }
 
     public function destroy(Course $course, Module $module)
     {
         $module->delete(); // Delete the module
+
+        // Update the course's updated_at timestamp
+        $course->touch();
 
         return back()->with('success', 'Module deleted successfully.');
     }

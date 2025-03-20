@@ -9,7 +9,8 @@
       </div>
         <p class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 sm:text-xl/8">Kami menawarkan jasa yang menarik untuk mu. Pilih sesuai kebutuhanmu, belajar mandiri berdasarkan keinginanmu atau melakukan tutor secara pribadi dengan team terbaik kami.</p>
         <div class="mx-auto mt-16 grid max-w-screen-xl grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:grid-cols-3">
-          <div class=" bg-white/60 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:rounded-b-none sm:p-10 lg:mx-0 lg:rounded-tr-none lg:rounded-bl-3xl">
+          <!-- Free Plan -->
+          <div class=" bg-white/60 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0">
             <h3 id="tier-hobby" class="text-base/7 font-semibold text-indigo-600">Belajar Mandiri</h3>
             <p class="mt-4 flex items-baseline gap-x-2">
               <span class="text-5xl font-semibold tracking-tight text-gray-900">Gratis</span>
@@ -44,6 +45,7 @@
             <a href="/login" aria-describedby="tier-hobby" class="mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-indigo-600 ring-1 ring-indigo-200 ring-inset hover:ring-indigo-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10">Bergabung Sekarang</a>
           </div>
 
+          <!-- Tutor Plan -->
           <div class="bg-white/60 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0">
             <h3 id="tier-hobby" class="text-base/7 font-semibold text-indigo-600">Belajar Tutor</h3>
             <p class="mt-4 flex items-baseline gap-x-2">
@@ -89,9 +91,10 @@
                 Tutor dari pelatih yang berpengalaman
               </li> 
             </ul>
-            <a href="https://wa.me/6282171639538" aria-describedby="tier-pro" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Hubungi Kami</a>
+            <a href="https://wa.me/6282171639538" aria-describedby="tier-pro" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Pesan Sekarang</a>
           </div>
           
+          <!-- Hire Us Plan -->
           <div class="relative bg-gray-900 p-8 ring-1 shadow-2xl ring-gray-900/10 sm:p-10">
             <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Tutor dan Perbaikan Skripsi</h3>
             <p class="mt-4 flex items-baseline gap-x-2">
@@ -131,7 +134,7 @@
               </li>
               
             </ul>
-            <a href="https://wa.me/6282171639538" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Pesan Sekarang</a>
+            <a href="https://wa.me/6282171639538" aria-describedby="tier-enterprise" class="mt-8 block rounded-md bg-indigo-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 sm:mt-10">Hubungi Kami</a>
           </div>
         </div>
   </div>

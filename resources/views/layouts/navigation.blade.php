@@ -59,7 +59,7 @@
                                     <!-- Monitoring Link -->
                                     <x-dropdown-link :href="route('plugins.monitoring')" 
                                         :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
-                                        {{ __('Monitoring') }}
+                                        {{ __('Search User') }}
                                     </x-dropdown-link>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
 
                         <!-- Monitoring Link -->
                         <x-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
-                            {{ __('Monitoring') }}
+                            {{ __('Search User') }}
                         </x-nav-link>
                     @endauth
                 </div>
@@ -184,7 +184,7 @@
 
                 <!-- Monitoring Link -->
                 <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
-                    {{ __('Monitoring') }}
+                    {{ __('Search User') }}
                 </x-responsive-nav-link>
             @else
                 <!-- Robot Control Link -->
@@ -194,7 +194,7 @@
 
                 <!-- Monitoring Link -->
                 <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
-                    {{ __('Monitoring') }}
+                    {{ __('Search User') }}
                 </x-responsive-nav-link>
             @endauth
         </div>
