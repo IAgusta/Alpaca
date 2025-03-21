@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
 use Illuminate\Support\Facades\Cache;
+use App\Models\UserCourse;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
+        $userId = Auth::id();
         $topCourses = Cache::remember('top_courses', now()->addMinutes(10), function () {
             return Course::where('id', '!=', 1)
                 ->orderBy('popularity', 'desc')
@@ -26,6 +28,8 @@ class DashboardController extends Controller
                 ->get();
         });
 
-        return view('dashboard', compact('user','topCourses','latestCourses'));
+        $userCourses = UserCourse::where('user_id', $userId)->with('course')->take(4)->get();
+
+        return view('dashboard', compact('user','topCourses','latestCourses', 'userCourses'));
     }
 }

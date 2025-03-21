@@ -2,11 +2,6 @@
     <!-- Hero Page -->
     <div class="relative isolate px-6 lg:px-8">
         <div class="mx-auto max-w-2xl py-20 sm:py-32 lg:py-20">
-          <div class="hidden sm:mb-8 sm:flex sm:justify-center">
-            <div class="relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-              Announcing Our New Project. <a href="{{ route('news') }}" class="font-semibold text-indigo-600"><span class="absolute inset-0" aria-hidden="true"></span>Read more <span aria-hidden="true">&rarr;</span></a>
-            </div>
-          </div>
           <div class="text-center">
             <h1 class="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">Learning Management System to enrich your online courses.</h1>
             <p class="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">Our LMS website offers a seamless and interactive learning experience, allowing users to access courses, track progress, and engage with content anytime, anywhere.</p>

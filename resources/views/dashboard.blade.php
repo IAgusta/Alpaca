@@ -9,9 +9,35 @@
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Top Courses Swiper -->
-                    @include('user.component.top_courses')
+                    <div class="col-span-2">
+                        <!-- Top Courses Swiper -->
+                        @include('user.component.top_courses')
 
+                        <!-- User Courses -->
+                        <div class="col-span-2 mt-4">
+                            <h3 class="text-lg font-medium text-gray-900">Your Courses Progress</h3>
+                            <div class="grid grid-cols-4 gap-4 mt-2">
+                                @foreach ( $userCourses as $userCourse )
+                                    <a href="{{ route('user.course.open', $userCourse->course->id) }}">
+                                        <div class="border p-4 rounded-lg" style="">
+                                            <h4 class="text-sm font-medium text-gray-900">{{ $userCourse->course->name }}</h4>
+                                            {{-- Progress Bar --}}
+                                            @php
+                                                $totalModules = $userCourse->course->modules->count();
+                                                $progressPercentage = $totalModules > 0 ? ($userCourse->completed_modules / $totalModules) * 100 : 0;
+                                            @endphp
+                                            <p class="text-sm text-gray-500 mt-2">Total : {{ $totalModules }}</p>
+                                            <p class="text-sm text-gray-500 mt-2">Completed : 
+                                                <div class="w-full flex bg-gray-300 rounded-full h-2">
+                                                    <div class="bg-green-500 h-2 rounded-full" style="width: {{ $progressPercentage }}%;"></div>
+                                                </div>
+                                            </p>
+                                        </div>
+                                    </a>                
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
                     <!-- Last Update Courses -->
                     <div>
                         <h3 class="text-lg font-medium text-gray-900">Last Update Courses</h3>
@@ -48,27 +74,8 @@
                             </a>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-                    <div class="col-span-2">
-                        <h3 class="text-lg font-medium text-gray-900">Your Courses Progress</h3>
-                        <div class="grid grid-cols-2 gap-4 mt-4">
-                            <div class="border p-4 rounded-lg">
-                                <h4 class="text-sm font-medium text-gray-900">User Courses</h4>
-                                <p class="text-sm text-gray-500">Total</p>
-                                <p class="text-sm text-gray-500">Completed :</p>
-                                <p class="text-sm text-gray-500">Chapter :</p>
-                            </div>
-                            <div class="border p-4 rounded-lg">
-                                <h4 class="text-sm font-medium text-gray-900">User Courses</h4>
-                                <p class="text-sm text-gray-500">Total</p>
-                                <p class="text-sm text-gray-500">Completed :</p>
-                                <p class="text-sm text-gray-500">Chapter :</p>
-                            </div>
-                        </div>
-                    </div>
                     <div>
                         <h3 class="text-lg font-medium text-gray-900">Plugins</h3>
                         <div class="mt-4 space-y-4">
