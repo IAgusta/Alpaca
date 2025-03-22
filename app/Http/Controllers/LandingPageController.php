@@ -11,13 +11,13 @@ class LandingPageController extends Controller
     public function index()
     {
         // Get the top 3 courses based on popularity, excluding course with ID 1
-        $topCourses = Cache::remember('top_courses', now()->addMinutes(10), function () {
+        $favoriteCourses = Cache::remember('favorite_courses', now()->addMinutes(10), function () {
             return Course::where('id', '!=', 1)
                 ->orderBy('popularity', 'desc')
                 ->take(3)
                 ->get();
         });
 
-        return view('welcome', compact('topCourses'));
+        return view('welcome', compact('favoriteCourses'));
     }
 }

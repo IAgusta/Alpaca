@@ -120,10 +120,11 @@
                     </div>
                     <div class="relative min-h-[30rem] w-full grow">
                         <div class="absolute top-10 right-0 bottom-0 left-10 overflow-hidden rounded-tl-xl shadow-2xl">
-                              <div class="flex flex-col w-full h-full overflow-hidden">
-                                <img src="img/exercise-form-user.png" alt="Exercise Form User" class="w-full h-auto object-cover mb-4">
-                                <img src="img/exercise-form-trainer.png" alt="Exercise Form Trainer" class="w-full h-auto object-cover">
-                              </div>
+                          <div class="flex bg-gray-800/40 ring-1 ring-white/5">
+                            <div class="-mb-px flex text-sm/6 font-medium text-gray-400">
+                              <img src="img/exercise-form-trainer.png" alt="Exercise Form Trainer" class="w-full h-fit object-cover">
+                            </div>
+                          </div>
                         </div>
                     </div>
                 </div>

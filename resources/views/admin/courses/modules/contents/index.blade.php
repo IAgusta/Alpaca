@@ -44,6 +44,13 @@
             <!-- Content Form -->
             <form method="POST" action="{{ route('admin.courses.modules.contents.store', ['course' => $course->id, 'module' => $module->id]) }}" enctype="multipart/form-data">
                 @csrf
+                <!-- title field -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Judul Konten</label>
+                    <input type="text" name="title" id="title" class="w-full border-gray-300 rounded-md shadow-sm" required>
+                </div>
+            
+                <!-- Existing content_type dropdown -->
                 <div class="mb-4">
                     <label class="flex text-sm font-medium text-gray-700">Tipe Isi Konten :
                         <p data-popover-target="popover" data-popover-placement="bottom">
@@ -59,31 +66,29 @@
                         <option value="exercise">Latihan</option>
                     </select>
                 </div>
-
-                <!-- Isi (Content) Editor -->
+            
+                <!-- Existing content-editor and exercise-form sections -->
                 <div id="content-editor" class="mb-2">
                     <label class="flex text-sm font-medium text-gray-700">Isi Konten Bagian :
                     </label>
                     <div id="editor" class="w-full border border-gray-300 shadow-sm"></div>
                     <input type="hidden" name="content" id="content-hidden">
                 </div>
-
-                <!-- Latihan (Exercise) Form -->
+            
                 <div id="exercise-form" class="hidden">
                     <label class="flex text-sm font-medium text-gray-700">Pertanyaan
                     </label>
-                    <!-- Quill Editor for Question -->
                     <div id="question-editor" class="w-full border border-gray-300 shadow-sm mb-2"></div>
                     <input type="hidden" name="question" id="question-hidden">
-
+            
                     <label class="block text-sm font-medium text-gray-700">Pilihan Jawaban</label>
                     <div id="answers-container"></div>
                     <button type="button" id="add-answer" class="bg-blue-500 text-white px-2 py-1 rounded mt-2">+ Tambah Jawaban</button>
-
+            
                     <label class="block text-sm font-medium text-gray-700 mt-4">Penjelasan (Jika Salah)</label>
                     <textarea name="explanation" class="w-full border-gray-300 rounded-md shadow-sm"></textarea>
                 </div>
-
+            
                 <!-- Popover Content -->
                 <div data-popover id="popover" role="tooltip" 
                 class="absolute z-10 invisible inline-block text-sm text-gray-500 transition-opacity duration-300 
@@ -99,35 +104,40 @@
                 </div>
                 <div data-popper-arrow></div>
                 </div>
-
+            
                 <x-primary-button type="submit">Save</x-primary-button>
             </form>
 
             <!-- Preview Section -->
             <div class="mt-6">
-                <h3 class="text-lg font-semibold">Preview Isi Konten</h3>
-                <!-- Exiting Content -->
+                <h3 class="text-lg font-semibold text-center">Preview Isi Konten</h3>
                 <ul class="mt-2 space-y-2 sortable-list" data-url="{{ route('admin.courses.modules.contents.reorder', ['course' => $course->id, 'module' => $module->id]) }}">
                     @foreach ($module->contents->sortBy('position') as $index => $content)
-                        <li class="p-4 bg-gray-100 rounded shadow-md flex justify-between items-center content-item" data-id="{{ $content->id }}" data-position="{{ $index + 1 }}">
-                            <div class="flex items-center gap-2">
-                                <div class="gap-2">
-                                    <button id="button-up" class="{{ $index === 0 ? 'hidden' : '' }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-up" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z"/>
-                                        </svg>
-                                    </button>
-                                    <span class="cursor-grab drag-handle">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-                                        </svg>
-                                    </span>
-                                    <button id="button-down" class="{{ $index === $module->contents->count() - 1 ? 'hidden' : '' }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-down" viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
-                                        </svg>
-                                    </button>
-                                </div>
+                        <li class="p-4 bg-gray-100 rounded shadow-md flex items-start content-item" data-id="{{ $content->id }}" data-position="{{ $index + 1 }}">
+                            <!-- Reposition Buttons (Left Side) -->
+                            <div class="flex flex-col items-center gap-2 mr-4">
+                                <button id="button-up" class="{{ $index === 0 ? 'hidden' : '' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-up" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z"/>
+                                    </svg>
+                                </button>
+                                <span class="cursor-grab drag-handle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                                    </svg>
+                                </span>
+                                <button id="button-down" class="{{ $index === $module->contents->count() - 1 ? 'hidden' : '' }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-down" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
+                                    </svg>
+                                </button>
+                            </div>
+            
+                            <!-- Content Section -->
+                            <div class="flex-1">
+                                <!-- Title -->
+                                <div class="font-semibold mb-2 text-center">{{ $content->title }}</div>
+            
                                 <!-- Content Preview -->
                                 @if ($content->content_type === "content")
                                     <div class="ql-editor p-0 border-0 shadow-none">{!! $content->content !!}</div>
@@ -154,8 +164,10 @@
                                     </div>
                                 @endif
                             </div>
-                            <div class="relative">
-                                <button data-dropdown-toggle="contentDropdown-{{ $content->id }}" class="relative top-0 right-0 bg-transparent p-2 rounded-full hover:bg-gray-200">
+            
+                            <!-- Dropdown Button (Top-Right) -->
+                            <div class="relative self-start">
+                                <button data-dropdown-toggle="contentDropdown-{{ $content->id }}" class="bg-transparent p-2 rounded-full hover:bg-gray-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                                         <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
                                     </svg>
@@ -171,32 +183,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <x-modal name="confirm-content-deletion-{{ $content->id }}" focusable>
-                                <form method="post" action="{{ route('admin.courses.modules.contents.destroy', ['course' => $course->id, 'module' => $module->id, 'moduleContent' => $content->id]) }}" class="p-6">
-                                    @csrf
-                                    @method('delete')
-
-                                    <h2 class="text-lg font-medium text-gray-900">
-                                        {{ __('Are you sure you want to delete this content?') }}
-                                    </h2>
-
-                                    <p class="mt-1 text-sm text-gray-600">
-                                        {{ __('Once deleted, this content cannot be recovered.') }}
-                                    </p>
-
-                                    <div class="mt-6 flex justify-end">
-                                        <!-- Cancel button to close the modal -->
-                                        <x-secondary-button x-on:click="$dispatch('close')">
-                                            {{ __('Cancel') }}
-                                        </x-secondary-button>
-
-                                        <!-- Delete button to submit the form -->
-                                        <x-danger-button class="ms-3">
-                                            {{ __('Delete Content') }}
-                                        </x-danger-button>
-                                    </div>
-                                </form>
-                            </x-modal>
                         </li>
                     @endforeach
                 </ul>

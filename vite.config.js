@@ -13,6 +13,7 @@ export default defineConfig({
                 'resources/js/course-theme.js',
                 'resources/js/content.js',
                 'resources/js/table-navbar.js',
+                'resources/js/content-feature.js',
             ],
             refresh: true,
         }),

@@ -9,7 +9,7 @@ class ModuleContent extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['module_id', 'content_type', 'content', 'position'];
+    protected $fillable = ['module_id', 'title', 'content_type', 'content', 'position'];
 
     // Relationship with Module
     public function module()

@@ -28,7 +28,10 @@ class DashboardController extends Controller
                 ->get();
         });
 
-        $userCourses = UserCourse::where('user_id', $userId)->with('course')->take(4)->get();
+        $userCourses = UserCourse::where('user_id', $userId)
+            ->whereHas('course', function ($query) {
+                $query->where('id', '!=', 1);
+            })->with('course')->take(3)->get();
 
         return view('dashboard', compact('user','topCourses','latestCourses', 'userCourses'));
     }

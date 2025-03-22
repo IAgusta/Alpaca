@@ -31,6 +31,7 @@ return new class extends Migration {
         Schema::create('module_contents', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
+            $table->string('title');
             $table->enum('content_type', ['content','exercise']);
             $table->longText('content'); // Store text, image path, video link, or code
             $table->integer('position'); // Determines order of content in a chapter

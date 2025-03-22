@@ -22,6 +22,7 @@ class ModuleContentController extends Controller
     {
         $data = $request->validate([
             'content_type' => 'required|in:content,exercise',
+            'title' => 'required|string|max:255', // Add validation for the title
         ]);
     
         if ($request->content_type == 'content') {
@@ -53,7 +54,7 @@ class ModuleContentController extends Controller
     
         // ✅ Insert into database
         $module->contents()->create($data);
-
+    
         // ✅ Update the module's updated_at timestamp
         $module->touch();
         $course->touch();
@@ -87,15 +88,18 @@ class ModuleContentController extends Controller
         // Validate the request based on content type
         if ($content->content_type === 'content') {
             $request->validate([
+                'title' => 'required|string|max:255', // Add validation for the title
                 'content' => 'required|string',
             ]);
     
             // Update the content for 'content' type
             $content->update([
+                'title' => $request->input('title'), // Update the title
                 'content' => $request->input('content'),
             ]);
         } elseif ($content->content_type === 'exercise') {
             $request->validate([
+                'title' => 'required|string|max:255', // Add validation for the title
                 'question' => 'required|string',
                 'answers' => 'required|array',
                 'answers.*.text' => 'required|string',
@@ -112,6 +116,7 @@ class ModuleContentController extends Controller
     
             // Update the content for 'exercise' type
             $content->update([
+                'title' => $request->input('title'), // Update the title
                 'content' => json_encode($exerciseData), // Store as JSON
             ]);
         }

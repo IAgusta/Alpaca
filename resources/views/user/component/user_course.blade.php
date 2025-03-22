@@ -35,7 +35,7 @@
             <div class="p-3 text-center flex-grow">
                 <div class="relative flex flex-col items-center">
                     <h5 class="text-sm font-medium text-gray-900 dark:text-white mx-auto text-center w-40">
-                        {{ $userCourse->course->name }}
+                        {{ ucwords(strtolower(Str::limit($userCourse->course->name, 20, '...'))) }}
                         <button data-popover-target="popover-{{ $userCourse->course->id }}" data-popover-placement="bottom" type="button">
                             <svg class="w-3 h-3 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" 
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -101,13 +101,14 @@
             <div class="p-2 flex flex-col items-center">
                 {{-- Progress Bar --}}
                 @php
-                $totalModules = $userCourse->course->modules->count();
-                $progressPercentage = $totalModules > 0 ? ($userCourse->completed_modules / $totalModules) * 100 : 0;
+                $totalModules = $userCourse->total_modules;
+                $completedModules = $userCourse->completed_modules;
+                $progressPercentage = $totalModules > 0 ? ($completedModules / $totalModules) * 100 : 0;
                 @endphp
                 <div class="w-full bg-gray-300 rounded-full h-2">
                     <div class="bg-green-500 h-2 rounded-full" style="width: {{ $progressPercentage }}%;"></div>
                 </div>
-                <div class="my-1 text-xs">{{ $userCourse->completed_modules }}/{{ $totalModules }} Complete</div>
+                <div class="my-1 text-xs">{{ $completedModules }}/{{ $totalModules }} Complete</div>
                 {{-- Open Button --}}
                 <a href="{{ route('user.course.open', $userCourse->course->id) }}">
                     <x-primary-button>Buka</x-primary-button>

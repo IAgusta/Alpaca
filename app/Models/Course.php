@@ -28,6 +28,10 @@ class Course extends Model
         return $this->hasMany(Module::class, 'course_id', 'id');
     }
 
+    public function userProgress() {
+        return $this->hasMany(UserCourse::class, 'course_id');
+    }
+
     // Relationship with User (Author)
     public function authorUser()
     {

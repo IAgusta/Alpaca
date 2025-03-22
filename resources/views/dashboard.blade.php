@@ -10,39 +10,19 @@
             <div class="bg-white overflow-hidden">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="col-span-2">
-                        <!-- Top Courses Swiper -->
+                        {{-- Top 10 Favorit Courses --}}
                         @include('user.component.top_courses')
 
-                        <!-- User Courses -->
-                        <div class="col-span-2 mt-4">
-                            <h3 class="text-lg font-medium text-gray-900">Your Courses Progress</h3>
-                            <div class="grid grid-cols-4 gap-4 mt-2">
-                                @foreach ( $userCourses as $userCourse )
-                                    <a href="{{ route('user.course.open', $userCourse->course->id) }}">
-                                        <div class="border p-4 rounded-lg" style="">
-                                            <h4 class="text-sm font-medium text-gray-900">{{ $userCourse->course->name }}</h4>
-                                            {{-- Progress Bar --}}
-                                            @php
-                                                $totalModules = $userCourse->course->modules->count();
-                                                $progressPercentage = $totalModules > 0 ? ($userCourse->completed_modules / $totalModules) * 100 : 0;
-                                            @endphp
-                                            <p class="text-sm text-gray-500 mt-2">Total : {{ $totalModules }}</p>
-                                            <p class="text-sm text-gray-500 mt-2">Completed : 
-                                                <div class="w-full flex bg-gray-300 rounded-full h-2">
-                                                    <div class="bg-green-500 h-2 rounded-full" style="width: {{ $progressPercentage }}%;"></div>
-                                                </div>
-                                            </p>
-                                        </div>
-                                    </a>                
-                                @endforeach
-                            </div>
+                        {{-- User Courses --}}
+                        <div class="col-span-2 mt-8">
+                            @include('user.component.dashboard_user_course')
                         </div>
                     </div>
-                    <!-- Last Update Courses -->
+                    {{-- Latest Courses Update --}}
                     <div>
                         <h3 class="text-lg font-medium text-gray-900">Last Update Courses</h3>
 
-                        <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div class="mt-2 grid grid-cols-2 gap-4">
                             @foreach ($latestCourses as $course) <!-- Show only 5 items -->
                                 <a href="{{ route('user.course.preview', $course->id) }}" class="block">
                                     <div class="border p-3 rounded-lg shadow-md bg-white flex flex-col group hover:bg-slate-500">
@@ -75,27 +55,42 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Plugins --}}
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
                     <div>
                         <h3 class="text-lg font-medium text-gray-900">Plugins</h3>
-                        <div class="mt-4 space-y-4">
-                            <div class="border p-4 rounded-lg">
-                                <h4 class="text-sm font-medium text-gray-900">
-                                    <span class="material-symbols-outlined">
+                        <div class="mt-2 flex flex-wrap gap-4">
+                            <!-- Robot Control -->
+                            <a href="{{ route('plugins.robotControl') }}" class="group">
+                                <div class="relative w-24 h-24 border rounded-lg shadow-md overflow-hidden bg-gray-200 hover:bg-slate-500 transition duration-300 flex items-center justify-center">
+                                    <!-- Icon (Visible by default, disappears on hover) -->
+                                    <span class="material-symbols-outlined text-5xl text-gray-900 transition-all duration-300 group-hover:opacity-0">
                                         stadia_controller
-                                        </span>
-                                    Robot Control</h4>
-                            </div>
-                            <div class="border p-4 rounded-lg">
-                                <h4 class="text-sm font-medium text-gray-900">
-                                    <span class="material-symbols-outlined">
+                                    </span>
+                                    <!-- Text (Hidden by default, appears centered on hover) -->
+                                    <p class="absolute opacity-0 text-lg font-semibold text-white transition-all duration-300 group-hover:opacity-100 group-hover:flex group-hover:items-center group-hover:justify-center w-full h-full text-center whitespace-nowrap">
+                                        Controler
+                                    </p>
+                                </div>
+                            </a>
+                
+                            <!-- Find Users -->
+                            <a href="{{ route('plugins.monitoring') }}" class="group">
+                                <div class="relative w-24 h-24 border rounded-lg shadow-md overflow-hidden bg-gray-200 hover:bg-slate-500 transition duration-300 flex items-center justify-center">
+                                    <!-- Icon (Visible by default, disappears on hover) -->
+                                    <span class="material-symbols-outlined text-5xl text-gray-900 transition-all duration-300 group-hover:opacity-0">
                                         person_search
-                                        </span>
-                                    Find Users</h4>
-                            </div>
+                                    </span>
+                                    <!-- Text (Hidden by default, appears centered on hover) -->
+                                    <p class="absolute opacity-0 text-lg font-semibold text-white transition-all duration-300 group-hover:opacity-100 group-hover:flex group-hover:items-center group-hover:justify-center w-full h-full text-center whitespace-nowrap">
+                                        Find Users
+                                    </p>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                </div>
+                </div>   
             </div>
         </div>
     </div>

@@ -44,6 +44,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/courses/open/{courseId}', [UserCourseController::class, 'open'])->name('user.course.open');
     Route::post('/user/courses/clear-history/{courseId}', [UserCourseController::class, 'clearHistory'])->name('user.course.clearHistory');
     Route::delete('/user/courses/delete/{courseId}', [UserCourseController::class, 'delete'])->name('user.course.delete');
+    Route::post('/exercise/submit', [UserCourseController::class, 'submitExercise'])->name('user.exercise.submit');
+    Route::post('/mark-module-as-read/{moduleId}', [UserCourseController::class, 'markModuleAsRead']);
+    Route::get('/get-drawer-content/{moduleId}', [UserCourseController::class, 'getDrawerContent']);
 });
 
 Route::middleware('auth')->group(function () {
