@@ -39,11 +39,11 @@ Route::get('/email/verify', function () { return view('auth.verify-email'); })->
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/courses', [UserCourseController::class, 'index'])->name('user.course');
-    Route::post('/user/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
-    Route::get('/user/courses/preview/{courseId}', [UserCourseController::class, 'preview'])->name('user.course.preview');
-    Route::get('/user/courses/open/{courseId}', [UserCourseController::class, 'open'])->name('user.course.open');
-    Route::post('/user/courses/clear-history/{courseId}', [UserCourseController::class, 'clearHistory'])->name('user.course.clearHistory');
-    Route::delete('/user/courses/delete/{courseId}', [UserCourseController::class, 'delete'])->name('user.course.delete');
+    Route::post('/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
+    Route::get('/courses/detail/{courseId}', [UserCourseController::class, 'detail'])->name('user.course.detail');
+    Route::get('/courses/open/{courseId}', [UserCourseController::class, 'open'])->name('user.course.open');
+    Route::post('/courses/clear-history/{courseId}', [UserCourseController::class, 'clearHistory'])->name('user.course.clearHistory');
+    Route::delete('/courses/delete/{courseId}', [UserCourseController::class, 'delete'])->name('user.course.delete');
     Route::post('/exercise/submit', [UserCourseController::class, 'submitExercise'])->name('user.exercise.submit');
     Route::post('/mark-module-as-read/{moduleId}', [UserCourseController::class, 'markModuleAsRead']);
     Route::get('/get-drawer-content/{moduleId}', [UserCourseController::class, 'getDrawerContent']);

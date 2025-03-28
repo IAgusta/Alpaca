@@ -24,7 +24,7 @@
 
                         <div class="mt-2 grid grid-cols-2 gap-4">
                             @foreach ($latestCourses as $course) <!-- Show only 5 items -->
-                                <a href="{{ route('user.course.preview', $course->id) }}" class="block">
+                                <a href="{{ route('user.course.detail', ['courseId' => $course->id]) }}" class="block">
                                     <div class="border p-3 rounded-lg shadow-md bg-white flex flex-col group hover:bg-slate-500">
                                         <!-- Course Image (Smaller) -->
                                         <div class="relative h-20 w-full rounded-md bg-cover bg-center" 

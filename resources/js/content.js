@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".ql-editor img").forEach(img => {
         img.style.display = "block";
         img.style.margin = "0 auto";
+        img.style.maxWidth = "100%";
+        img.style.height = "auto";
     });
 
     document.querySelectorAll(".ql-editor h1").forEach(h1 => {

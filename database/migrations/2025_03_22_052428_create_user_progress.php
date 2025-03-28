@@ -4,9 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use function Laravel\Prompts\table;
+
 return new class extends Migration {
     public function up() {
-        // Combined table for course and module progress
+        // Combined table for course
         Schema::create('user_course_progress', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -18,14 +20,19 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        Schema::create('user_module_progress', function(Blueprint $table){
+            $table->id();
+            $table->foreignId('module_id')->constrained()->onDelete('cascade');
+            $table->boolean('read')->nullable();
+            $table->timestamps();
+        });
+
         // Table for content-level progress
         Schema::create('user_content_progress', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('module_id')->constrained()->onDelete('cascade');
             $table->foreignId('module_content_id')->constrained()->onDelete('cascade');
-            $table->boolean('read')->default(false);
-            $table->timestamp('read_at')->nullable();
             $table->boolean('is_correct')->nullable();
             $table->string('selected_answer')->nullable();
             $table->timestamp('submitted_at')->nullable();

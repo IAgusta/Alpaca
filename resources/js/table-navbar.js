@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const rowsPerPage = 10;
+    let rowsPerPage = parseInt(document.getElementById('entriesPerPage').value);
     let currentPage = 1;
 
     function filterUsers() {
@@ -128,6 +128,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Update rows per page dynamically
+    document.getElementById('entriesPerPage').addEventListener('change', function () {
+        rowsPerPage = parseInt(this.value);
+        currentPage = 1; // Reset to first page
+        filterUsers();
+    });
+
     // Attach filterUsers function to the search input and filter checkboxes
     document.getElementById('simple-search').addEventListener('input', filterUsers);
     document.querySelectorAll('#filterDropdown input[type="checkbox"]').forEach(checkbox => {
@@ -139,8 +146,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Initial filter and pagination setup
     filterUsers();
-
-    // Initial pagination setup
-    const rows = document.querySelectorAll('tbody tr');
-    paginateRows(rows);
 });

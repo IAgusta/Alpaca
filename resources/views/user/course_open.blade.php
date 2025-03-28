@@ -22,21 +22,6 @@
     <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 h-screen overflow-hidden">
             <div class="mx-auto p-2 bg-white overflow-hidden shadow-sm sm:rounded-lg h-full flex">
-                <!-- Toggle Button for All Screens -->
-                <button class="p-2 cursor-pointer text-gray-500 hover:text-gray-700" 
-                        data-drawer-target="drawer-disable-body-scrolling"
-                        data-drawer-show="drawer-disable-body-scrolling"
-                        data-drawer-backdrop="true"
-                        data-drawer-body-scrolling="false"
-                        type="button">
-                    <span class="material-symbols-outlined">
-                        keyboard_double_arrow_right
-                    </span>
-                </button>
-
-                <!-- Drawer Navigation -->
-                @include('user.component.drawer_navigation')
-                
                 <!-- Main Content -->
                 <div class="w-full p-4 overflow-y-auto" id="main-content">
                     @if($course->modules)
@@ -89,11 +74,6 @@
                                 @endif
                             </div>
                         @endforeach
-                        <!-- Navigation Buttons -->
-                        <div class="flex justify-center gap-4 mt-4">
-                            <button id="prev-module" class="px-4 py-2 bg-gray-500 text-white rounded hidden">Kembali</button>
-                            <button id="next-module" class="px-4 py-2 bg-blue-500 text-white rounded">Lanjut</button>
-                        </div>
                     @endif
                 </div>
             </div>

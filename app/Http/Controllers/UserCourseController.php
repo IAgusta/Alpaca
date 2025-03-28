@@ -45,6 +45,19 @@ class UserCourseController extends Controller
         return view('user.course', compact('userCourses', 'availableCourses'));
     }
 
+    public function detail($courseId) {
+        $userId = Auth::id();
+        // Get the course with its modules and contents
+        $course = Course::with(['modules.contents'])->findOrFail($courseId);
+        $userCourses = UserCourse::where('user_id', $userId)
+        ->with('course')
+        ->get();
+
+        $savedCourses = UserCourse::where('course_id', $courseId)->count();
+    
+        return view('user.course_detail', compact('course', 'userCourses','savedCourses'));
+    }
+
     public function add(Request $request)
     {
         $request->validate([
@@ -78,12 +91,7 @@ class UserCourseController extends Controller
         // Increment the popularity of the course
         $course->increment('popularity');
 
-        return redirect()->route('user.course')->with('success', 'Course added successfully.');
-    }
-
-    public function preview($courseId) {
-        $course = Course::with('modules.contents')->findOrFail($courseId);
-        return view('user.course_preview', compact('course'));
+        return back()->with('success', 'Course added to Bookmark.');
     }
 
     public function open($courseId) {
@@ -128,7 +136,7 @@ class UserCourseController extends Controller
         // Delete the course progress
         $userCourse->deleteCourse();
 
-        return redirect()->route('user.course')->with('success', 'Course deleted successfully.');
+        return back()->with('success', 'Course Bookmark Removed successfully.');
     }
 
     public function submitExercise(Request $request) {

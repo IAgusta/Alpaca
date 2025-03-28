@@ -4,7 +4,7 @@
         <div class="swiper-wrapper">
             @foreach($topCourses as $course)
             <div class="swiper-slide">
-                <a href="{{ route('user.course.preview', $course->id) }}">
+                <a href="{{ route('user.course.detail', ['courseId' => $course->id]) }}">
                     <div class="relative w-full h-[250px] rounded-lg overflow-hidden text-white flex items-center" style="background-image: url('{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}'); background-size: cover; background-position: center;">
                         
                         <!-- Overlay -->
@@ -25,7 +25,7 @@
 
                                     <!-- Tags -->
                                     <div class="mt-2 flex flex-wrap gap-2">
-                                        @foreach(explode(',', $course->theme) as $theme)
+                                        @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
                                             <span class="px-2 py-1 text-sm bg-blue-500 text-white rounded-lg">{{ $theme }}</span>
                                         @endforeach
                                     </div>
@@ -53,8 +53,8 @@
 
     <!-- Navigation (Bottom Right) -->
     <div class="absolute right-4 bottom-4 flex items-center gap-4 z-10">
-        <button id="prevSlide" class="text-white hover:text-gray-300">&lt;</button>
         <span id="slide-number" class="text-sm text-white">No. 1</span>
+        <button id="prevSlide" class="text-white hover:text-gray-300">&lt;</button>
         <button id="nextSlide" class="text-white hover:text-gray-300">&gt;</button>
     </div>
 </div>
