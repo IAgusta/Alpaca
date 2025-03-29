@@ -40,8 +40,8 @@ Route::get('/email/verify', function () { return view('auth.verify-email'); })->
 Route::middleware(['auth'])->group(function () {
     Route::get('/courses', [UserCourseController::class, 'index'])->name('user.course');
     Route::post('/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
-    Route::get('/courses/detail/{courseId}', [UserCourseController::class, 'detail'])->name('user.course.detail');
-    Route::get('/courses/open/{courseId}', [UserCourseController::class, 'open'])->name('user.course.open');
+    Route::get('/courses/{name}/{courseId}/detail', [UserCourseController::class, 'detail'])->name('user.course.detail')->where(['courseId' => '[0-9]+']);
+    Route::get('/course/{name}/{courseId}/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])->name('course.module.open')->where(['courseId' => '[0-9]+','moduleId' => '[0-9]']);
     Route::post('/courses/clear-history/{courseId}', [UserCourseController::class, 'clearHistory'])->name('user.course.clearHistory');
     Route::delete('/courses/delete/{courseId}', [UserCourseController::class, 'delete'])->name('user.course.delete');
     Route::post('/exercise/submit', [UserCourseController::class, 'submitExercise'])->name('user.exercise.submit');

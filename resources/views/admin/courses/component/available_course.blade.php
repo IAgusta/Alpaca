@@ -144,21 +144,8 @@
                     @endif
                 </div>
             </a>
-            
-            <div class="grid grid-cols-3 gap-2 text-center bg-gray-100 p-2 rounded-b-lg mt-auto {{ $course->id == '1' ? 'invisible opacity-0 h-0' : '' }}">
-                <div>
-                    <p class="text-xs font-semibold text-gray-600">Disimpan Oleh</p>
-                    <p class="text-sm font-bold">{{ '1' }}</p>
-                </div>
-                <div>
-                    <p class="text-xs font-semibold text-gray-600">Total Popularitas</p>
-                    <p class="text-sm font-bold">{{ $course->popularity }}</p>
-                </div>
-                <div>
-                    <p class="text-xs font-semibold text-gray-600">Total Bagian</p>
-                    <p class="text-sm font-bold">{{ $course->modules->count() }}</p>
-                </div>
-            </div>
+            {{-- Stat Course --}}
+            @include('components.stat-available-courses')
         </div>
       
         <!-- Delete Course Modal -->

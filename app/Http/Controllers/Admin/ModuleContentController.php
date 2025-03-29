@@ -1,6 +1,5 @@
 <?php
 
-// app/Http/Controllers/ModuleContentController.php
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -18,31 +17,59 @@ class ModuleContentController extends Controller
     {
         $contents = $module->contents()->orderBy('position')->get();
         return view('admin.courses.modules.contents.index', compact('course', 'module', 'contents'));
-    } 
+    }
 
-    private function processQuillImages($content)
+    private function processQuillImages($content, Course $course, $oldContent = null)
     {
+        // Extract existing images from old content (if provided)
+        $existingImages = [];
+        if ($oldContent) {
+            preg_match_all('/<img src="[^"]+\/storage\/content_images\/[^"]+"/', $oldContent, $existingMatches);
+            $existingImages = $existingMatches[0] ?? [];
+        }
+    
         preg_match_all('/<img src="data:image\/(png|jpeg|jpg|gif);base64,([^"]+)"/', $content, $matches, PREG_SET_ORDER);
+    
+        $courseFolder = 'course_' . $course->id;
+        $newImages = [];
     
         foreach ($matches as $match) {
             $extension = $match[1];
             $base64Data = $match[2];
-            $imageData = base64_decode($base64Data);
+            
+            if (!base64_decode($base64Data, true)) {
+                continue;
+            }
     
+            $imageData = base64_decode($base64Data);
             $fileName = 'quill_' . time() . '_' . uniqid() . '.' . $extension;
-            $storagePath = 'content_images/' . $fileName;
+            $storagePath = "content_images/{$courseFolder}/{$fileName}";
             
-            // Store using absolute path
-            Storage::disk('public')->put($storagePath, $imageData);
+            Storage::disk('public')->makeDirectory("content_images/{$courseFolder}");
             
-            // Generate URL - use one of these options:
-            // Option 1: Using asset()
-            // $publicUrl = asset('storage/' . $storagePath);
-            
-            // Option 2: Using Storage::url()
-            $publicUrl = Storage::url($storagePath);
-            
-            $content = str_replace($match[0], '<img src="' . $publicUrl . '"', $content);
+            try {
+                Storage::disk('public')->put($storagePath, $imageData);
+                $publicUrl = Storage::url($storagePath);
+                $newImages[] = '<img src="' . $publicUrl . '"';
+                $content = str_replace($match[0], '<img src="' . $publicUrl . '"', $content);
+            } catch (\Exception $e) {
+                Log::error("Image upload failed: " . $e->getMessage());
+            }
+        }
+    
+        // Delete images that existed in old content but not in new content
+        if ($oldContent) {
+            $imagesToDelete = array_diff($existingImages, $newImages);
+            foreach ($imagesToDelete as $imgTag) {
+                preg_match('/src="([^"]+)"/', $imgTag, $srcMatch);
+                if (isset($srcMatch[1])) {
+                    $path = parse_url($srcMatch[1], PHP_URL_PATH);
+                    $relativePath = str_replace('/storage/', '', $path);
+                    if (Storage::disk('public')->exists($relativePath)) {
+                        Storage::disk('public')->delete($relativePath);
+                    }
+                }
+            }
         }
     
         return $content;
@@ -52,18 +79,15 @@ class ModuleContentController extends Controller
     {
         $data = $request->validate([
             'content_type' => 'required|in:content,exercise',
-            'title' => 'required|string|max:255',
         ]);
     
         if ($request->content_type == 'content') {
             $content = $request->validate(['content' => 'required|string'])['content'];
-    
-            $content = $this->processQuillImages($content);
-    
+            $content = $this->processQuillImages($content, $course); // Added course parameter
             $data['content'] = $content;
         } else {
             $answers = [];
-            $question = $this->processQuillImages($request->input('question'));
+            $question = $this->processQuillImages($request->input('question'), $course); // Added course parameter
             foreach ($request->input('answers') as $answer) {
                 $answers[] = [
                     'text' => $answer['text'],
@@ -89,13 +113,10 @@ class ModuleContentController extends Controller
     
         return back()->with('success', 'Content added successfully!');
     }
-    
 
     public function edit(Course $course, Module $module, $moduleContent)
     {
-        // Find the module content by ID
         $content = ModuleContent::findOrFail($moduleContent);
-
         $module->touch();
         $course->touch();
 
@@ -105,24 +126,24 @@ class ModuleContentController extends Controller
             'content' => $content,
         ]);
     }
-    
 
     public function update(Request $request, Course $course, Module $module, $moduleContent)
     {
-        // Find the module content by ID
         $content = ModuleContent::findOrFail($moduleContent);
-    
-        // Validate the request based on content type
+        
         if ($content->content_type === 'content') {
             $request->validate([
                 'title' => 'required|string|max:255',
                 'content' => 'required|string',
             ]);
     
-            // ✅ Process Quill images before updating
-            $processedContent = $this->processQuillImages($request->input('content'));
+            // Pass old content to detect removed images
+            $processedContent = $this->processQuillImages(
+                $request->input('content'),
+                $course,
+                $content->content // Pass old content
+            );
     
-            // Update the content
             $content->update([
                 'title' => $request->input('title'),
                 'content' => $processedContent,
@@ -137,32 +158,33 @@ class ModuleContentController extends Controller
                 'explanation' => 'nullable|string',
             ]);
     
-            // ✅ Process Quill images in the question field
-            $processedQuestion = $this->processQuillImages($request->input('question'));
+            $exerciseData = json_decode($content->content, true);
+            $oldQuestion = $exerciseData['question'] ?? '';
     
-            // Prepare the exercise data
+            $processedQuestion = $this->processQuillImages(
+                $request->input('question'),
+                $course,
+                $oldQuestion // Pass old question content
+            );
+    
             $exerciseData = [
                 'question' => $processedQuestion,
                 'answers' => $request->input('answers'),
                 'explanation' => $request->input('explanation'),
             ];
     
-            // Update the content
             $content->update([
                 'title' => $request->input('title'),
                 'content' => json_encode($exerciseData),
             ]);
         }
     
-        // ✅ Update timestamps
         $module->touch();
         $course->touch();
     
-        // Redirect with success message
         return redirect()->route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module])
                          ->with('success', 'Content updated successfully.');
     }
-    
 
     public function destroy(Request $request, Course $course, Module $module, ModuleContent $moduleContent)
     {
@@ -171,14 +193,11 @@ class ModuleContentController extends Controller
         }
     
         $this->deleteImagesFromContent($moduleContent->content);
-    
         $moduleContent->delete();
     
-        // ✅ Update timestamps
         $module->touch();
         $course->touch();
     
-        // If it's an AJAX request, return JSON
         if ($request->expectsJson()) {
             return response()->json(['success' => true]);
         }
@@ -194,14 +213,20 @@ class ModuleContentController extends Controller
         preg_match_all('/<img src="([^"]+)"/', $content, $matches);
     
         foreach ($matches[1] as $imageUrl) {
-            // Parse URL to get path
             $path = parse_url($imageUrl, PHP_URL_PATH);
             
-            // Convert URL path to storage path
             if (str_contains($path, '/storage/content_images/')) {
                 $relativePath = str_replace('/storage/', '', $path);
+                
+                // Delete the actual file
                 if (Storage::disk('public')->exists($relativePath)) {
                     Storage::disk('public')->delete($relativePath);
+                }
+                
+                // Optional: Delete empty course folders
+                $dirPath = dirname($relativePath);
+                if (count(Storage::disk('public')->files($dirPath)) === 0) {
+                    Storage::disk('public')->deleteDirectory($dirPath);
                 }
             }
         }
@@ -217,11 +242,9 @@ class ModuleContentController extends Controller
                 ->update(['position' => $position['position']]);
         }
 
-        // ✅ Update the module's updated_at timestamp
         $module->touch();
         $course->touch();
     
         return response()->json(['success' => true]);
     }
-    
 }

@@ -17,11 +17,13 @@ return new class extends Migration {
             $table->integer('completed_modules')->default(0);
             $table->boolean('course_completed')->default(false);
             $table->timestamp('course_completed_at')->nullable();
+            $table->timestamp('last_opened')->nullable();
             $table->timestamps();
         });
 
         Schema::create('user_module_progress', function(Blueprint $table){
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('module_id')->constrained()->onDelete('cascade');
             $table->boolean('read')->nullable();
             $table->timestamps();

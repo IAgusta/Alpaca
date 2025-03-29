@@ -49,7 +49,7 @@
                 </div>
                 <div class="group relative flex-grow">
                     <h3 class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
-                        <a href="{{ route('user.course.detail', ['courseId' => $course->id]) }}">
+                        <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}">
                             <span class="absolute inset-0"></span>
                             <div class="flex gap-4 items-center">
                                 <span class="text-lg font-semibold">{{ $course->name }}</span>

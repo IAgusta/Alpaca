@@ -4,7 +4,7 @@
         @if ($course->id != 1) <!-- Exclude Course 1 from available courses -->
         <div class="relative bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col" style="width: 208px; height: 350px;">
                 {{-- Course Image --}}
-                <a href="{{ route('user.course.detail', ['courseId' => $course->id]) }}" class="relative">
+                <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}" class="relative">
                     <img class="w-full h-35 object-cover rounded-t-lg" src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" alt="Course Image" style="width: 206px; height: 154px; object-fit: cover;"/>
                     <!-- Lock/Unlock Icon -->
                     <div class="absolute top-2 left-2">
@@ -17,7 +17,7 @@
                 </a>
                 <!-- Course Details -->
                 <div class="flex flex-col h-full"> <!-- Added container for consistent layout -->
-                    <a href="{{ route('user.course.detail', ['courseId' => $course->id]) }}" class="cursor-pointer flex-grow">
+                    <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}" class="cursor-pointer flex-grow">
                         <div class="p-3 text-center h-full flex flex-col"> <!-- Added flex-col and h-full -->
                             <div class="relative flex flex-col items-center">
                                 <!-- Course Title with Popover Button -->
@@ -87,22 +87,8 @@
                             @endif
                         </div>
                     </a>
-                    
-                    <!-- Stats Grid - Moved outside the <a> tag but still clickable -->
-                    <div class="grid grid-cols-3 gap-2 text-center bg-gray-100 p-2 rounded-b-lg mt-auto">
-                        <div>
-                            <p class="text-xs font-semibold text-gray-600">Disimpan Oleh</p>
-                            <p class="text-sm font-bold">{{ '1' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-semibold text-gray-600">Total Popularitas</p>
-                            <p class="text-sm font-bold">{{ $course->popularity }}</p>
-                        </div>
-                        <div>
-                            <p class="text-xs font-semibold text-gray-600">Total Bagian</p>
-                            <p class="text-sm font-bold">{{ $course->modules->count() }}</p>
-                        </div>
-                    </div>
+                    {{-- Stat Course --}}
+                    @include('components.stat-available-courses')
                 </div>
             </div>
         @endif

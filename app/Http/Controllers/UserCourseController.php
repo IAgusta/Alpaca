@@ -11,10 +11,12 @@ use App\Models\UserContentProgress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UserCourseController extends Controller
 {
-    public function index() {
+    public function index() 
+    {
         $userId = Auth::id();
         $quickstartCourseId = 1; // Assuming Course 1 has ID 1
 
@@ -45,17 +47,41 @@ class UserCourseController extends Controller
         return view('user.course', compact('userCourses', 'availableCourses'));
     }
 
-    public function detail($courseId) {
+    public function detail($name, $courseId) 
+    {
         $userId = Auth::id();
-        // Get the course with its modules and contents
+    
+        // Optional: Verify the name matches the course (for SEO)
         $course = Course::with(['modules.contents'])->findOrFail($courseId);
+        
+        // If you want to ensure URL consistency (recommended)
+        $expectedSlug = Str::slug($course->name);
+        if ($expectedSlug !== $name) {
+            // Redirect to correct URL if name doesn't match
+            return redirect()->route('user.course.detail', [
+                'name' => $expectedSlug,
+                'courseId' => $courseId
+            ]);
+        }
+    
+        // Rest of your existing logic...
+        $userHasCourse = UserCourse::where('user_id', $userId)
+            ->where('course_id', $courseId)
+            ->exists();
+    
+        if ($userHasCourse) {
+            UserCourse::where('user_id', $userId)
+                ->where('course_id', $courseId)
+                ->update(['last_opened' => now()]);
+        }
+    
         $userCourses = UserCourse::where('user_id', $userId)
-        ->with('course')
-        ->get();
-
+            ->with('course')
+            ->get();
+    
         $savedCourses = UserCourse::where('course_id', $courseId)->count();
     
-        return view('user.course_detail', compact('course', 'userCourses','savedCourses'));
+        return view('user.course_detail', compact('course', 'userCourses', 'savedCourses'));
     }
 
     public function add(Request $request)
@@ -88,27 +114,62 @@ class UserCourseController extends Controller
             'course_completed' => false,
         ]);
 
-        // Increment the popularity of the course
-        $course->increment('popularity');
+        $course->timestamps = false; // Disable timestamp updates
+        $course->updateQuietly(['popularity' => $course->popularity + 1]); // Update quietly
 
         return back()->with('success', 'Course added to Bookmark.');
     }
 
-    public function open($courseId) {
+    public function open($name, $courseId, $moduleTitle, $moduleId)
+    {
         $userId = Auth::id();
-
-        // Check if the user has access to the course
+    
+        // 1. Verify course exists and name matches
+        $course = Course::findOrFail($courseId);
+        if (Str::slug($course->name) !== $name) {
+            return redirect()->route('course.module.open', [
+                'name' => Str::slug($course->name),
+                'courseId' => $courseId,
+                'moduleTitle' => $moduleTitle,
+                'moduleId' => $moduleId
+            ]);
+        }
+    
+        // 2. Check course access
         $userCourse = UserCourse::where('user_id', $userId)
             ->where('course_id', $courseId)
             ->first();
-
+    
         if (!$userCourse) {
             return redirect()->route('user.course')->with('error', 'You do not have access to this course.');
         }
-
-        // Load the course with its modules and contents
-        $course = Course::with('modules.contents')->findOrFail($courseId);
-        return view('user.course_open', compact('course'));
+    
+        // 3. Load module with contents
+        $module = Module::with('contents')
+            ->where('id', $moduleId)
+            ->where('course_id', $courseId)
+            ->first();
+    
+        if (!$module) {
+            return redirect()->back()->with('error', 'Module not found');
+        }
+    
+        // 4. Verify module title matches URL
+        if (Str::slug($module->title) !== $moduleTitle) {
+            return redirect()->route('course.module.open', [
+                'name' => $name,
+                'courseId' => $courseId,
+                'moduleTitle' => Str::slug($module->title),
+                'moduleId' => $moduleId
+            ]);
+        }
+    
+        // 5. Update last opened (your existing logic)
+        UserCourse::where('user_id', $userId)
+            ->where('course_id', $courseId)
+            ->update(['last_opened' => now()]);
+    
+        return view('user.course_open', ['course' => $course,'module' => $module]);
     }
 
     public function clearHistory($courseId) {
@@ -167,108 +228,5 @@ class UserCourseController extends Controller
         );
 
         return response()->json(['success' => true]);
-    }
-
-    public function showContent($courseId, $moduleId, $contentId) {
-        $userId = Auth::id();
-
-        // Mark the content as read
-        UserContentProgress::updateOrCreate(
-            [
-                'user_id' => $userId,
-                'module_content_id' => $contentId,
-            ],
-            [
-                'module_id' => $moduleId,
-                'read' => true,
-                'read_at' => now(),
-            ]
-        );
-
-        // Load the content
-        $content = ModuleContent::findOrFail($contentId);
-        return view('user.content', compact('content'));
-    }
-
-    public function markModuleAsRead($moduleId)
-    {
-        $userId = Auth::id();
-
-        // Ensure the module exists
-        $module = Module::find($moduleId);
-        if (!$module) {
-            return response()->json(['success' => false, 'message' => 'Module not found.'], 404);
-        }
-
-        // Check if all contents in the module are completed
-        $totalContents = $module->contents->count();
-        $completedContents = UserContentProgress::where('user_id', $userId)
-            ->where('module_id', $moduleId)
-            ->where('read', true)
-            ->count();
-
-        if ($completedContents === $totalContents) {
-            // Mark the module as completed in user_course_progress
-            $userCourse = UserCourse::where('user_id', $userId)
-                ->where('course_id', $module->course_id)
-                ->first();
-
-            if ($userCourse) {
-                $userCourse->increment('completed_modules');
-
-                // Check if all modules in the course are completed
-                if ($userCourse->completed_modules === $userCourse->total_modules) {
-                    $userCourse->update([
-                        'course_completed' => true,
-                        'course_completed_at' => now(),
-                    ]);
-                }
-            }
-        }
-
-        return response()->json(['success' => true]);
-    }
-
-    public function getDrawerContent($moduleId)
-    {
-        $userId = Auth::id();
-
-        // Fetch all read content for the module by joining with module_contents
-        $readContents = DB::table('user_content_progress')
-            ->join('module_contents', 'user_content_progress.module_content_id', '=', 'module_contents.id')
-            ->where('user_content_progress.user_id', $userId)
-            ->where('module_contents.module_id', $moduleId)
-            ->where('user_content_progress.read', true)
-            ->select('module_contents.title', 'module_contents.id') // Select the title column
-            ->get();
-
-        // Prepare the HTML for the drawer content
-        $html = '';
-        foreach ($readContents as $content) {
-            $html .= '<li>';
-            $html .= '<a href="#content-' . $content->id . '" class="text-blue-500 hover:underline">';
-            $html .= $content->title; // Use the title column
-            $html .= '</a>';
-            $html .= '</li>';
-        }
-
-        if (empty($html)) {
-            $html = '<li class="text-gray-500">No content read yet.</li>';
-        }
-
-        return response()->json(['html' => $html]);
-    }
-
-    public function getContentDetails($contentId)
-    {
-        $content = ModuleContent::findOrFail($contentId);
-
-        return response()->json([
-            'content' => [
-                'id' => $content->id,
-                'title' => $content->title, // Assuming 'title' is a field in your ModuleContent model
-            ],
-            'moduleId' => $content->module_id,
-        ]);
     }
 }

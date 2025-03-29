@@ -14,6 +14,7 @@ export default defineConfig({
                 'resources/js/content.js',
                 'resources/js/table-navbar.js',
                 'resources/js/content-feature.js',
+                'resources/js/theme.js',
             ],
             refresh: true,
         }),

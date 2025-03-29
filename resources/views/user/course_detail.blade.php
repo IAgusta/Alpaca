@@ -42,6 +42,12 @@
                                     </button>
                                 </form>
                             @else
+                                @if($course->is_locked)
+                                    <button data-modal-target="unlock-modal-{{ $course->id }}" data-modal-toggle="unlock-modal-{{ $course->id }}" class="px-4 py-2 rounded-lg flex items-center bg-orange-400 hover:bg-orange-500">
+                                        <span class="material-symbols-outlined">lock</span>
+                                        <span class="ml-2">Lock</span>
+                                    </button>
+                                @else
                                 <form method="POST" action="{{ route('user.course.add', $course->id) }}">
                                     @csrf
                                     <input type="hidden" name="course_id" value="{{ $course->id }}">
@@ -50,6 +56,7 @@
                                         <span class="ml-2">Save</span>
                                     </button>
                                 </form>
+                                @endif
                             @endif
                             <button class="px-4 py-2 rounded-lg flex items-center bg-slate-300 hover:bg-slate-500">
                                 <span class="material-symbols-outlined">auto_stories</span>
@@ -67,6 +74,10 @@
                                 </button>
                             </div>
                         </div>
+
+                        <!-- Unlock modal -->
+                        @include('user.component.unlock_modal')
+
                         <div class="mt-4 flex gap-2">
                             @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
                             <a href="#">
@@ -99,17 +110,19 @@
                     <div class="mt-2 grid grid-cols-2 gap-4">
                         @foreach($course->modules as $index => $module)
                             <div class="border p-4 rounded-lg flex justify-between items-center">
-                                <div class="flex items-start gap-3"> <!-- Added flex container -->
-                                    <!-- Module number indicator -->
-                                    <div class="flex items-center justify-center bg-gray-100 text-gray-800 rounded-full w-6 h-6 text-sm font-medium shrink-0">
-                                        {{ $index + 1 }}
+                                <a href="{{ route('course.module.open', ['name' => Str::slug($course->name),'courseId' => $course->id,'moduleTitle' => Str::slug($module->title),'moduleId' => $module->id]) }}" class="flex-grow">
+                                    <div class="flex items-start gap-3"> <!-- Added flex container -->
+                                        <!-- Module number indicator -->
+                                        <div class="flex items-center justify-center bg-gray-100 text-gray-800 rounded-full w-6 h-6 text-sm font-medium shrink-0">
+                                            {{ $index + 1 }}
+                                        </div>
+                                        
+                                        <div>
+                                            <p class="font-bold">{{ $module->title }}</p>
+                                            <p class="text-sm text-gray-500">Created at: {{ $module->created_at->format('M d, Y') }} | Updated at: {{ $module->updated_at->format('M d, Y') }}</p>
+                                        </div>
                                     </div>
-                                    
-                                    <div>
-                                        <p class="font-bold">{{ $module->title }}</p>
-                                        <p class="text-sm text-gray-500">Created at: {{ $module->created_at->format('M d, Y') }} | Updated at: {{ $module->updated_at->format('M d, Y') }}</p>
-                                    </div>
-                                </div>
+                                </a>
                                 <button>
                                     <span class="material-symbols-outlined">
                                         {{ !$module->is_completed ? 'visibility' : 'visibility_off' }}

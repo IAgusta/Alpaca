@@ -3,7 +3,7 @@
     <!-- title field -->
     <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700">Judul Konten</label>
-        <input type="text" name="title" id="title" class="w-full border-gray-300 rounded-md shadow-sm" required>
+        <input type="text" name="title" id="title" class="w-full border-gray-300 rounded-md shadow-sm">
     </div>
 
     <!-- Existing content_type dropdown -->

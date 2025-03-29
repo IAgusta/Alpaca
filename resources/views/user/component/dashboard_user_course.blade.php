@@ -2,7 +2,7 @@
     Your Courses Progress</h3>
 <div class="mt-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
     @foreach ($userCourses as $userCourse)
-        <a href="{{ route('user.course.open', $userCourse->course->id) }}" class="block">
+        <a href="{{ route('user.course.detail', ['name' => Str::slug($userCourse->course->name),'courseId' => $userCourse->course->id])  }}" class="block">
             <div class="border p-3 rounded-lg shadow-md bg-white flex flex-col group hover:bg-slate-500">
                 <!-- Course Image -->
                 <div class="relative h-20 w-full rounded-md bg-cover bg-center" 
