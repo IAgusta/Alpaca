@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('module_id')->constrained()->onDelete('cascade');
-            $table->boolean('read')->nullable();
+            $table->boolean('read')->default(0);
             $table->timestamps();
         });
 

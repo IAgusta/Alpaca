@@ -15,6 +15,7 @@ export default defineConfig({
                 'resources/js/table-navbar.js',
                 'resources/js/content-feature.js',
                 'resources/js/theme.js',
+                'resources/js/user-progress.js',
             ],
             refresh: true,
         }),

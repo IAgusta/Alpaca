@@ -11,6 +11,8 @@ use App\Http\Controllers\RobotController;
 use App\Http\Controllers\UserCourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingPageController;
+use Illuminate\Support\Facades\Auth;
+use App\Models\UserModel;
 
 require __DIR__.'/auth.php';
 
@@ -40,8 +42,10 @@ Route::get('/email/verify', function () { return view('auth.verify-email'); })->
 Route::middleware(['auth'])->group(function () {
     Route::get('/courses', [UserCourseController::class, 'index'])->name('user.course');
     Route::post('/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
-    Route::get('/courses/{name}/{courseId}/detail', [UserCourseController::class, 'detail'])->name('user.course.detail')->where(['courseId' => '[0-9]+']);
-    Route::get('/course/{name}/{courseId}/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])->name('course.module.open')->where(['courseId' => '[0-9]+','moduleId' => '[0-9]']);
+    Route::get('/courses/{name}/{courseId}/detail', [UserCourseController::class, 'detail'])->name('user.course.detail');
+    Route::get('/course/{name}/{courseId}/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])->name('course.module.open');
+    Route::post('/module-progress/{moduleId}/toggle', [UserCourseController::class, 'toggle'])->name('module.progress.toggle');
+    Route::post('/courses/{courseId}/toggle-all', [UserCourseController::class, 'toggleAllModules'])->name('user.course.toggleAll');
     Route::post('/courses/clear-history/{courseId}', [UserCourseController::class, 'clearHistory'])->name('user.course.clearHistory');
     Route::delete('/courses/delete/{courseId}', [UserCourseController::class, 'delete'])->name('user.course.delete');
     Route::post('/exercise/submit', [UserCourseController::class, 'submitExercise'])->name('user.exercise.submit');

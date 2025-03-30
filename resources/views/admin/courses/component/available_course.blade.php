@@ -75,8 +75,8 @@
                 <div class="p-3 text-center h-full flex flex-col"> <!-- Added flex-col and h-full -->
                     <div class="relative flex flex-col items-center">
                         <!-- Course Title with Popover Button -->
-                        <h5 class="text-sm font-medium text-gray-900 dark:text-white mx-auto text-center w-40 cursor-text" onclick="event.stopPropagation()">
-                            {{ ucwords(strtolower(Str::limit($course->name, 20, '...'))) }}
+                        <h5 class="flex justify-center text-sm font-medium text-gray-900 dark:text-white mx-auto text-center w-40 cursor-text" onclick="event.stopPropagation()">
+                            <p class="truncate">{{ $course->name }}</p>
                             <button data-popover-target="popover-{{ $course->id }}" data-popover-placement="bottom" type="button">
                                 <svg class="w-3 h-3 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" 
                                     viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +100,7 @@
                             <div data-popper-arrow></div>
                         </div>
                     </div>
-                    <span class="text-xs text-gray-500 dark:text-gray-400 cursor-text" onclick="event.stopPropagation()">by {{ Str::limit($course->authorUser->name, 32, '...') ?? 'Unknown' }}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 cursor-text truncate" onclick="event.stopPropagation()">by {{ $course->authorUser->name ?? 'Unknown' }}</span>
 
                     <!-- Module Theme -->
                     @php

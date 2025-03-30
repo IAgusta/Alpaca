@@ -28,52 +28,7 @@
                     <div class="flex-1">
                         <h1 class="text-3xl font-bold mb-6">{{ $course->name }}</h1>
                         <p class="text-gray-600 my-4">{{ $course->authorUser->name ?? 'Unknown' }}</p>
-                        <div class="mt-4 flex gap-2">
-                            @php
-                                $isUserEnrolled = $userCourses->contains('course_id', $course->id);
-                            @endphp
-                            @if($isUserEnrolled)
-                                <form method="POST" action="{{ route('user.course.delete', $course->id) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="px-4 py-2 rounded-lg flex items-center bg-orange-400 hover:bg-orange-500">
-                                        <span class="material-symbols-outlined">bookmark_remove</span>
-                                        <span class="ml-2">Remove</span>
-                                    </button>
-                                </form>
-                            @else
-                                @if($course->is_locked)
-                                    <button data-modal-target="unlock-modal-{{ $course->id }}" data-modal-toggle="unlock-modal-{{ $course->id }}" class="px-4 py-2 rounded-lg flex items-center bg-orange-400 hover:bg-orange-500">
-                                        <span class="material-symbols-outlined">lock</span>
-                                        <span class="ml-2">Lock</span>
-                                    </button>
-                                @else
-                                <form method="POST" action="{{ route('user.course.add', $course->id) }}">
-                                    @csrf
-                                    <input type="hidden" name="course_id" value="{{ $course->id }}">
-                                    <button class="px-4 py-2 rounded-lg flex items-center bg-orange-400 hover:bg-orange-500">
-                                        <span class="material-symbols-outlined">bookmark</span>
-                                        <span class="ml-2">Save</span>
-                                    </button>
-                                </form>
-                                @endif
-                            @endif
-                            <button class="px-4 py-2 rounded-lg flex items-center bg-slate-300 hover:bg-slate-500">
-                                <span class="material-symbols-outlined">auto_stories</span>
-                                <span class="ml-2 hidden lg:inline">Continue Reading</span>
-                            </button>
-                            <div class="hidden lg:flex gap-2">
-                                <button class="px-4 py-2 rounded-lg flex items-center bg-slate-300 hover:bg-slate-500">
-                                    <span class="material-symbols-outlined">report</span>
-                                </button>
-                                <button class="px-4 py-2 rounded-lg flex items-center bg-slate-300 hover:bg-slate-500">
-                                    <span class="material-symbols-outlined">download</span>
-                                </button>
-                                <button class="px-4 py-2 rounded-lg flex items-center bg-slate-300 hover:bg-slate-500">
-                                    <span class="material-symbols-outlined">share</span>
-                                </button>
-                            </div>
-                        </div>
+                        @include('user.component.course_detail_component')
 
                         <!-- Unlock modal -->
                         @include('user.component.unlock_modal')
@@ -105,34 +60,156 @@
                 <div class="mt-6">
                     <div class="flex justify-between">
                         <h2 class="text-2xl font-bold">Bagian</h2>
-                        <x-primary-button>Mark All As Read</x-primary-button>
+                        <x-primary-button id="toggleAllButton" onclick="toggleAllModules({{ $course->id }})">Mark All As Read</x-primary-button>
                     </div>
-                    <div class="mt-2 grid grid-cols-2 gap-4">
+                    <div class="mt-2 lg:grid lg:grid-cols-2 gap-4">
                         @foreach($course->modules as $index => $module)
-                            <div class="border p-4 rounded-lg flex justify-between items-center">
-                                <a href="{{ route('course.module.open', ['name' => Str::slug($course->name),'courseId' => $course->id,'moduleTitle' => Str::slug($module->title),'moduleId' => $module->id]) }}" class="flex-grow">
-                                    <div class="flex items-start gap-3"> <!-- Added flex container -->
-                                        <!-- Module number indicator -->
-                                        <div class="flex items-center justify-center bg-gray-100 text-gray-800 rounded-full w-6 h-6 text-sm font-medium shrink-0">
-                                            {{ $index + 1 }}
-                                        </div>
-                                        
-                                        <div>
-                                            <p class="font-bold">{{ $module->title }}</p>
-                                            <p class="text-sm text-gray-500">Created at: {{ $module->created_at->format('M d, Y') }} | Updated at: {{ $module->updated_at->format('M d, Y') }}</p>
-                                        </div>
+                            @php
+                                // Check if the module is read
+                                $progress = \App\Models\UserModel::where('user_id', auth()->id())
+                                    ->where('module_id', $module->id)
+                                    ->first();
+                                $isRead = $progress && $progress->read;
+                            @endphp
+                        
+                            <div class="p-4 rounded-lg flex justify-between items-center border-l-4 transition-colors duration-200
+                                {{ $isRead ? 'bg-gray-200 border-gray-400 text-gray-600 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400' 
+                                        : 'bg-white border-blue-500 text-black dark:bg-gray-900 dark:border-blue-500 dark:text-white' }}">
+                                
+                                <a href="{{ route('course.module.open', [
+                                    'name' => Str::slug($course->name),
+                                    'courseId' => $course->id,
+                                    'moduleTitle' => Str::slug($module->title),
+                                    'moduleId' => $module->id
+                                ]) }}" class="flex-grow flex items-start gap-3">
+                        
+                                    <!-- Module title -->
+                                    <div>
+                                        <p class="font-bold">Ch. {{ $index + 1 }} {{ $module->title }}</p>
+                                        <p class="text-sm transition-colors duration-200
+                                            {{ $isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-600 dark:text-gray-300' }}">
+                                            Created at: {{ $module->created_at->format('M d, Y') }} | Updated at: {{ $module->updated_at->format('M d, Y') }}
+                                        </p>
                                     </div>
                                 </a>
-                                <button>
+                        
+                                <!-- Toggle Button -->
+                                <button onclick="toggleProgress({{ $module->id }}, this)">
                                     <span class="material-symbols-outlined">
-                                        {{ !$module->is_completed ? 'visibility' : 'visibility_off' }}
+                                        {{ $isRead ? 'visibility_off' : 'visibility' }}
                                     </span>
                                 </button>
                             </div>
-                        @endforeach
+                        @endforeach                    
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function toggleProgress(moduleId, button) {
+            fetch(`/module-progress/${moduleId}/toggle`, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json",
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const container = button.closest("div");
+                    const icon = button.querySelector("span");
+
+                    // Toggle visibility icon
+                    if (data.status === "read") {
+                        icon.textContent = "visibility_off";
+                        container.classList.remove("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
+                        container.classList.add("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
+                    } else {
+                        icon.textContent = "visibility";
+                        container.classList.remove("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
+                        container.classList.add("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
+                    }
+
+                    // Update course progress dynamically
+                    updateCourseProgressUI();
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function updateCourseProgressUI() {
+            fetch("/user/course-progress")
+                .then(response => response.json())
+                .then(data => {
+                    const progressText = document.getElementById("course-status");
+                    if (progressText) {
+                        if (data.course_completed) {
+                            progressText.textContent = "🎉 Course Completed!";
+                            progressText.classList.add("text-green-500");
+                        } else {
+                            progressText.textContent = `${data.completed_modules} / ${data.total_modules} modules completed`;
+                            progressText.classList.remove("text-green-500");
+                        }
+                    }
+                });
+        }
+
+        function toggleAllModules(courseId) {
+            fetch(`/courses/${courseId}/toggle-all`, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    "Content-Type": "application/json",
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const button = document.getElementById("toggleAllButton");
+                    const moduleContainers = document.querySelectorAll(".module-container");
+
+                    moduleContainers.forEach(container => {
+                        const icon = container.querySelector(".visibility-icon"); // Ensure the right icon is targeted
+                        const buttonElement = container.querySelector(".toggle-button"); // The button inside the module div
+
+                        if (data.newStatus === "read") {
+                            // Change button text
+                            button.textContent = "Mark All As Unread";
+                            
+                            // Change div styling dynamically
+                            container.classList.remove("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
+                            container.classList.add("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
+
+                            // Update icon
+                            if (icon) icon.textContent = "visibility_off";
+
+                            // Simulate single module button state change
+                            if (buttonElement) {
+                                buttonElement.setAttribute("onclick", `toggleProgress(${container.dataset.moduleId}, this)`);
+                            }
+                        } else {
+                            button.textContent = "Mark All As Read";
+                            
+                            // Change div styling back to original
+                            container.classList.remove("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
+                            container.classList.add("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
+
+                            // Update icon
+                            if (icon) icon.textContent = "visibility";
+
+                            // Restore module button state
+                            if (buttonElement) {
+                                buttonElement.setAttribute("onclick", `toggleProgress(${container.dataset.moduleId}, this)`);
+                            }
+                        }
+                    });
+
+                    updateCourseProgressUI();
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
 </x-app-layout>
