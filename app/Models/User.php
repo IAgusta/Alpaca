@@ -6,12 +6,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -21,18 +22,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'image',
-        'about',
-        'birth_date',
-        'phone',
         'password',
         'role',
-        'active', 
         'last_seen',
-        'last_role_change',
     ];
     
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -42,6 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
     ];
+
+    // The atributes that should will protect for softdeletion.
+    protected $dates = ['deleted_at'];
 
     /**
      * Get the attributes that should be cast.
@@ -53,24 +50,17 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'active' => 'boolean',
             'last_seen' => 'datetime',
-            'last_role_change' => 'datetime',
         ];
     }
 
     /**
-     * Check if the user can change their role (only after 24 hours).
+     * Relationship with UserDetail.
      */
-    public function canChangeRole()
+    public function details()
     {
-        // If last_role_change is null, allow the change
-        if ($this->last_role_change === null) {
-            return true;
-        }
-    
-        // Check if 24 hours have passed since the last role change
-        $lastChange = Carbon::parse($this->last_role_change);
-        return $lastChange->diffInHours(Carbon::now()) >= 24;
+        return $this->hasOne(UserDetail::class, 'user_id');
     }
+
+
 }

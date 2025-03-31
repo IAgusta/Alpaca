@@ -100,7 +100,8 @@
                                         <p class="font-bold">Ch. {{ $index + 1 }} {{ $module->title }}</p>
                                         <p class="text-sm transition-colors duration-200
                                             {{ $isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-600 dark:text-gray-300' }}">
-                                            Created at: {{ $module->created_at->format('M d, Y') }} | Updated at: {{ $module->updated_at->format('M d, Y') }}
+                                            Created at: {{ $module->created_at?->format('M d, Y') ?? 'N/A' }} | 
+                                            Updated at: {{ $module->updated_at?->format('M d, Y') ?? 'N/A' }}
                                         </p>
                                     </div>
                                 </a>

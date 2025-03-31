@@ -13,16 +13,25 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name');  
             $table->string('email')->unique();
             $table->enum('role', ['owner', 'admin', 'trainer', 'user'])->default('user'); 
-            $table->date('birth_date')->nullable();
-            $table->string('phone')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('last_seen')->nullable();
             $table->rememberToken();
-            $table->timestamps();
-            $table->timestamp('last_role_change')->nullable();
+            $table->timestamps(); 
+            $table->softDeletes();
+        });
+
+        Schema::create('user_details', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('image')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('about')->nullable();
+            $table->string('phone')->nullable();
+            $table->json('social_media')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -46,8 +55,12 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints(); // Disable FK checks before dropping
+        Schema::dropIfExists('user_course_progress'); // Drop this first (it references `users`)
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');
+        Schema::dropIfExists('user_details');
+        Schema::enableForeignKeyConstraints(); // Re-enable FK checks
     }
 };

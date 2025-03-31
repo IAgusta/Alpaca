@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->boolean('is_locked')->default(false);
             $table->string('lock_password')->nullable();
             $table->integer('popularity')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -31,7 +32,7 @@ return new class extends Migration {
         Schema::create('module_contents', function (Blueprint $table) { 
             $table->id();
             $table->foreignId('module_id')->constrained('modules')->onDelete('cascade');
-            $table->string('title');
+            $table->string('title')->nullable();
             $table->enum('content_type', ['content','exercise']);
             $table->longText('content'); // Store text, image path, video link, or code
             $table->integer('position'); // Determines order of content in a chapter
@@ -41,9 +42,14 @@ return new class extends Migration {
 
     public function down()
     {
-        Schema::dropIfExists('module_contents');
-        Schema::dropIfExists('modules');
-        Schema::dropIfExists('courses');
+        Schema::disableForeignKeyConstraints(); // Disable FK checks before dropping
+
+        Schema::dropIfExists('user_module_progress'); // Drop this first since it depends on `modules`
+        Schema::dropIfExists('module_contents'); // Drop this before `modules`
+        Schema::dropIfExists('modules'); // Now it's safe to drop
+        Schema::dropIfExists('courses'); // Drop last since modules depend on courses
+    
+        Schema::enableForeignKeyConstraints();
     }
 };
 

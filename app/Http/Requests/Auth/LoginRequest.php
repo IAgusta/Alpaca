@@ -33,27 +33,38 @@ class LoginRequest extends FormRequest
     }
 
     /**
-     * Attempt to authenticate the request's credentials.
+     * Attempt to authenticate the request's credentials. and stop user that already goten soft delete to login
      *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-
+    
         $credentials = [
             'email' => Str::lower($this->input('email')),
             'password' => $this->input('password'),
         ];
-
+    
+        // Find the user including soft-deleted ones
+        $user = \App\Models\User::withTrashed()->where('email', $credentials['email'])->first();
+    
+        // Check if the user exists and is soft deleted
+        if ($user && $user->trashed()) {
+            throw ValidationException::withMessages([
+                'email' => 'Your account has been deleted. Please contact support.',
+            ]);
+        }
+    
+        // Attempt authentication for non-deleted users
         if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-
+    
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
-
+    
         RateLimiter::clear($this->throttleKey());
     }
 

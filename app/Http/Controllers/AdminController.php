@@ -42,8 +42,7 @@ class AdminController extends Controller
         if ($authUser->role === 'owner') {
             // Owner can set any role
             $user->update([
-                'role' => $request->role,
-                'last_role_change' => Carbon::now()
+                'role' => $request->role
             ]);
             return back()->with('success', 'Role updated successfully');
         }
@@ -51,8 +50,7 @@ class AdminController extends Controller
         if ($authUser->role === 'admin' && in_array($request->role, ['trainer', 'user'])) {
             // Admin can only set trainer/user
             $user->update([
-                'role' => $request->role,
-                'last_role_change' => Carbon::now()
+                'role' => $request->role
             ]);
             return back()->with('success', 'Role updated successfully');
         }

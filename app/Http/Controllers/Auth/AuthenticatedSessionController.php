@@ -33,7 +33,6 @@ class AuthenticatedSessionController extends Controller
 
         if ($user instanceof User) { // Ensure it's a User instance
             $user->update([
-                'active' => true, // Mark user as online
                 'last_seen' => now(), // Set last activity timestamp
             ]);
         }
@@ -51,7 +50,6 @@ class AuthenticatedSessionController extends Controller
 
         if ($user instanceof User) { // Ensure it's a User instance
             $user->update([
-                'active' => false, // Mark user as offline
                 'last_seen' => now(), // Update last seen timestamp
             ]);
         }

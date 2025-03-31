@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Module;
 use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Course extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -38,13 +39,24 @@ class Course extends Model
         return $this->belongsTo(User::class, 'author');
     }
 
-    // Automatically delete related modules when a course is deleted
+    // Automatically soft delete related modules when a course is soft deleted
     protected static function boot()
     {
         parent::boot();
 
         static::deleting(function ($course) {
-            $course->modules()->delete();
+            if ($course->isForceDeleting()) {
+                // If it's a permanent delete, also permanently delete related modules
+                $course->modules()->forceDelete();
+            } else {
+                // Otherwise, just soft delete related modules
+                $course->modules()->delete();
+            }
+        });
+
+        static::restoring(function ($course) {
+            // Restore soft deleted modules when restoring a course
+            $course->modules()->restore();
         });
     }
 }

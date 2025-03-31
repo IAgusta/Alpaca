@@ -122,17 +122,47 @@ class CourseController extends Controller
             'course_name' => ['required', 'string', 'in:' . $course->name],
         ]);
     
+        // Soft delete the course
+        $course->delete();
+    
+        // Redirect with a success message
+        return redirect()->route('admin.courses.index')->with('success', 'Course moved to Trash Bin.');
+    }
+    
+    public function forceDestroy($id)
+    {
+        $course = Course::withTrashed()->findOrFail($id);
+
+        // Allow only admins to permanently delete
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
+
         // Delete the course image if it exists
         if ($course->image) {
             Storage::disk('public')->delete($course->image);
         }
-    
-        // Delete the course
-        $course->delete();
-    
-        // Redirect with a success message
-        return redirect()->route('admin.courses.index')->with('success', 'Course deleted successfully.');
+
+        // Permanently delete the course
+        $course->forceDelete();
+
+        return redirect()->route('admin.courses.index')->with('success', 'Course permanently deleted.');
     }
+
+    public function restore($id)
+    {
+        $course = Course::withTrashed()->findOrFail($id);
+
+        // Allow only admins or course owners to restore
+        if (Auth::user()->role !== 'admin' && intval($course->author) !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $course->restore();
+
+        return redirect()->route('admin.courses.index')->with('success', 'Course restored successfully.');
+    }
+
 
     public function lockCourse(Request $request, $id)
     {

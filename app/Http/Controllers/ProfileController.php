@@ -56,7 +56,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Soft delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -68,6 +68,7 @@ class ProfileController extends Controller
 
         Auth::logout();
 
+        // Soft delete the user (this keeps the record but sets deleted_at)
         $user->delete();
 
         $request->session()->invalidate();

@@ -19,7 +19,7 @@
 
         <!-- Birth Date -->
         <div class="mt-4">
-            <x-input-label class="mb-3" for="birth_date" :value="__('Birth Date')" />
+            <x-input-label class="mb-3" for="birth_date" :value="__('Birth Date (Optional)')" />
             <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -31,7 +31,6 @@
                     type="text" 
                     name="birth_date" 
                     value="{{ old('birth_date') }}"
-                    required
                     data-datepicker
                     data-datepicker-buttons
                     data-datepicker-autoselect-today
@@ -45,7 +44,7 @@
         <!-- Phone (Optional) -->
         <div class="mt-4">
             <x-input-label class="mb-3" for="phone" :value="__('Phone (Optional)')" />
-            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" />
+            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" placeholder="eg: +62123XXXXX" />
             <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 
