@@ -21,6 +21,10 @@ class UserDetail extends Model
         'social_media',
     ];
 
+    protected $casts = [
+        'social_links' => 'array',
+    ];
+
     /**
      * Relationship with User.
      */

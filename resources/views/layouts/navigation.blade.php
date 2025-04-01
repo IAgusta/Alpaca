@@ -76,7 +76,8 @@
                 data-dropdown-show-classes="ring-2 ring-gray-300 dark:ring-gray-500"
                 data-dropdown-hide-classes=""
                 class="w-10 h-10 rounded-full cursor-pointer transition-all duration-200" 
-                src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('storage/profiles/default-profile.png') }}" 
+                src="{{ Auth::user()->details->image ? asset('storage/' . (json_decode(Auth::user()->details->image, true)['profile'] ?? '')) : '' }}" 
+                onerror="this.src='{{ asset('storage/profiles/default-profile.png') }}'" 
                 alt="User dropdown">
 
                 <!-- Dropdown menu -->
@@ -100,7 +101,7 @@
                         </li>
                         
                         <li>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">User Course</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Course</a>
                         </li>
                     </ul>
                     

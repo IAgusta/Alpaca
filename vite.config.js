@@ -16,6 +16,8 @@ export default defineConfig({
                 'resources/js/content-feature.js',
                 'resources/js/theme.js',
                 'resources/js/course/show.js',
+                'resources/js/profile/profile-images.js',
+                'resources/js/profile/added-social-link.js',
             ],
             refresh: true,
         }),

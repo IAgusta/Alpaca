@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Models\UserDetail;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,7 +20,6 @@ class ProfileUpdateRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'birth_date' => ['nullable', 'date'],
             'about' => ['nullable', 'string', 'max:1000'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'phone' => ['nullable', 'string', 'max:20'],
             'email' => [
                 'required',
@@ -29,6 +29,10 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
+            'banner_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:5120'],
+            'social_media' => ['nullable', 'array'], // Validate as an array
+            'social_media.*' => ['nullable', 'url'], // Validate each link as a URL
         ];
     }
 }

@@ -72,35 +72,50 @@
                             </div>
             
                             <!-- Content Section -->
-                            <div class="flex-1">
-                                <!-- Title -->
-                                <div class="font-semibold mb-2 text-center">{{ $content->title }}</div>
-            
-                                <!-- Content Preview -->
-                                @if ($content->content_type === "content")
-                                    <div class="ql-editor p-0 border-0 shadow-none">{!! $content->content !!}</div>
-                                @else
-                                    @php
-                                        $exercise = json_decode($content->content, true);
-                                    @endphp
-                                    <div>
-                                        <strong>Question:</strong>
-                                        <div class="ql-editor p-0 border-0 shadow-none">{!! $exercise['question'] ?? 'No question provided' !!}</div>
-                                        <ul>
-                                            @foreach ($exercise['answers'] ?? [] as $answer)
-                                                <li>
-                                                    {{ $answer['text'] ?? 'No answer text provided' }}
-                                                    @if (isset($answer['correct']) && $answer['correct'])
-                                                        <span class="text-green-600 font-bold">(✔ Correct)</span>
-                                                    @endif
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                        <div class="text-sm text-gray-600">
-                                            <strong>Explanation:</strong> {{ $exercise['explanation'] ?? 'No explanation provided' }}
+                            <div class="flex-1" x-data="{ showContent: false }">
+                                <!-- Title & Button in One Line -->
+                                <div class="flex items-center justify-center relative">
+                                    <div class="font-semibold text-center">{{ $content->title }}</div>
+                                    <button 
+                                        @click="showContent = !showContent" 
+                                        class="text-blue-500 hover:bg-blue-50 p-1 rounded-full"
+                                        aria-label="Toggle content visibility">
+                                        <span class="material-symbols-outlined" x-show="!showContent">
+                                            visibility
+                                        </span>
+                                        <span class="material-symbols-outlined" x-show="showContent" x-cloak>
+                                            visibility_off
+                                        </span>
+                                    </button>
+                                </div>
+
+                                <!-- Content Toggle -->
+                                <div x-show="showContent" x-cloak class="mt-2">
+                                    @if ($content->content_type === "content")
+                                        <div class="ql-editor p-0 border-0 shadow-none">{!! $content->content !!}</div>
+                                    @else
+                                        @php
+                                            $exercise = json_decode($content->content, true);
+                                        @endphp
+                                        <div>
+                                            <strong>Question:</strong>
+                                            <div class="ql-editor p-0 border-0 shadow-none">{!! $exercise['question'] ?? 'No question provided' !!}</div>
+                                            <ul>
+                                                @foreach ($exercise['answers'] ?? [] as $answer)
+                                                    <li>
+                                                        {{ $answer['text'] ?? 'No answer text provided' }}
+                                                        @if (isset($answer['correct']) && $answer['correct'])
+                                                            <span class="text-green-600 font-bold">(✔ Correct)</span>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                            <div class="text-sm text-gray-600">
+                                                <strong>Explanation:</strong> {{ $exercise['explanation'] ?? 'No explanation provided' }}
+                                            </div>
                                         </div>
-                                    </div>
-                                @endif
+                                    @endif
+                                </div>
                             </div>
             
                             <!-- Dropdown Button (Top-Right) -->
