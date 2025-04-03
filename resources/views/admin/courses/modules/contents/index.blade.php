@@ -54,21 +54,11 @@
                         <li class="p-4 bg-gray-100 rounded shadow-md flex items-start content-item" data-id="{{ $content->id }}" data-position="{{ $index + 1 }}">
                             <!-- Reposition Buttons (Left Side) -->
                             <div class="flex flex-col items-center gap-2 mr-4">
-                                <button id="button-up" class="{{ $index === 0 ? 'hidden' : '' }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-up" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z"/>
-                                    </svg>
-                                </button>
                                 <span class="cursor-grab drag-handle">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
                                     </svg>
                                 </span>
-                                <button id="button-down" class="{{ $index === $module->contents->count() - 1 ? 'hidden' : '' }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-down" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
-                                    </svg>
-                                </button>
                             </div>
             
                             <!-- Content Section -->
@@ -92,14 +82,26 @@
                                 <!-- Content Toggle -->
                                 <div x-show="showContent" x-cloak class="mt-2">
                                     @if ($content->content_type === "content")
-                                        <div class="ql-editor p-0 border-0 shadow-none">{!! $content->content !!}</div>
+                                        <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                            <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
+                                                <div id="preview-container-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
+                                                    {!! $content->content !!}
+                                                </div>
+                                            </div>
+                                        </div>
                                     @else
                                         @php
                                             $exercise = json_decode($content->content, true);
                                         @endphp
                                         <div>
                                             <strong>Question:</strong>
-                                            <div class="ql-editor p-0 border-0 shadow-none">{!! $exercise['question'] ?? 'No question provided' !!}</div>
+                                            <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                                <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
+                                                    <div id="preview-container-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
+                                                        {!! $exercise['question'] ?? 'No question provided' !!}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <ul>
                                                 @foreach ($exercise['answers'] ?? [] as $answer)
                                                     <li>
@@ -122,7 +124,7 @@
                             <div class="relative self-start">
                                 <button data-dropdown-toggle="contentDropdown-{{ $content->id }}" class="bg-transparent p-2 rounded-full hover:bg-gray-200">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a.5.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
                                     </svg>
                                 </button>
                                 <div id="contentDropdown-{{ $content->id }}" class="hidden absolute right-2 top-10 z-10 w-44 bg-white rounded-lg shadow-lg dark:bg-gray-700">
@@ -146,8 +148,6 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
-    @vite(['resources/js/content-manager.js', 'resources/js/content.js'])
+    @vite(['resources/js/content/editor.js','resources/js/content/content-manager.js'])
 </x-app-layout>

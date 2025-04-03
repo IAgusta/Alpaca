@@ -7,11 +7,11 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'resources/js/content-manager.js',
+                'resources/js/content/editor.js',
+                'resources/js/content/content-manager.js',
                 'resources/js/data-user.js',
                 'resources/js/robot-control.js',
                 'resources/js/course-theme.js',
-                'resources/js/content.js',
                 'resources/js/table-navbar.js',
                 'resources/js/content-feature.js',
                 'resources/js/theme.js',

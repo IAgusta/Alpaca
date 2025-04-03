@@ -79,6 +79,7 @@ class ModuleContentController extends Controller
     {
         $data = $request->validate([
             'content_type' => 'required|in:content,exercise',
+            'title' => 'required|string|max:255',
         ]);
     
         if ($request->content_type == 'content') {
@@ -86,8 +87,16 @@ class ModuleContentController extends Controller
             $content = $this->processQuillImages($content, $course); // Added course parameter
             $data['content'] = $content;
         } else {
-            $answers = [];
+            $request->validate([
+                'question' => 'required|string',
+                'answers' => 'required|array',
+                'answers.*.text' => 'required|string',
+                'answers.*.correct' => 'nullable|boolean',
+                'explanation' => 'nullable|string',
+            ]);
+    
             $question = $this->processQuillImages($request->input('question'), $course); // Added course parameter
+            $answers = [];
             foreach ($request->input('answers') as $answer) {
                 $answers[] = [
                     'text' => $answer['text'],
@@ -133,7 +142,7 @@ class ModuleContentController extends Controller
         
         if ($content->content_type === 'content') {
             $request->validate([
-                'title' => 'required|string|max:255',
+                'title' => 'string|max:255',
                 'content' => 'required|string',
             ]);
     

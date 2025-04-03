@@ -18,8 +18,11 @@
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.0.7",
+        "@tiptap/core": "^2.11.7",
+        "@tiptap/pm": "^2.11.7",
+        "@tiptap/starter-kit": "^2.11.7",
         "flowbite": "^3.1.2",
-        "quill": "^2.0.3",
+        "flowbite-typography": "^1.0.5",
         "quill-image-resize-module": "^3.0.0"
     }
 }

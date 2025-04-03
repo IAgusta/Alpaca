@@ -67,11 +67,10 @@
                             </h1>
                             <h3 class="text-sm text-gray-500 font-thin">{{ __('Dibuat pada : ') }}{{ $module->created_at ? $module->created_at->translatedFormat('d F Y,') . ' ' . __('Jam : ') . $module->created_at->format('H:i') . __(' WIB') : '-' }}</h3>
                             <h3 class="text-sm text-gray-500 font-thin">{{ __('Diupdate pada : ') }}{{ $module->updated_at ? $module->updated_at->translatedFormat('d F Y,') . ' ' . __('Jam : ') . $module->updated_at->format('H:i') . __(' WIB') : '-' }}</h3>
-                            
+                            <!-- Divider Line Above Title -->
+                            <div class="border-t border-gray-200 w-full my-4"></div>
                             @if($module->contents)
                                 @foreach($module->contents as $content)
-                                    <!-- Divider Line Above Title -->
-                                    <div class="border-t border-gray-200 w-full my-4"></div>
                                     <div id="content-{{ $content->id }}">
                                         <h2 class="text-xl font-semibold mt-2 text-center">{{ $content->title }}</h2>
                                         @if($content->content_type === 'exercise')
@@ -113,5 +112,4 @@
             </div>
         </div>
     </div>
-    @vite(['resources/js/content.js', 'resources/js/content-feature.js'])
 </x-app-layout>

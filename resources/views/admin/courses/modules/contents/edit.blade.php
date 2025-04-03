@@ -31,7 +31,7 @@
 
             <!-- Edit Form -->
             <form method="POST" action="{{ route('admin.courses.modules.contents.update', ['course' => $course, 'module' => $module, 'moduleContent' => $content->id]) }}" 
-                  onsubmit="updateContentBeforeSubmit()">
+                  onsubmit="document.getElementById('content-hidden').value = editor.getHTML(); document.getElementById('question-hidden').value = questionEditor.getHTML();">
                 @csrf
                 @method('PATCH')
 
@@ -49,10 +49,16 @@
 
                 <!-- Content Editor (for "content" type) -->
                 @if ($content->content_type === 'content')
-                    <div class="mb-2">
-                        <label class="block text-sm font-medium text-gray-700">Content</label>
-                        <div id="editor" class="w-full border border-gray-300 shadow-sm">{!! $content->content !!}</div>
-                        <input type="hidden" name="content" id="content-hidden" value="{{ $content->content }}">
+                    <div id="content-editor" class="mb-2">
+                        <label class="flex text-sm font-medium text-gray-700">Isi Konten Bagian :</label>
+                        <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            @include('admin.courses.modules.contents.partials.text-editor')
+                            <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
+                                <label for="wysiwyg-container" class="sr-only">Publish post</label>
+                                <div id="wysiwyg-container" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"></div>
+                                <input type="hidden" name="content" id="content-hidden" value="{{ $content->content }}">
+                            </div>
+                        </div>
                     </div>
                 @endif
 
@@ -65,8 +71,14 @@
                     <!-- Question Editor -->
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700">Question</label>
-                        <div id="question-editor" class="w-full border border-gray-300 shadow-sm">{!! $exercise['question'] ?? '' !!}</div>
-                        <input type="hidden" name="question" id="question-hidden" value="{{ $exercise['question'] ?? '' }}">
+                        <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                            @include('admin.courses.modules.contents.partials.text-editor')
+                            <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
+                                <label for="question-wysiwyg-container" class="sr-only">Question</label>
+                                <div id="question-wysiwyg-container" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">{!! $exercise['question'] ?? '' !!}</div>
+                                <input type="hidden" name="question" id="question-hidden" value="{{ $exercise['question'] ?? '' }}">
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Answer Choices -->
@@ -101,6 +113,5 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-    @vite(['resources/js/content-manager.js'])
+    @vite(['resources/js/content/editor.js'])
 </x-app-layout>

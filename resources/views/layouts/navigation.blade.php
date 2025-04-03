@@ -82,13 +82,38 @@
 
                 <!-- Dropdown menu -->
                 <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
+                    <!-- Banner and Profile Image Wrapper -->
+                    <a href="{{ route('profile.edit') }}" class="flex flex-col items-center relative">
+                        <div class="relative w-full h-16">
+                            <!-- Banner Image -->
+                            <img id="banner" 
+                            src="{{ Auth::user()->details->image ? asset('storage/' . (json_decode(Auth::user()->details->image, true)['banner'] ?? '')) : '' }}" 
+                            onerror="this.src='{{ asset('storage/profiles/patterns.png') }}'" 
+                                    class="w-full h-full object-cover" 
+                                    alt="Banner Image">
+
+                            <!-- Dark Overlay (30-40% opacity) -->
+                            <div class="absolute inset-0 bg-black bg-opacity-5"></div>
+                            
+                            <!-- Profile Image - Fully Centered -->
+                            <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <img id="profile-preview" 
+                                src="{{ Auth::user()->details->image ? asset('storage/' . (json_decode(Auth::user()->details->image, true)['profile'] ?? '')) : '' }}" 
+                                onerror="this.src='{{ asset('storage/profiles/default-profile.png') }}'" 
+                                        class="w-8 h-8 rounded-full object-cover shadow-lg" 
+                                        alt="Profile Image">
+                            </div>
+                        </div>
+                    </a>
                     <!-- User info section - won't close dropdown when clicked -->
-                    <div class="px-4 py-3 text-sm text-gray-900 dark:text-white" onclick="event.stopPropagation()">
+                    <div class="px-4 py-3 text-sm text-gray-900 dark:text-white flex flex-col items-center text-center" onclick="event.stopPropagation()">
+                        <!-- User Name -->
                         <div class="truncate hover:whitespace-normal" title="{{ Auth::user()->name }}">
                             {{ Auth::user()->name }}
                         </div>
-                        <div class="font-medium truncate hover:whitespace-normal" title="{{ Auth::user()->email }}">
-                            {{ Auth::user()->email }}
+                        <!-- User Role - Styled Differently -->
+                        <div class="truncate hover:whitespace-normal bg-blue-500 text-white px-2 py-1 rounded-full text-xs mt-1" title="{{ Auth::user()->role }}">
+                            {{ Str::ucfirst(Auth::user()->role)  }}
                         </div>
                     </div>
                     
@@ -99,9 +124,11 @@
                                 {{ __('Profile') }}
                             </a>
                         </li>
-                        
                         <li>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Course</a>
+                            <a href="{{ route('user.course') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Library</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('admin.courses.index') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">My Course</a>
                         </li>
                     </ul>
                     
