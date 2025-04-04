@@ -122,13 +122,18 @@
                 <div class="flex mt-6 gap-2">
                     <span>Social Media :</span>
                     <div class="flex gap-2">
-                        @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube'] as $platform)
-                        <div class="flex items-center">
-                            <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5 me-2">
-                        </div>
+                        @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'github'] as $platform)
+                            @php
+                                $socialMediaLinks = $user->details->social_media ?? [];
+                                $link = $socialMediaLinks[$platform] ?? null;
+                            @endphp
+                            @if ($link)
+                                <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="flex items-center">
+                                    <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5 me-2">
+                                </a>
+                            @endif
                         @endforeach
                     </div>
-                    <input type="hidden" name="social_media" id="social-media-input">
                 </div>
             </div>
         </div>
@@ -141,7 +146,6 @@
 
     <!-- Required Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/datepicker.min.js"></script>
-    @vite('resources/js/profile/added-social-link.js')
 
     <script>
     document.addEventListener('DOMContentLoaded', function () {

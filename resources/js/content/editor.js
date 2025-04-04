@@ -109,7 +109,7 @@ window.addEventListener('load', function() {
     });
 
     document.getElementById('toggleLinkButton').addEventListener('click', () => {
-        const url = window.prompt('Enter image URL:', 'https://flowbite.com');
+        const url = window.prompt('Enter image URL:', '');
         editor.chain().focus().toggleLink({ href: url }).run();
     });
     document.getElementById('removeLinkButton').addEventListener('click', () => {

@@ -22,7 +22,7 @@ class UserDetail extends Model
     ];
 
     protected $casts = [
-        'social_links' => 'array',
+        'social_media' => 'array', // Ensure social_media is cast to an array
     ];
 
     /**

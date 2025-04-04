@@ -1,59 +1,128 @@
-<div id="social-input-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div class="relative p-4 w-full max-w-md max-h-full">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    Your Social Links
-                </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="social-input-modal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div class="p-4 md:p-5 space-y-4">
+<section>
+    <header>
+        <h2 class="text-lg font-medium text-gray-900">
+            {{ __('Social Media Profile Information') }}
+            @if (session('status') === 'social-media-updated')
+            <x-input-success
+                :messages="__('Profile Account Link Changed.')"/>
+            @endif
+        </h2>
+        <p class="mt-1 text-sm text-gray-600">
+            {{ __("Update your other platform account links.") }}
+        </p>
+    </header>
+
+    <form id="social-media-form" method="post" action="{{ route('profile.update.link') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
+        @csrf
+        @method('PATCH')
+        <input type="hidden" name="social_media" id="social-media-input" value="{{ json_encode($user->details->social_media ?? []) }}">
+    
+        <div class="flex flex-col gap-4">
+            <!-- Social Media Links Section --> 
+            @foreach (['facebook', 'instagram', 'x' => 'Twitter', 'linkedin', 'youtube', 'github'] as $key => $platform)
                 @php
-                    $socialMedia = json_decode($user->details->social_media ?? '{}', true);
+                    $platformName = is_int($key) ? ucfirst($platform) : $platform;
+                    $platformKey = is_int($key) ? $platform : $key;
+                    $currentLink = $user->details->social_media[$platformKey] ?? ''; // Fetch the current link from the database
                 @endphp
-            
-                @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube'] as $platform)
-                    <div class="social-link-container" data-platform="{{ $platform }}">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5 me-2">
-                                <span class="font-medium capitalize">{{ $platform }}</span>
-                            </div>
-                            <button type="button" class="add-link-btn {{ isset($socialMedia[$platform]) ? 'hidden' : '' }}">
-                                <span class="material-symbols-outlined">add_link</span>
-                            </button>
-                        </div>
-                        <div class="link-input-container {{ isset($socialMedia[$platform]) ? 'hidden' : '' }} mt-2">
-                            <div class="flex">
-                                <input type="url" class="social-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="https://{{ $platform }}.com/username">
-                                <button type="button" class="save-link-btn text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-3 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    Save
-                                </button>
-                            </div>
-                        </div>
-                        <div class="link-display-container {{ isset($socialMedia[$platform]) ? '' : 'hidden' }} mt-2">
-                            <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-600 p-2 rounded">
-                                <span class="text-sm text-gray-700 dark:text-gray-300 truncate">{{ $socialMedia[$platform] ?? '' }}</span>
-                                <button type="button" class="remove-link-btn text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                    <span class="material-symbols-outlined">link_off</span>
-                                </button>
-                            </div>
+                
+                <div x-data="{
+                    showInput: {{ $currentLink ? 'true' : 'false' }},
+                    link: '{{ $currentLink }}',
+                    isLoading: false,
+                    saveLink() {
+                        this.isLoading = true;
+                        const socialMediaInput = document.getElementById('social-media-input');
+                        const socialLinks = JSON.parse(socialMediaInput.value || '{}');
+                        if (this.link.trim()) {
+                            socialLinks['{{ $platformKey }}'] = this.link.trim();
+                            socialMediaInput.value = JSON.stringify(socialLinks);
+                        }
+                        setTimeout(() => {
+                            this.isLoading = false;
+                            this.showInput = false;
+                        }, 800);
+                    }
+                }" 
+                @mouseenter="if(!link) showInput = true" 
+                @mouseleave="setTimeout(() => { if(!link) showInput = false }, 200)"
+                class="group flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                    
+                    <!-- Platform icon -->
+                    <div class="relative w-8 h-8 flex items-center justify-center">
+                        <img src="{{ asset('icons/' . $platformKey . '.svg') }}" 
+                             alt="{{ $platformName }} icon" 
+                             class="w-full h-full transition-transform group-hover:scale-110">
+                        
+                        <!-- Loading indicator (hidden by default) -->
+                        <div x-show="isLoading" class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                         </div>
                     </div>
-                @endforeach
-            </div>
-            <!-- Modal footer -->
-            <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button id="save-social-links" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
-            </div>
+                    
+                    <!-- Platform name (always visible) -->
+                    <span class="font-medium text-gray-700 min-w-[80px]">{{ $platformName }}</span>
+                    
+                    <!-- Input field (shown on hover when empty or always when has link) -->
+                    <div x-show="showInput || link" x-transition class="flex-1 flex items-center gap-2">
+                        <input type="url" name="social[{{ $platformKey }}]" x-model="link" 
+                               placeholder="https://{{ $platformKey }}.com/username"
+                               class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full px-3 py-1.5 text-sm">
+                        
+                        <!-- Save indicator (shown when input is focused or has value) -->
+                        <button type="button" @click="saveLink(); console.log('Temporary storage:', JSON.parse(document.getElementById('social-media-input').value));" 
+                                x-show="link" 
+                                class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                            Save
+                        </button>
+                    </div>
+                    
+                    <!-- Default state (shown when no link exists) -->
+                    <div x-show="!link && !showInput" class="flex-1">
+                        <span class="text-sm text-gray-400">Not connected</span>
+                        <span class="material-symbols-outlined text-sm text-gray-400">link_off</span>
+                    </div>
+                </div>
+            @endforeach
         </div>
-    </div>
-</div>
+    
+        <div class="flex items-center justify-end gap-4 mt-6 pt-4 border-t border-gray-200">
+            <x-primary-button>{{ __('Save All') }}</x-primary-button>
+        </div>
+    </form>
+
+    <style>
+                /* Smooth transitions */
+        [x-cloak] { display: none !important; }
+
+        /* Loading spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* Hover effects */
+        .hover\:bg-gray-50:hover {
+            background-color: #f9fafb;
+        }
+
+        .transition-colors {
+            transition-property: background-color, border-color, color, fill, stroke;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+
+        .transition-transform {
+            transition-property: transform;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 150ms;
+        }
+    </style>
+
+    <!-- Social media form content -->
+    @vite('resources/js/profile/added-social-link.js')
+</section>

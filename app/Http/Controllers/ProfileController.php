@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
 use App\Models\UserDetail;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -34,7 +36,8 @@ class ProfileController extends Controller
         // Update basic profile information
         $this->updateProfileInfo($user, $data);
     
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        // Redirect back to the profile page with the active tab
+        return Redirect::route('profile.edit', ['tab' => 'update-profile'])->with('status', 'profile-updated');
     }
 
     /**
@@ -55,20 +58,40 @@ class ProfileController extends Controller
     
         $details = $user->details ?? new UserDetail(['user_id' => $user->id]);
     
-        // Ensure social_media is properly decoded
-        $socialMedia = is_string($data['social_media']) ? json_decode($data['social_media'], true) : $data['social_media'];
-        if (empty($socialMedia)) {
-            $socialMedia = null; // Set to null instead of an empty array
-        } else {
-            $socialMedia = json_encode($socialMedia); // Convert back to JSON
-        }
-    
         $details->fill([
             'birth_date' => $data['birth_date'] ?? null,
             'about' => $data['about'] ?? null,
             'phone' => $data['phone'] ?? null,
-            'social_media' => $socialMedia, // Save JSON correctly
         ])->save();
+    }
+
+    /**
+     * Update the user's social media links.
+     */
+    public function updateSocialMediaLinks(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'social_media' => 'required|json',
+        ]);
+        
+        $user = $request->user();
+        $details = $user->details ?? new UserDetail(['user_id' => $user->id]);
+        
+        // Decode the JSON input
+        $socialMedia = json_decode($request->social_media, true);
+        
+        // Filter out empty values
+        $filteredSocialMedia = Arr::where($socialMedia, fn($value) => !empty($value));
+        
+        // Log the final data to be stored
+        Log::info('Final social media links to be stored:', $filteredSocialMedia);
+        
+        // Update the social media data
+        $details->social_media = $filteredSocialMedia;
+        $details->save();
+        
+        // Redirect back to the profile page with the active tab
+        return Redirect::route('profile.edit', ['tab' => 'update-link-account'])->with('status', 'social-media-updated');
     }
 
     public function updateProfileImage(Request $request): RedirectResponse

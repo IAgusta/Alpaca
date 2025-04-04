@@ -1,114 +1,85 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Fix curly quotes in links within Quill editor content
-    document.querySelectorAll(".ql-editor a").forEach(link => {
-        link.href = link.href.replace(/“|”/g, '"');
-        link.target = link.target.replace(/“|”/g, '"');
-    });
+    // Initialize TipTap editor for preview containers
+    document.querySelectorAll('[id^="wysiwyg-preview-"]').forEach((container) => {
+        const content = container.innerHTML; // Get the content from the container
+        container.innerHTML = ''; // Clear the plain HTML content
 
-    // Handle clicks on links within Quill editor content
-    document.querySelectorAll(".ql-editor a").forEach(link => {
-        link.addEventListener("click", function (e) {
-            e.stopPropagation();
-            e.preventDefault(); // Prevent Laravel from interpreting it as a relative path
-            const url = new URL(this.href.replace(/“|”/g, '"'));
-            window.open(url.href, '_blank');
+        new Editor({
+            element: container,
+            extensions: [
+                StarterKit.configure({
+                    textStyle: false,
+                    bold: false,
+                    marks: {
+                        bold: false,
+                    },
+                }),
+                TextStyle,
+                Color,
+                FontFamily,
+                Highlight,
+                Underline,
+                Link,
+                TextAlign.configure({
+                    types: ['heading', 'paragraph'], // Ensure alignment is applied to headings and paragraphs
+                }),
+                Image,
+                YouTube,
+            ],
+            content: content, // Set the content
+            editable: false, // Make the editor read-only
+            editorProps: {
+                attributes: {
+                    class: 'format lg:format-lg dark:format-invert focus:outline-none format-blue max-w-none',
+                },
+            },
         });
     });
 
-    // Center-align images within Quill editor content
-    document.querySelectorAll(".ql-editor img").forEach(img => {
-        img.style.display = "block";
-        img.style.margin = "0 auto";
-        img.style.maxWidth = "100%";
-        img.style.height = "auto";
-    });
-
-    document.querySelectorAll(".ql-editor h1").forEach(h1 => {
-        h1.classList.add("text-lg", "font-bold", "mb-4");
-    });
-
-    document.querySelectorAll(".ql-code-block-container").forEach(container => {
-        let codeLines = [];
-
-        // Extract and combine code lines
-        container.querySelectorAll(".ql-code-block").forEach(line => {
-            let text = line.textContent.trim(); // Use textContent for accurate copying
-            codeLines.push(text);
-        });
-
-        let formattedCode = codeLines.join("\n"); // Join lines with newlines
+    // Render code blocks with a "Copy" button
+    document.querySelectorAll('[id^="wysiwyg-preview-"] code').forEach((codeBlock) => {
+        const codeContent = codeBlock.textContent.trim(); // Extract code content
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("relative", "p-4", "bg-gray-800", "text-white", "rounded-lg", "overflow-auto", "shadow-sm");
 
         // Create <pre><code> structure
-        let pre = document.createElement("pre");
-        let code = document.createElement("code");
-        code.textContent = formattedCode;
+        const pre = document.createElement("pre");
+        const code = document.createElement("code");
+        code.textContent = codeContent;
         pre.appendChild(code);
 
         // Style the <pre> block
-        pre.style.display = "block";
-        pre.style.margin = "10px 0";
-        pre.style.padding = "10px";
-        pre.style.backgroundColor = "#282c34";
-        pre.style.color = "#fff";
-        pre.style.borderRadius = "5px";
+        pre.style.margin = "0";
         pre.style.whiteSpace = "pre-wrap";
         pre.style.overflowX = "auto";
-        pre.style.position = "relative";
 
         // Create "Copy" button
-        let copyBtn = document.createElement("button");
+        const copyBtn = document.createElement("button");
         copyBtn.innerText = "Copy";
-        copyBtn.style.position = "absolute";
-        copyBtn.style.right = "10px";
-        copyBtn.style.top = "5px";
-        copyBtn.style.padding = "5px 10px";
-        copyBtn.style.fontSize = "12px";
-        copyBtn.style.cursor = "pointer";
-        copyBtn.style.backgroundColor = "#007bff";
-        copyBtn.style.color = "#fff";
-        copyBtn.style.border = "none";
-        copyBtn.style.borderRadius = "3px";
-        copyBtn.style.zIndex = "5";
+        copyBtn.classList.add("absolute", "top-2", "right-2", "px-2", "py-1", "bg-blue-500", "text-white", "rounded", "text-sm", "hover:bg-blue-600");
 
-        // Copy function with fallback method
+        // Copy functionality
         copyBtn.addEventListener("click", function () {
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(formattedCode).then(() => {
+                navigator.clipboard.writeText(codeContent).then(() => {
                     copyBtn.innerText = "Copied!";
-                    setTimeout(() => copyBtn.innerText = "Copy", 2000);
-                }).catch(err => {
-                    console.error("Failed to copy:", err);
+                    setTimeout(() => (copyBtn.innerText = "Copy"), 2000);
                 });
             } else {
-                // Fallback for non-secure environments
-                let textarea = document.createElement("textarea");
-                textarea.value = formattedCode;
+                const textarea = document.createElement("textarea");
+                textarea.value = codeContent;
                 document.body.appendChild(textarea);
                 textarea.select();
                 document.execCommand("copy");
                 document.body.removeChild(textarea);
                 copyBtn.innerText = "Copied!";
-                setTimeout(() => copyBtn.innerText = "Copy", 2000);
+                setTimeout(() => (copyBtn.innerText = "Copy"), 2000);
             }
         });
 
-        // Wrap everything and replace original content
-        let wrapper = document.createElement("div");
-        wrapper.style.position = "relative";
+        // Append elements
         wrapper.appendChild(copyBtn);
         wrapper.appendChild(pre);
-
-        container.replaceWith(wrapper);
-    });
-
-    // Center-align and resize videos within Quill editor content
-    document.querySelectorAll(".ql-editor .ql-video").forEach(video => {
-        video.style.display = "block";
-        video.style.margin = "0 auto";
-        video.style.width = "80%"; // Adjust the width as needed
-        video.style.maxWidth = "800px"; // Set a maximum width
-        video.style.height = "auto"; // Maintain aspect ratio
-        video.style.maxHeight = "450px"; // Set a maximum height
-        video.style.height = "450px"; // Set height to fit full HD
+        codeBlock.replaceWith(wrapper);
     });
 });

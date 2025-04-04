@@ -31,7 +31,7 @@
 
     <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 h-screen overflow-hidden">
-            <div class="grid grid-cols-5 gap-4 h-full">
+            <div class="lg:grid lg:grid-cols-5 gap-4 h-full">
                 <!-- Left Sidebar -->
                 <div class="hidden lg:block col-span-1 rounded-lg p-4 h-full overflow-y-auto">
                     <div class="mt-4 flex flex-col space-y-4 text-gray-600 items-end">
@@ -71,7 +71,7 @@
                             <div class="border-t border-gray-200 w-full my-4"></div>
                             @if($module->contents)
                                 @foreach($module->contents as $content)
-                                    <div id="content-{{ $content->id }}">
+                                    <div id="content-{{ $content->id }}" class="mb-6">
                                         <h2 class="text-xl font-semibold mt-2 text-center">{{ $content->title }}</h2>
                                         @if($content->content_type === 'exercise')
                                             @php
@@ -94,8 +94,12 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <div class="ql-editor p-0 border-0 shadow-none">
-                                                {!! $content->content !!}
+                                            <div class="content-preview">
+                                                <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
+                                                    <div id="wysiwyg-preview-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
+                                                        {!! $content->content !!}
+                                                    </div>
+                                                </div>
                                             </div>
                                         @endif
                                     </div>
@@ -112,4 +116,5 @@
             </div>
         </div>
     </div>
+    @vite(['resources/js/content/style.js'])
 </x-app-layout>

@@ -1,9 +1,9 @@
-.ql-content-editor img {
+.preview-container iframe {
     display: block;
     margin: 0 auto;}
 
 
-.module-content img {
+.module-content iframe {
     display: block;
     margin: 0 auto;
 }
@@ -38,4 +38,37 @@
   width: 30px;
   height: 30px;
   font-size: 14px;
+}
+
+.social-media-icon.has-link {
+  position: relative;
+}
+
+.social-media-icon.has-link::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+.social-media-icon.glow {
+  animation: glow 1s;
+}
+
+.popover-content {
+  display: none;
+}
+
+.popover-content.active {
+  display: flex;
 }

@@ -83,8 +83,8 @@
                                 <div x-show="showContent" x-cloak class="mt-2">
                                     @if ($content->content_type === "content")
                                         <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
-                                            <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
-                                                <div id="preview-container-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
+                                            <div class="px-4 py-2">
+                                                <div id="preview-container-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
                                                     {!! $content->content !!}
                                                 </div>
                                             </div>
@@ -95,9 +95,9 @@
                                         @endphp
                                         <div>
                                             <strong>Question:</strong>
-                                            <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                            <div class="w-full">
                                                 <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
-                                                    <div id="preview-container-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
+                                                    <div id="preview-container-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
                                                         {!! $exercise['question'] ?? 'No question provided' !!}
                                                     </div>
                                                 </div>

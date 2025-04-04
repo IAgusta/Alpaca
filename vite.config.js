@@ -9,6 +9,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/content/editor.js',
                 'resources/js/content/content-manager.js',
+                'resources/js/content/style.js',
                 'resources/js/data-user.js',
                 'resources/js/robot-control.js',
                 'resources/js/course-theme.js',
