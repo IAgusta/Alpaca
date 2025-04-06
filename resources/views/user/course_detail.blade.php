@@ -36,7 +36,7 @@
                         <div class="mt-4 flex gap-2">
                             @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
                             <a href="#">
-                                <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300">{{ $theme }}</span>
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300">{{ $theme }}</span>
                             </a>
                             @endforeach
                         </div>
@@ -58,61 +58,124 @@
                 </div>
                 <p class="mt-4 text-gray-700">{{ $course->description ?? 'This course doesn`t have any description' }}</p>
                 <div class="mt-6">
-                    <div class="flex justify-between">
-                        <h2 class="text-2xl font-bold">Bagian</h2>
-                        @php
-                            $userId = Auth::id();
-                            $totalModules = $course->modules->count();
-                            $completedModules = \App\Models\UserModel::where('user_id', $userId)
-                                ->whereHas('module', function ($query) use ($course) {
-                                    $query->where('course_id', $course->id);
-                                })
-                                ->where('read', true)
-                                ->count();
-                        @endphp
-                        
-                        <x-primary-button id="toggleAllButton" data-course-id="{{ $course->id }}">
-                            {{ $completedModules === $totalModules ? 'Mark All As Unread' : 'Mark All As Read' }}
-                        </x-primary-button>
-                    
-                    </div>
-                    <div class="mt-2 lg:grid lg:grid-cols-2 gap-4">
-                        @foreach($course->modules as $index => $module)
-                            @php
-                                $progress = \App\Models\UserModel::where('user_id', auth()->id())
-                                    ->where('module_id', $module->id)
-                                    ->first();
-                                $isRead = $progress && $progress->read;
-                            @endphp
-                            
-                            <div class="module-container p-4 rounded-lg flex justify-between items-center border-l-4 transition-colors duration-200
-                                {{ $isRead ? 'bg-gray-200 border-gray-400 text-gray-600 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400' 
-                                        : 'bg-white border-blue-500 text-black dark:bg-gray-900 dark:border-blue-500 dark:text-white' }}"
-                                data-module-id="{{ $module->id }}">
-                                
-                                <a href="{{ route('course.module.open', [
-                                    'name' => Str::slug($course->name),
-                                    'courseId' => $course->id,
-                                    'moduleTitle' => Str::slug($module->title),
-                                    'moduleId' => $module->id
-                                ]) }}" class="flex-grow flex items-start gap-3">
-                                    <div>
-                                        <p class="font-bold">Ch. {{ $index + 1 }} {{ $module->title }}</p>
-                                        <p class="text-sm transition-colors duration-200
-                                            {{ $isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-600 dark:text-gray-300' }}">
-                                            Created at: {{ $module->created_at?->format('M d, Y') ?? 'N/A' }} | 
-                                            Updated at: {{ $module->updated_at?->format('M d, Y') ?? 'N/A' }}
-                                        </p>
+                    <div class="mt-2 lg:grid lg:grid-cols-3 gap-4">
+                        {{-- Courses more Details --}}
+                        <div class="lg:col-span-1">
+                            <!-- Author / Themes -->
+                            <div class="flex gap-4">
+                                <div>
+                                    <h3 class="font-bold text-sm uppercase">Author</h3>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        <a href="#">
+                                            <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300 truncate max-w-[120px]"
+                                                title="{{ $course->authorUser->name }}">
+                                                {{ Str::limit($course->authorUser->name, 12, "") ?? 'Unknown' }}
+                                            </span>
+                                        </a>
                                     </div>
-                                </a>
-                                
-                                <button class="toggle-button" data-module-id="{{ $module->id }}">
-                                    <span class="material-symbols-outlined visibility-icon">
-                                        {{ $isRead ? 'visibility_off' : 'visibility' }}
-                                    </span>
-                                </button>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-sm uppercase">Themes</h3>
+                                    <div class="flex flex-wrap gap-2 mt-1">
+                                        @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
+                                        <a href="#">
+                                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300">{{ $theme }}</span>
+                                        </a>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
-                        @endforeach                  
+                            {{-- Author Social Media Links --}}
+                            <div>
+                                <h3 class="font-bold text-sm uppercase mt-3">Author Social Media</h3>
+                                <div class="flex space-x-3 mt-1 flex-wrap mb-4">
+                                    @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'github'] as $platform)
+                                        @php
+                                            $socialMediaLinks = $course->authorUser->details->social_media ?? [];
+                                            $link = $socialMediaLinks[$platform] ?? null;
+                                            
+                                            // Extract username from URL if link exists
+                                            $username = null;
+                                            if ($link) {
+                                                $parsedUrl = parse_url($link);
+                                                if (isset($parsedUrl['path'])) {
+                                                    $username = ltrim($parsedUrl['path'], '/');
+                                                    // Remove any trailing slashes
+                                                    $username = rtrim($username, '/');
+                                                }
+                                            }
+                                        @endphp
+                                        @if ($link)
+                                            <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1">
+                                                <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5">
+                                                @if ($username)
+                                                    <span class="text-sm">{{ $username }}</span>
+                                                @endif
+                                            </a>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        {{-- Courses Modules --}}
+                        <div class="lg:col-span-2">
+                            <div class="flex justify-between">
+                                <h2 class="text-2xl font-bold">Bagian</h2>
+                                @php
+                                    $userId = Auth::id();
+                                    $totalModules = $course->modules->count();
+                                    $completedModules = \App\Models\UserModel::where('user_id', $userId)
+                                        ->whereHas('module', function ($query) use ($course) {
+                                            $query->where('course_id', $course->id);
+                                        })
+                                        ->where('read', true)
+                                        ->count();
+                                @endphp
+                                
+                                <x-primary-button id="toggleAllButton" data-course-id="{{ $course->id }}">
+                                    {{ $completedModules === $totalModules ? 'Mark All As Unread' : 'Mark All As Read' }}
+                                </x-primary-button>
+                            
+                            </div>
+                            <div class="mt-2 gap-4">
+                                @foreach($course->modules as $index => $module)
+                                    @php
+                                        $progress = \App\Models\UserModel::where('user_id', auth()->id())
+                                            ->where('module_id', $module->id)
+                                            ->first();
+                                        $isRead = $progress && $progress->read;
+                                    @endphp
+                                    
+                                    <div class="module-container p-4 rounded-lg flex justify-between items-center border-l-4 transition-colors duration-200
+                                        {{ $isRead ? 'bg-gray-200 border-gray-400 text-gray-600 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400' 
+                                                : 'bg-white border-blue-500 text-black dark:bg-gray-900 dark:border-blue-500 dark:text-white' }}"
+                                        data-module-id="{{ $module->id }}">
+                                        
+                                        <a href="{{ route('course.module.open', [
+                                            'name' => Str::slug($course->name),
+                                            'courseId' => $course->id,
+                                            'moduleTitle' => Str::slug($module->title),
+                                            'moduleId' => $module->id
+                                        ]) }}" class="flex-grow flex items-start gap-3">
+                                            <div>
+                                                <p class="font-bold">Ch. {{ $index + 1 }} {{ $module->title }}</p>
+                                                <p class="text-sm transition-colors duration-200
+                                                    {{ $isRead ? 'text-gray-500 dark:text-gray-400' : 'text-gray-600 dark:text-gray-300' }}">
+                                                    Created at: {{ $module->created_at?->format('M d, Y') ?? 'N/A' }} | 
+                                                    Updated at: {{ $module->updated_at?->format('M d, Y') ?? 'N/A' }}
+                                                </p>
+                                            </div>
+                                        </a>
+                                        
+                                        <button class="toggle-button" data-module-id="{{ $module->id }}">
+                                            <span class="material-symbols-outlined visibility-icon">
+                                                {{ $isRead ? 'visibility_off' : 'visibility' }}
+                                            </span>
+                                        </button>
+                                    </div>
+                                @endforeach                  
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -115,10 +115,9 @@ window.addEventListener('load', function() {
     document.getElementById('removeLinkButton').addEventListener('click', () => {
         editor.chain().focus().unsetLink().run()
     });
-    document.getElementById('toggleCodeButton').addEventListener('click', () => {
-        editor.chain().focus().toggleCode().run();
-    })
-
+    document.getElementById('toggleCodeBlockButton').addEventListener('click', () => {
+        editor.chain().focus().toggleCodeBlock().run();
+    });
     document.getElementById('toggleLeftAlignButton').addEventListener('click', () => {
         editor.chain().focus().setTextAlign('left').run();
     });
@@ -146,6 +145,7 @@ window.addEventListener('load', function() {
             editor.chain().focus().setImage({ src: url }).run();
         }
     });
+    
     document.getElementById('addVideoButton').addEventListener('click', () => {
         const url = window.prompt('Enter YouTube URL:', '');
         if (url) {

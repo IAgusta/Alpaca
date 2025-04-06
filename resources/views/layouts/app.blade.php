@@ -23,8 +23,6 @@
         @else
             @include('partials.header')
         @endauth
-
-
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white shadow">
@@ -48,6 +46,9 @@
             <main>
                 {{ $slot }}
             </main>
+
+            <!-- Footer -->
+            @include('layouts.footer')
         </div>
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
     </body>

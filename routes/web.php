@@ -31,7 +31,7 @@ Route::get('/terms', function () { return view('terms');})->name('terms');
 Route::get('/privacy-policy', function () { return view('privacy-policy');})->name('privacy-policy');
 Route::get('/news', function () { return view('news');})->name('news');
 Route::get('/plugins/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
-Route::get('/plugins/search-users', function () { return view('plugins.monitoring');})->name('plugins.monitoring');
+Route::get('/find-users', function () { return view('plugins.search_user');})->name('plugins.search-users');
 Route::get('/documentation', function(){ return view('plugins.documentation');})->name('documentation');
 Route::get('/documentation-esp32', function () { return view('plugins.documentation.esp32');})->name('documentation.esp32');
 Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');
@@ -54,7 +54,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::patch('/profile/update-links', [ProfileController::class, 'updateSocialMediaLinks'])->name('profile.update.link');
     Route::post('/profile/update-images', [ProfileController::class, 'updateProfileImage'])->name('profile.update.images');

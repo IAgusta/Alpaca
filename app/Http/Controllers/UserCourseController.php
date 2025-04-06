@@ -156,6 +156,7 @@ class UserCourseController extends Controller
     {
         $userId = Auth::id();
     
+        // Fetch the course
         $course = Course::findOrFail($courseId);
         if (Str::slug($course->name) !== $name) {
             return redirect()->route('course.module.open', [
@@ -166,6 +167,7 @@ class UserCourseController extends Controller
             ]);
         }
     
+        // Fetch the module
         $module = Module::with('contents')
             ->where('id', $moduleId)
             ->where('course_id', $courseId)
@@ -175,7 +177,7 @@ class UserCourseController extends Controller
             return redirect()->back()->with('error', 'Module not found');
         }
     
-        // 4. Verify module title matches URL
+        // Verify module title matches URL
         if (Str::slug($module->title) !== $moduleTitle) {
             return redirect()->route('course.module.open', [
                 'name' => $name,
@@ -185,49 +187,41 @@ class UserCourseController extends Controller
             ]);
         }
     
-        // 5. Update last opened (your existing logic)
-        UserCourse::where('user_id', $userId)
-            ->where('course_id', $courseId)
-            ->update(['last_opened' => now()]);
-
-        // 6. Mark Module as Read
-        UserModel::updateOrCreate(
-            ['user_id' => $userId, 'module_id' => $moduleId], 
-            ['read' => true] // Update or create with read status
-        );
-
-        // 7. Change the user Course Progress
+        // Check if the course is already added to user_course_progress
         $courseProgress = UserCourse::where('user_id', $userId)
-        ->where('course_id', $courseId)
-        ->first();
-
-        if ($courseProgress) {
-            // Get the total modules in the course
-            $totalModules = Module::where('course_id', $courseId)->count();
+            ->where('course_id', $courseId)
+            ->first();
     
-            // Count completed (read) modules
+        if ($courseProgress) {
+            // Update last opened timestamp
+            $courseProgress->update(['last_opened' => now()]);
+    
+            // Update course progress immediately
+            $totalModules = Module::where('course_id', $courseId)->count();
             $completedModules = UserModel::where('user_id', $userId)
                 ->whereIn('module_id', Module::where('course_id', $courseId)->pluck('id'))
                 ->where('read', true)
                 ->count();
     
-            // Update the progress
             $courseProgress->update([
                 'completed_modules' => $completedModules,
-                'course_completed' => $completedModules == $totalModules, // True if all modules are read
+                'course_completed' => $completedModules == $totalModules,
                 'course_completed_at' => $completedModules == $totalModules ? now() : null,
             ]);
-        } else {
-            // If user_course_progress does not exist, create it
-            UserCourse::create([
-                'user_id' => $userId,
-                'course_id' => $courseId,
-                'total_modules' => Module::where('course_id', $courseId)->count(),
-                'completed_modules' => 1,
-                'course_completed' => false,
-            ]);
         }
-        return view('user.course_open', ['course' => $course,'module' => $module]);
+    
+        // Mark the module as read in user_module_progress
+        UserModel::updateOrCreate(
+            ['user_id' => $userId, 'module_id' => $moduleId],
+            ['read' => true]
+        );
+    
+        // Ensure progress is updated in case of new read history
+        if ($courseProgress) {
+            $this->updateCourseProgress($userId, $courseId);
+        }
+    
+        return view('user.course_open', ['course' => $course, 'module' => $module]);
     }
 
     private function updateCourseProgress($userId, $courseId)

@@ -35,11 +35,15 @@
                     </x-nav-link>
                     @endif
 
+                    <x-nav-link :href="route('plugins.search-users')" :active="request()->routeIs('plugins.search-users')" @click="loading = true">
+                        {{ __('Find User') }}
+                    </x-nav-link>
+
                     <!-- Plugins Dropdown -->
                     <div class="relative">
                         <button @click="pluginsOpen = !pluginsOpen" 
                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            {{ __('Plugins') }}
+                            {{ __('Tools') }}
                             <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                             </svg>
@@ -53,12 +57,6 @@
                                 <x-dropdown-link :href="route('plugins.robotControl')" 
                                     :active="request()->routeIs('plugins.robotControl')" @click="loading = true">
                                     {{ __('Robot Control') }}
-                                </x-dropdown-link>
-
-                                <!-- Monitoring Link -->
-                                <x-dropdown-link :href="route('plugins.monitoring')" 
-                                    :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
-                                    {{ __('Search User') }}
                                 </x-dropdown-link>
                             </div>
                         </div>
@@ -83,7 +81,7 @@
                 <!-- Dropdown menu -->
                 <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
                     <!-- Banner and Profile Image Wrapper -->
-                    <a href="{{ route('profile.edit') }}" class="flex flex-col items-center relative">
+                    <a href="{{ route('profile.index') }}" class="flex flex-col items-center relative">
                         <div class="relative w-full h-16">
                             <!-- Banner Image -->
                             <img id="banner" 
@@ -100,7 +98,7 @@
                                 <img id="profile-preview" 
                                 src="{{ Auth::user()->details->image ? asset('storage/' . (json_decode(Auth::user()->details->image, true)['profile'] ?? '')) : '' }}" 
                                 onerror="this.src='{{ asset('storage/profiles/default-profile.png') }}'" 
-                                        class="w-8 h-8 rounded-full object-cover shadow-lg" 
+                                        class="w-8 h-8 border border-blue-500 rounded-full object-cover shadow-lg" 
                                         alt="Profile Image">
                             </div>
                         </div>
@@ -108,7 +106,7 @@
                     <!-- User info section - won't close dropdown when clicked -->
                     <div class="px-4 py-3 text-sm text-gray-900 dark:text-white flex flex-col items-center text-center" onclick="event.stopPropagation()">
                         <!-- User Name -->
-                        <div class="truncate hover:whitespace-normal" title="{{ Auth::user()->name }}">
+                        <div class="truncate hover:whitespace-normal text-wrap" title="{{ Auth::user()->name }}">
                             {{ Auth::user()->name }}
                         </div>
                         <!-- User Role - Styled Differently -->
@@ -120,7 +118,7 @@
                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
                         <!-- Profile Link -->
                         <li>
-                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                            <a href="{{ route('profile.index') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                 {{ __('Profile') }}
                             </a>
                         </li>
@@ -184,9 +182,9 @@
                 {{ __('Robot Control') }}
             </x-responsive-nav-link>
 
-            <!-- Monitoring Link -->
-            <x-responsive-nav-link :href="route('plugins.monitoring')" :active="request()->routeIs('plugins.monitoring')" @click="loading = true">
-                {{ __('Search User') }}
+            <!-- Find User Link -->
+            <x-responsive-nav-link :href="route('plugins.search-users')" :active="request()->routeIs('plugins.search-users')" @click="loading = true">
+                {{ __('Find User') }}
             </x-responsive-nav-link>
         </div>
 
@@ -206,7 +204,7 @@
                     </div>
                 </div>
                 <!-- Profile Link -->
-                <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')" @click="loading = true">
+                <x-responsive-nav-link :href="route('profile.index')" :active="request()->routeIs('profile.index')" @click="loading = true">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 

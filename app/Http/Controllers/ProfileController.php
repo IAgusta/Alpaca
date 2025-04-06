@@ -16,6 +16,22 @@ use Illuminate\Support\Facades\Log;
 class ProfileController extends Controller
 {
     /**
+     * Display the user's profile.
+     */
+    public function index(Request $request): View
+    {
+        $user = $request->user();
+        $details = $user->details ?? new UserDetail(['user_id' => $user->id]);
+        $images = $details->image ? json_decode($details->image, true) : [];
+
+        return view('profile.index', [
+            'user' => $user,
+            'details' => $details,
+            'images' => $images,
+        ]);
+    }
+
+    /**
      * Display the user's profile form.
      */
     public function edit(Request $request): View

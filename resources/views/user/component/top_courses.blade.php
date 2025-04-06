@@ -26,7 +26,7 @@
                                     <!-- Tags -->
                                     <div class="mt-2 flex flex-wrap gap-2">
                                         @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
-                                            <span class="px-2 py-1 text-sm bg-blue-500 text-white rounded-lg">{{ $theme }}</span>
+                                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300">{{ $theme }}</span>
                                         @endforeach
                                     </div>
 

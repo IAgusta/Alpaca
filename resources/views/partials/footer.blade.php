@@ -11,7 +11,7 @@
                   <a href="{{ route('user.course') }}" class=" hover:underline">Kelas Online</a>
               </li>
               <li class="mb-4">
-                  <a href="{{ route('plugins.monitoring') }}" class="hover:underline">Cari Murid</a>
+                  <a href="{{ route('plugins.search-users') }}" class="hover:underline">Cari Murid</a>
               </li>
               <li class="mb-4">
                   <a href="{{ route('plugins.robotControl') }}" class="hover:underline">Kontrol Robot</a>
