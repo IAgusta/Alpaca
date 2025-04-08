@@ -17,10 +17,7 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
-        @csrf
-        @method('patch')
-
+    <div class="mt-6 space-y-6">
         <!-- Banner Section -->
         <div class="relative w-full h-52 rounded-xl overflow-hidden">
             <img 
@@ -70,11 +67,16 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+        @csrf
+        @method('patch')
 
         <!-- User Details Form -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-                <x-input-label for="name" :value="__('Name')" />
+                <x-input-label for="name" :value="__('Full Name')" />
                 <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" 
                               :value="old('name', $user->name)" required autofocus autocomplete="name" />
                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
@@ -103,10 +105,38 @@
                     @endif
                 </div>
 
+                @php
+                    $cleanPhone = old('phone', $user->details->phone);
+                    $cleanPhone = $cleanPhone && Str::startsWith($cleanPhone, '+62') ? Str::substr($cleanPhone, 3) : $cleanPhone;
+                @endphp
+                
                 <div class="mt-4">
                     <x-input-label for="phone" :value="__('Phone Number')" />
-                    <x-text-input id="phone" name="phone" type="number" class="mt-1 block w-full no-spinner"  
-                                  :value="old('phone', $user->details->phone)" placeholder="Optional" />
+                
+                    <div x-data="{ phone: '{{ $cleanPhone }}' }" class="relative flex items-stretch mt-1">
+                        <!-- Static +62 prefix -->
+                        <span class="flex items-center px-3 text-sm bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg
+                                    dark:bg-gray-700 dark:border-gray-600 text-gray-700 dark:text-white"
+                            style="min-height: 42px;">
+                            +62
+                        </span>
+                
+                        <!-- Visible input -->
+                        <input
+                            id="phone"
+                            name="visible_phone"
+                            x-model="phone"
+                            x-on:input="phone = phone.replace(/[^0-9]/g, '')"
+                            type="text"
+                            placeholder="8123XXXXXXX"
+                            class="rounded-r-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 text-sm block w-full p-2.5 placeholder-gray-400
+                                dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-500"
+                        />
+                
+                        <!-- Hidden full phone with +62 -->
+                        <input type="hidden" name="phone" :value="phone.trim() !== '' ? '+62' + phone : ''">
+                    </div>
+                
                     <x-input-error class="mt-2" :messages="$errors->get('phone')" />
                 </div>
             </div>

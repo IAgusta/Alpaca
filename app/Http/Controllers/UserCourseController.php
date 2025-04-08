@@ -19,25 +19,16 @@ class UserCourseController extends Controller
     public function index() 
     {
         $userId = Auth::id();
-        $quickstartCourseId = 1; // Assuming Course 1 has ID 1
-
-        // Check if the quickstart course is already added
-        $quickstartCourse = UserCourse::where('user_id', $userId)
-            ->where('course_id', $quickstartCourseId)
-            ->first();
-
-        // If not, add it to the user's courses
-        if (!$quickstartCourse) {
-            UserCourse::create([
-                'user_id' => $userId,
-                'course_id' => $quickstartCourseId,
-                'total_modules' => Course::find($quickstartCourseId)->modules->count(),
-                'completed_modules' => 0,
-                'course_completed' => false,
-            ]);
+        // Update total_modules for all user courses
+        $userCourses = UserCourse::where('user_id', $userId)->get();
+        foreach ($userCourses as $userCourse) {
+            $currentTotalModules = Course::find($userCourse->course_id)->modules->count();
+            if ($userCourse->total_modules !== $currentTotalModules) {
+                $userCourse->update(['total_modules' => $currentTotalModules]);
+            }
         }
 
-        // Get all user courses
+        // Get all user courses with updated data
         $userCourses = UserCourse::where('user_id', $userId)
             ->with('course')
             ->get();

@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
+        'username',
         'password',
         'role',
         'last_seen',
@@ -63,11 +64,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Derived username from email
+     * Get the username attribute.
+     *
+     * @return string
      */
     public function getUsernameAttribute()
     {
-        return strstr($this->email, '@', true); // before @
+        return $this->attributes['username'];
     }
 
     /**

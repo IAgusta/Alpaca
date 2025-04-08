@@ -7,7 +7,7 @@
         {{-- Saved By --}}
         <div class="flex flex-col items-center">
             <span class="text-xs font-medium text-gray-500 dark:text-gray-300 mb-1">Saved</span>
-            <span class="text-sm font-bold text-gray-800 dark:text-white">{{ $course->saved_count ?? 0 }}</span>
+            <span class="text-sm font-bold text-gray-800 dark:text-white">{{ $course->user_progress_count ?? 0 }}</span>
         </div>
         
         {{-- Popularity --}}
@@ -18,7 +18,7 @@
         
         {{-- Modules --}}
         <div class="flex flex-col items-center">
-            <span class="text-xs font-medium text-gray-500 dark:text-gray-300 mb-1">Modules</span>
+            <span class="text-xs font-medium text-gray-500 dark:text-gray-300 mb-1">Bagian</span>
             <span class="text-sm font-bold text-gray-800 dark:text-white">{{ $course->modules_count ?? $course->modules->count() }}</span>
         </div>
     </div>

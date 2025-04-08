@@ -67,8 +67,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 bg-white p-6 rounded-lg shadow">
                 <div class="space-y-4">
                     <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Name') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $user->name }}</p>
+                        <h3 class="text-sm font-medium text-gray-500">{{ __('Username') }}</h3>
+                        <p class="mt-1 text-sm text-gray-900">{{ $user->username }}</p>
                     </div>
 
                     <div>
@@ -93,6 +93,11 @@
                                 {{ __('Your email address is unverified.') }}
                             </p>
                         @endif
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">{{ __('Account Age') }}</h3>
+                        <p class="mt-1 text-sm text-gray-900">{{ $accountage }}</p>
                     </div>
 
                     <div>

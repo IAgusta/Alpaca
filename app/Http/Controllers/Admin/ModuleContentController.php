@@ -19,7 +19,7 @@ class ModuleContentController extends Controller
         return view('admin.courses.modules.contents.index', compact('course', 'module', 'contents'));
     }
 
-    private function processQuillImages($content, Course $course, $oldContent = null)
+    private function processEditorImages($content, Course $course, $oldContent = null)
     {
         // Extract existing images from old content (if provided)
         $existingImages = [];
@@ -42,7 +42,7 @@ class ModuleContentController extends Controller
             }
     
             $imageData = base64_decode($base64Data);
-            $fileName = 'quill_' . time() . '_' . uniqid() . '.' . $extension;
+            $fileName = 'editor_' . time() . '_' . uniqid() . '.' . $extension;
             $storagePath = "content_images/{$courseFolder}/{$fileName}";
             
             Storage::disk('public')->makeDirectory("content_images/{$courseFolder}");
@@ -80,46 +80,44 @@ class ModuleContentController extends Controller
         $data = $request->validate([
             'content_type' => 'required|in:content,exercise',
             'title' => 'required|string|max:255',
+            'content' => 'required|string',
         ]);
-    
-        if ($request->content_type == 'content') {
-            $content = $request->validate(['content' => 'required|string'])['content'];
-            $content = $this->processQuillImages($content, $course); // Added course parameter
-            $data['content'] = $content;
+
+        if ($data['content_type'] === 'content') {
+            $data['content'] = $this->processEditorImages($data['content'], $course);
         } else {
+            // For exercise type, process the question (content) and additional fields
+            $question = $this->processEditorImages($data['content'], $course);
+            
             $request->validate([
-                'question' => 'required|string',
                 'answers' => 'required|array',
                 'answers.*.text' => 'required|string',
                 'answers.*.correct' => 'nullable|boolean',
                 'explanation' => 'nullable|string',
             ]);
-    
-            $question = $this->processQuillImages($request->input('question'), $course); // Added course parameter
-            $answers = [];
-            foreach ($request->input('answers') as $answer) {
-                $answers[] = [
-                    'text' => $answer['text'],
-                    'correct' => $answer['correct'] ?? false,
-                ];
-            }
-    
+
+            // Combine all exercise data
             $data['content'] = json_encode([
                 'question' => $question,
-                'answers' => $answers,
+                'answers' => collect($request->input('answers'))->map(function ($answer) {
+                    return [
+                        'text' => $answer['text'],
+                        'correct' => isset($answer['correct']) && $answer['correct'],
+                    ];
+                })->toArray(),
                 'explanation' => $request->input('explanation'),
             ]);
         }
-    
+
         $lastPosition = $module->contents()->max('position') ?? 0;
         $data['position'] = $lastPosition + 1;
         $data['author'] = Auth::id();
-    
+
         $module->contents()->create($data);
-    
+
         $module->touch();
         $course->touch();
-    
+
         return back()->with('success', 'Content added successfully!');
     }
 
@@ -147,7 +145,7 @@ class ModuleContentController extends Controller
             ]);
     
             // Pass old content to detect removed images
-            $processedContent = $this->processQuillImages(
+            $processedContent = $this->processEditorImages(
                 $request->input('content'),
                 $course,
                 $content->content // Pass old content
@@ -170,7 +168,7 @@ class ModuleContentController extends Controller
             $exerciseData = json_decode($content->content, true);
             $oldQuestion = $exerciseData['question'] ?? '';
     
-            $processedQuestion = $this->processQuillImages(
+            $processedQuestion = $this->processEditorImages(
                 $request->input('question'),
                 $course,
                 $oldQuestion // Pass old question content

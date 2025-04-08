@@ -23,11 +23,13 @@ class ProfileController extends Controller
         $user = $request->user();
         $details = $user->details ?? new UserDetail(['user_id' => $user->id]);
         $images = $details->image ? json_decode($details->image, true) : [];
+        $accountage = $user->created_at->diffForHumans();
 
         return view('profile.index', [
             'user' => $user,
             'details' => $details,
             'images' => $images,
+            'accountage' => $accountage,
         ]);
     }
 

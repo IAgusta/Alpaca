@@ -31,9 +31,4 @@
             </div>
         </a>
     @endforeach
-
-    <!-- "More" Button -->
-    <a href="{{ route('user.course') }}" class="hover:bg-slate-500 hover:text-white flex items-center justify-center border p-3 rounded-lg shadow-md bg-gray-100 text-blue-400 font-medium text-sm">
-        More
-    </a>
 </div>

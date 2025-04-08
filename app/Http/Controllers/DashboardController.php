@@ -15,25 +15,24 @@ class DashboardController extends Controller
         $user = Auth::user();
         $userId = Auth::id();
         $topCourses = Cache::remember('top_courses', now()->addHours(12), function () {
-            return Course::where('id', '!=', 1)
-                ->whereRaw("LOWER(name) NOT LIKE '%test%'")
+            return Course::whereRaw("LOWER(name) NOT LIKE '%test%'")
                 ->orderBy('popularity', 'desc')
                 ->take(10)
                 ->get();
         });
-    
+        
         $latestCourses = Cache::remember('latest_courses', now()->addMinutes(1), function () {
-            return Course::where('id', '!=', 1)
-                ->whereRaw("LOWER(name) NOT LIKE '%test%'")
+            return Course::whereRaw("LOWER(name) NOT LIKE '%test%'")
                 ->orderBy('updated_at', 'desc')
-                ->take(5)
+                ->take(10)
                 ->get();
         });
 
         $userCourses = UserCourse::where('user_id', $userId)
-            ->whereHas('course', function ($query) {
-                $query->where('id', '!=', 1);
-            })->with('course')->take(3)->get();
+        ->whereHas('course', function ($query) {
+            // Removed the id != 1 condition
+            $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
+        })->with('course')->take(4)->get();
 
         return view('dashboard', compact('user','topCourses','latestCourses', 'userCourses'));
     }

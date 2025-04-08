@@ -49,9 +49,11 @@ window.addEventListener('load', function() {
             };
         },
     });
-    // tip tap editor setup
-    const storedContent = document.getElementById('content-hidden').value; // Get stored content
 
+    // Get the initial content
+    const initialContent = document.getElementById('content-hidden').value;
+
+    // Initialize single editor instance
     const editor = new Editor({
         element: document.querySelector('#wysiwyg-container'),
         extensions: [
@@ -62,7 +64,6 @@ window.addEventListener('load', function() {
                     bold: false,
                 },
             }),
-            // Include the custom Bold extension
             CustomBold,
             TextStyle,
             Color,
@@ -81,7 +82,7 @@ window.addEventListener('load', function() {
             Image,
             YouTube,
         ],
-        content: storedContent, // Initialize editor with stored content
+        content: initialContent, // Set initial content here
         editorProps: {
             attributes: {
                 class: 'format lg:format-lg dark:format-invert focus:outline-none format-blue max-w-none',
@@ -89,7 +90,7 @@ window.addEventListener('load', function() {
         }
     });
 
-    // Synchronize the editor's content with the hidden input field
+    // Synchronize editor content
     editor.on('update', () => {
         const content = editor.getHTML();
         document.getElementById('content-hidden').value = content;
@@ -227,6 +228,27 @@ window.addEventListener('load', function() {
             fontFamilyDropdown.hide();
         });
     });
+
+    // Add form submission handler
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const contentType = document.getElementById('content_type')?.value || document.querySelector('input[readonly]').value.toLowerCase();
+            const editorContent = editor.getHTML();
+
+            // Always set the editor content to the content field
+            document.getElementById('content-hidden').value = editorContent;
+
+            // For exercise type, no need to create JSON here since backend will handle it
+            // Just let the form submit naturally with:
+            // - content (question from editor)
+            // - answers array (from form fields)
+            // - explanation (from textarea)
+            form.submit();
+        });
+    }
+
 }
 
 // Initialize TipTap editor for preview containers

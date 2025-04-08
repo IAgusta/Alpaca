@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                             {{-- Author Social Media Links --}}
-                            <div>
+                            <div class="mt-4">
                                 <h3 class="font-bold text-sm uppercase mt-3">Author Social Media</h3>
                                 <div class="flex space-x-3 mt-1 flex-wrap mb-4">
                                     @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'github'] as $platform)
@@ -146,7 +146,7 @@
                                         $isRead = $progress && $progress->read;
                                     @endphp
                                     
-                                    <div class="module-container p-4 rounded-lg flex justify-between items-center border-l-4 transition-colors duration-200
+                                    <div class="module-container mb-3 p-4 rounded-lg flex justify-between items-center border-l-4 transition-colors duration-200
                                         {{ $isRead ? 'bg-gray-200 border-gray-400 text-gray-600 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400' 
                                                 : 'bg-white border-blue-500 text-black dark:bg-gray-900 dark:border-blue-500 dark:text-white' }}"
                                         data-module-id="{{ $module->id }}">

@@ -16,15 +16,18 @@ class CourseController extends Controller
     public function index()
     {
         $user = Auth::user();
-
+    
         if ($user->role === 'trainer') {
-            // Show only courses created by the logged-in trainer
-            $courses = Course::where('author', $user->id)->with('authorUser')->get();
+            $courses = Course::with('authorUser')
+                ->withCount('userProgress')
+                ->where('author', $user->id)
+                ->get();
         } else {
-            // Admin sees all courses
-            $courses = Course::with('authorUser')->get();
+            $courses = Course::with('authorUser')
+                ->withCount('userProgress')
+                ->get();
         }
-
+    
         return view('admin.courses.index', compact('courses'));
     }
 

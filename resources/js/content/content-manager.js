@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const contentEditor = document.getElementById("content-editor");
     const exerciseForm = document.getElementById("exercise-form");
     const questionEditorElement = document.getElementById("question-editor");
+    const exerciseFields = document.getElementById("exercise-fields");
+    const editorLabel = document.getElementById("editor-label");
 
     // Initialize TipTap for the question editor
     if (questionEditorElement) {
@@ -95,12 +97,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // Switch between Content & Exercise (only for create form)
     if (contentTypeSelect) {
         contentTypeSelect.addEventListener("change", function() {
-            if (this.value === "content") {
-                contentEditor.classList.remove("hidden");
-                exerciseForm.classList.add("hidden");
+            if (this.value === "exercise") {
+                exerciseFields.classList.remove("hidden");
+                editorLabel.textContent = "Pertanyaan:";
             } else {
-                contentEditor.classList.add("hidden");
-                exerciseForm.classList.remove("hidden");
+                exerciseFields.classList.add("hidden");
+                editorLabel.textContent = "Isi Konten:";
             }
         });
     }
