@@ -72,6 +72,20 @@
                     </div>
 
                     <div>
+                        <h3 class="text-sm font-medium text-gray-500">{{ __('Role') }}</h3>
+                        <p class="mt-1 text-sm text-gray-900">{{ Str::ucfirst($user->role) }}</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">{{ __('About me') }}</h3>
+                        <p class="mt-1 text-sm text-gray-900">
+                            {{ $user->details->about ?? __("This user hasn't written a bio yet.") }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
                         <h3 class="text-sm font-medium text-gray-500">{{ __('Email') }}</h3>
                         <p class="mt-1 text-sm text-gray-900">{{ $user->email }}</p>
                         @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -81,13 +95,6 @@
                         @endif
                     </div>
 
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Phone Number') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $user->details->phone ?? __('Not provided') }}</p>
-                    </div>
-                </div>
-
-                <div class="space-y-4">
                     <div>
                         <h3 class="text-sm font-medium text-gray-500">{{ __('Birth Date') }}</h3>
                         <p class="mt-1 text-sm text-gray-900">
@@ -100,10 +107,8 @@
                     </div>
 
                     <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Bio') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900 whitespace-pre-line">
-                            {{ $user->details->about ?? __('This user hasn\'t written a bio yet.') }}
-                        </p>
+                        <h3 class="text-sm font-medium text-gray-500">{{ __('Phone Number') }}</h3>
+                        <p class="mt-1 text-sm text-gray-900">{{ $user->details->phone ?? __('Not provided') }}</p>
                     </div>
                 </div>
             </div>

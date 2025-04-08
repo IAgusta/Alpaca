@@ -62,5 +62,24 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(UserDetail::class, 'user_id');
     }
 
+    /**
+     * Derived username from email
+     */
+    public function getUsernameAttribute()
+    {
+        return strstr($this->email, '@', true); // before @
+    }
 
+    /**
+     * Scope a query to only include users who have not verified their email
+     * and were created more than 30 days ago.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUnverifiedOld($query)
+    {
+        return $query->whereNull('email_verified_at')
+                    ->where('created_at', '<', now()->subDays(30));
+    }
 }

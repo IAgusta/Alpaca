@@ -22,7 +22,7 @@ class DashboardController extends Controller
                 ->get();
         });
     
-        $latestCourses = Cache::remember('latest_courses', now()->addMinutes(3), function () {
+        $latestCourses = Cache::remember('latest_courses', now()->addMinutes(1), function () {
             return Course::where('id', '!=', 1)
                 ->whereRaw("LOWER(name) NOT LIKE '%test%'")
                 ->orderBy('updated_at', 'desc')
