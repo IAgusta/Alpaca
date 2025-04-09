@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
@@ -189,5 +190,75 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function show($username): View
+    {
+        $user = User::with('details')->where('username', $username)->firstOrFail();
+        $details = $user->details ?? new \App\Models\UserDetail(['user_id' => $user->id]);
+        $images = $details->image ? json_decode($details->image, true) : [];
+        $accountage = $user->created_at->diffForHumans();
+    
+        return view('profile.show', [
+            'user' => $user,
+            'details' => $details,
+            'images' => $images,
+            'accountage' => $accountage,
+        ]);
+    }
+
+    public function getAllUsers()
+    {
+        $users = User::select('id', 'name', 'username', 'role', 'created_at')
+            ->with('details')
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
+
+        $users->getCollection()->transform(function ($user) {
+            $avatar = $user->details && $user->details->image 
+                ? json_decode($user->details->image, true)['profile'] ?? null 
+                : null;
+                
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'username' => $user->username,
+                'role' => $user->role,
+                'avatar' => $avatar ? asset('storage/' . $avatar) : asset('storage/profiles/default-profile.png')
+            ];
+        });
+
+        return response()->json($users);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+        
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $users = User::where('name', 'LIKE', "%{$query}%")
+            ->orWhere('username', 'LIKE', "%{$query}%")
+            ->select('id', 'name', 'username', 'role')
+            ->with('details')
+            ->limit(10)
+            ->get()
+            ->map(function ($user) {
+                $avatar = $user->details && $user->details->image 
+                    ? json_decode($user->details->image, true)['profile'] ?? null 
+                    : null;
+                    
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'username' => $user->username,
+                    'role' => $user->role,
+                    'avatar' => $avatar ? asset('storage/' . $avatar) : asset('storage/profiles/default-profile.png')
+                ];
+            });
+
+        return response()->json($users);
     }
 }

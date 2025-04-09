@@ -35,15 +35,15 @@ Route::get('/find-users', function () { return view('plugins.search_user');})->n
 Route::get('/documentation', function(){ return view('plugins.documentation');})->name('documentation');
 Route::get('/documentation-esp32', function () { return view('plugins.documentation.esp32');})->name('documentation.esp32');
 Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
 
 Route::middleware(['auth'])->group(function () {
+    // User course routes
     Route::get('/courses', [UserCourseController::class, 'index'])->name('user.course');
     Route::post('/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
     Route::get('/courses/{name}/{courseId}/detail', [UserCourseController::class, 'detail'])->name('user.course.detail');
-    Route::get('/course/{name}/{courseId}/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])->name('course.module.open');
+    Route::get('/courses/{name}/{courseId}/module/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])->name('course.module.open');
     Route::post('/module-progress/{moduleId}/toggle', [UserCourseController::class, 'toggle'])->name('module.progress.toggle');
     Route::post('/courses/{courseId}/toggle-all', [UserCourseController::class, 'toggleAllModules'])->name('user.course.toggleAll');
     Route::post('/courses/clear-history/{courseId}', [UserCourseController::class, 'clearHistory'])->name('user.course.clearHistory');
@@ -68,32 +68,41 @@ Route::middleware(['auth', 'only.admin'])->group(function () {
     Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 });
 
-// Routes for admin and trainer
 Route::middleware(['auth', 'admin'])->group(function () {
-    // Course Routes
-    Route::get('/courses-index', [CourseController::class, 'index'])->name('admin.courses.index');
-    Route::post('/courses/storedtoDB', [CourseController::class, 'store'])->name('admin.courses.store');
-    Route::put('/courses/{course}/updatefromDB', [CourseController::class, 'update'])->name('admin.courses.update');
-    Route::post('/courses/{course}/locked', [CourseController::class, 'lockCourse'])->name('course.lockCourse');
-    Route::post('/courses/{course}/unlock', [CourseController::class, 'unlockCourse'])->name('course.unlockCourse');
-    Route::delete('/courses/{course}/destroyfromDB', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
+    // Admin course management routes
+    Route::prefix('admin')->group(function () {
+        // Course Routes
+        Route::get('/courses-index', [CourseController::class, 'index'])->name('admin.courses.index');
+        Route::post('/courses/store', [CourseController::class, 'store'])->name('admin.courses.store');
+        Route::put('/courses/{course}', [CourseController::class, 'update'])->name('admin.courses.update');
+        Route::post('/courses/{course}/locked', [CourseController::class, 'lockCourse'])->name('course.lockCourse');
+        Route::post('/courses/{course}/unlock', [CourseController::class, 'unlockCourse'])->name('course.unlockCourse');
+        Route::delete('/courses/{course}', [CourseController::class, 'destroy'])->name('admin.courses.destroy');
 
-    // Module Routes (inside a course)
-    Route::prefix('/courses-index/{course}/modules')->name('admin.courses.modules.')->group(function () {
-        Route::post('/', [ModuleController::class, 'store'])->name('store'); // Store new module
-        Route::delete('/{module}/destroyfromDB', [ModuleController::class, 'destroy'])->name('destroy'); // Delete module
-        Route::put('/{module}/updatedfromDB', [ModuleController::class, 'update'])->name('update'); // Update module
-    });
-
-    // Module Content Routes
-    Route::prefix('/courses-index/{course}/modules/{module}/contents')
-        ->name('admin.courses.modules.contents.')
-        ->group(function () {
-            Route::get('/', [ModuleContentController::class, 'index'])->name('index');
-            Route::post('/', [ModuleContentController::class, 'store'])->name('store');
-            Route::get('/{moduleContent}/edit', [ModuleContentController::class, 'edit'])->name('edit'); // Show edit form
-            Route::patch('/{moduleContent}/updatedfromDB', [ModuleContentController::class, 'update'])->name('update'); // Update content
-            Route::delete('/{moduleContent}/destroyfromDB', [ModuleContentController::class, 'destroy'])->name('destroy'); // Delete content
-            Route::post('/reorder/changePlace', [ModuleContentController::class, 'reorder'])->name('reorder'); // Reorder content
+        // Module Routes
+        Route::prefix('courses/{course}/modules')->name('admin.courses.modules.')->group(function () {
+            Route::post('/', [ModuleController::class, 'store'])->name('store');
+            Route::put('/{module}', [ModuleController::class, 'update'])->name('update');
+            Route::delete('/{module}', [ModuleController::class, 'destroy'])->name('destroy');
+            
+            // Module Content Routes
+            Route::prefix('{module}/contents')->name('contents.')->group(function () {
+                Route::get('/', [ModuleContentController::class, 'index'])->name('index');
+                Route::post('/', [ModuleContentController::class, 'store'])->name('store');
+                Route::get('/{moduleContent}/edit', [ModuleContentController::class, 'edit'])->name('edit');
+                Route::patch('/{moduleContent}', [ModuleContentController::class, 'update'])->name('update');
+                Route::delete('/{moduleContent}', [ModuleContentController::class, 'destroy'])->name('destroy');
+                Route::post('/reorder', [ModuleContentController::class, 'reorder'])->name('reorder');
+            });
         });
+    });
 });
+
+// API route for user search
+Route::get('/api/search-users', [ProfileController::class, 'search'])->name('api.users.search');
+Route::get('/api/all-users', [ProfileController::class, 'getAllUsers'])->name('api.users.all');
+
+// Move the username route to be the very last route
+Route::get('/{username}', [ProfileController::class, 'show'])
+    ->name('profile.show')
+    ->where('username', '^(?!dashboard$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|email$|courses-index$).*$');

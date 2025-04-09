@@ -28,12 +28,6 @@
                         {{ __('Courses') }}
                     </x-nav-link>
 
-                    <!-- Admin Management User (For Admin and Owner Only)-->
-                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
-                    <x-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')" @click="loading = true">
-                        {{ __('Manage User') }}
-                    </x-nav-link>
-                    @endif
 
                     <x-nav-link :href="route('plugins.search-users')" :active="request()->routeIs('plugins.search-users')" @click="loading = true">
                         {{ __('Find User') }}
@@ -169,13 +163,6 @@
                 :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')" @click="loading = true">
                 {{ __('Courses') }}
             </x-responsive-nav-link>
-
-            <!-- Admin Management User (For Admin and Owner Only)-->
-            @if(auth()->user()->role === 'admin' || auth()->user()->role === 'owner')
-            <x-responsive-nav-link :href="route('admin.manage-user')" :active="request()->routeIs('admin.manage-user')" @click="loading = true">
-                {{ __('Manage User') }}
-            </x-responsive-nav-link>
-            @endif
 
             <!-- Robot Control Link -->
             <x-responsive-nav-link :href="route('plugins.robotControl')" :active="request()->routeIs('plugins.robotControl')" @click="loading = true">
