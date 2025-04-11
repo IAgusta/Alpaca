@@ -32,34 +32,23 @@
                     </div>
                     <span class="text-xs text-gray-500 dark:text-gray-400 truncate">by {{ $userCourse->course->authorUser->name ?? 'Unknown' }}</span>
                     
-                    {{-- Module Themes --}}
-                    @php
-                        $themeString = !empty(trim($userCourse->course->theme)) ? $userCourse->course->theme : 'umum';
-                        $themes = explode(',', $themeString);
-                        $totalThemes = count($themes);
-                        $displayThemes = array_slice($themes, 0, 2);
+                    <!-- Tags -->
+                    <div class="mt-2 flex flex-wrap gap-1 justify-center">
+                        @php
+                            $themes = explode(',', $course->theme ?? 'Umum');
+                            $limitedThemes = array_slice($themes, 0, 8);
+                        @endphp
                         
-                        $colors = ['bg-blue-100 text-blue-800', 'bg-red-100 text-red-800', 'bg-green-100 text-green-800', 'bg-yellow-100 text-yellow-800'];
-                    @endphp
-                    
-                    @if(count($themes) > 0)
-                        <div class="flex flex-wrap gap-2 mt-2 justify-center">
-                            @foreach($displayThemes as $theme)
-                                @php
-                                    $formattedTheme = (strtolower(trim($theme)) === 'umum') ? 'Umum' : ucwords(trim($theme));
-                                @endphp
-                                <span class="{{ $colors[$loop->index % count($colors)] }} text-xs font-medium px-2.5 py-0.5 rounded-sm">
-                                    {{ $formattedTheme }}
-                                </span>
-                            @endforeach
-                            
-                            @if($totalThemes > 2)
-                                <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-sm">
-                                    +{{ $totalThemes - 2 }} more
-                                </span>
-                            @endif
-                        </div>
-                    @endif
+                        @foreach($limitedThemes as $theme)
+                            @php
+                                $cleanTheme = trim($theme);
+                                $shortTheme = strlen($cleanTheme) > 10 ? substr($cleanTheme, 0, 10) . '…' : $cleanTheme;
+                            @endphp
+                            <span class="bg-slate-400 bg-opacity-20 text-[10px] px-2 py-[2px] rounded-md">
+                                {{ $shortTheme }}
+                            </span>
+                        @endforeach
+                    </div>
                 </div>
             </a>
 

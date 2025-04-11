@@ -37,7 +37,7 @@
                         <img :src="user.avatar" class="w-12 h-12 rounded-full mr-4" alt="Avatar">
                         <div>
                             <div class="font-medium" x-text="user.name"></div>
-                            <div class="text-sm text-gray-500" x-text="user.role"></div>
+                            <div class="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-xs mt-1 first-letter:uppercase" x-text="user.role"></div>
                         </div>
                     </button>
                 </template>

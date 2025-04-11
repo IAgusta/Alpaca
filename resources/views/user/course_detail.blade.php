@@ -79,7 +79,7 @@
                                     <div class="flex flex-wrap gap-2 mt-1">
                                         @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
                                         <a href="#">
-                                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300">{{ $theme }}</span>
+                                            <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300 truncate max-w-[120px]">{{ $theme }}</span>
                                         </a>
                                         @endforeach
                                     </div>
@@ -88,7 +88,7 @@
                             {{-- Author Social Media Links --}}
                             <div class="mt-4">
                                 <h3 class="font-bold text-sm uppercase mt-3">Author Social Media</h3>
-                                <div class="flex space-x-3 mt-1 flex-wrap mb-4">
+                                <div class="flex space-x-3 mt-1 flex-wrap mb-4 justify-start">
                                     @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'github'] as $platform)
                                         @php
                                             $socialMediaLinks = $course->authorUser->details->social_media ?? [];
