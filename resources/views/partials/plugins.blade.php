@@ -1,6 +1,6 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
     <div>
-        <h3 class="text-lg font-medium text-gray-900">Plugins</h3>
+        <h3 class="text-lg font-medium text-gray-900">Shortcut</h3>
         <div class="mt-2 flex flex-wrap gap-4">
             <!-- Robot Control -->
             <a href="{{ route('plugins.robotControl') }}" class="group">

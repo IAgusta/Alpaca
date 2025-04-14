@@ -16,6 +16,7 @@ class DashboardController extends Controller
         $userId = Auth::id();
         $topCourses = Cache::remember('top_courses', now()->addHours(12), function () {
             return Course::whereRaw("LOWER(name) NOT LIKE '%test%'")
+                ->where('created_at', '>=', now()->subDays(30))
                 ->orderBy('popularity', 'desc')
                 ->take(10)
                 ->get();

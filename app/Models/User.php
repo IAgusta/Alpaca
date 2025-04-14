@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -84,5 +85,23 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $query->whereNull('email_verified_at')
                     ->where('created_at', '<', now()->subDays(30));
+    }
+
+    /**
+     * Check if the user is online.
+     *
+     * @return bool
+     */
+    public function isOnline()
+    {
+        $lastActivity = DB::table('sessions')
+            ->where('user_id', $this->id)
+            ->latest('last_activity')
+            ->value('last_activity');
+
+        if (!$lastActivity) return false;
+
+        $lastActivityTime = \Carbon\Carbon::createFromTimestamp($lastActivity);
+        return $lastActivityTime->diffInMinutes(now()) <= 5;
     }
 }

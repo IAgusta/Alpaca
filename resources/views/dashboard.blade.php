@@ -14,8 +14,12 @@
                         @include('user.component.top_courses')
 
                         {{-- User Courses --}}
-                        <div class="col-span-2 mt-8">
-                            @include('user.component.dashboard_user_course')
+                        <div class="col-span-2 mt-7">
+                            @if ($user->role != 'user')
+                                @include('admin.admin')
+                            @else
+                                @include('user.component.dashboard_user_course')
+                            @endif
                         </div>
                     </div>
                     {{-- Latest Courses Update --}}

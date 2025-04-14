@@ -21,7 +21,7 @@
         <!-- Banner Section -->
         <div class="relative w-full h-52 rounded-xl overflow-hidden">
             <img 
-                src="{{ $user->details->image ? asset('storage/' . (json_decode($user->details->image, true)['banner'] ?? '')) : asset('storage/profiles/patterns.png') }}" 
+                src="{{ $user->details->image ? asset('storage/' . (json_decode($user->details->image, true)['banner'] ?? 'profiles/patterns.png')) : asset('storage/profiles/patterns.png') }}" 
                 class="w-full h-full object-cover" 
                 alt="Banner Image">
             <div class="absolute inset-0 bg-black bg-opacity-10"></div>

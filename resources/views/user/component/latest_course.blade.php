@@ -1,4 +1,4 @@
-<h3 class="text-lg font-medium text-gray-900">Last Update Courses</h3>
+<h3 class="text-lg font-medium text-gray-900">Latest Update Courses</h3>
 
 <div class="mt-2 grid grid-cols-2 gap-4">
     @foreach ($latestCourses as $course) <!-- Show only 5 items -->

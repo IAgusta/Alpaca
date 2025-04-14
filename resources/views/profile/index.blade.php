@@ -10,7 +10,7 @@
             <!-- Banner Section -->
             <div class="relative w-full h-52 rounded-xl overflow-hidden mt-6">
                 <img 
-                    src="{{ $user->details->image ? asset('storage/' . (json_decode($user->details->image, true)['banner'] ?? '')) : asset('storage/profiles/patterns.png') }}" 
+                    src="{{ $user->details->image ? asset('storage/' . (json_decode($user->details->image, true)['banner'] ?? 'profiles/patterns.png')) : asset('storage/profiles/patterns.png') }}" 
                     class="w-full h-full object-cover" 
                     alt="Banner Image">
                 <div class="absolute inset-0 bg-black bg-opacity-10"></div>
@@ -64,7 +64,7 @@
             </div>
 
             <!-- User Details Display -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 bg-white p-6 rounded-lg shadow">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 bg-white p-6 rounded-lg">
                 <div class="space-y-4">
                     <div>
                         <h3 class="text-sm font-medium text-gray-500">{{ __('Username') }}</h3>

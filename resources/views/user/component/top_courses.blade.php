@@ -1,4 +1,4 @@
-<h3 class="text-lg font-medium text-gray-900 mb-2">Popular Courses</h3>
+<h3 class="text-lg font-medium text-gray-900 mb-2">New Popular Courses</h3>
 <div class="relative">
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">

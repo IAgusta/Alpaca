@@ -10,7 +10,7 @@
             <!-- Banner Section -->
             <div class="relative w-full h-52 rounded-xl overflow-hidden mt-6">
                 <img 
-                    src="{{ $user->details->image ? asset('storage/' . (json_decode($user->details->image, true)['banner'] ?? '')) : asset('storage/profiles/patterns.png') }}" 
+                    src="{{ $user->details->image ? asset('storage/' . (json_decode($user->details->image, true)['banner'] ?? 'profiles/patterns.png')) : asset('storage/profiles/patterns.png') }}" 
                     class="w-full h-full object-cover" 
                     alt="Banner Image">
                 <div class="absolute inset-0 bg-black bg-opacity-10"></div>
@@ -57,60 +57,93 @@
                 </div>
             </div>
 
-            <!-- User Details Display -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 bg-white p-6 rounded-lg shadow">
-                <div class="space-y-4">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Username') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $user->username }}</p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Role') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ Str::ucfirst($user->role) }}</p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('About me') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">
-                            {{ $user->details->about ?? __("This user hasn't written a bio yet.") }}
-                        </p>
+            <!-- Tabs Container -->
+            <div class="lg:flex">
+                <!-- Tab List -->
+                <div class="flex overflow-x-auto lg:flex-col lg:w-48 lg:shrink-0">
+                    <div class="bg-white rounded-l-lg w-full">
+                        <ul class="flex flex-row lg:flex-col w-full text-sm font-medium text-center" 
+                            id="profile-show-tab"
+                            data-tabs-toggle="#profile-show-tab-content"
+                            role="tablist">
+                            <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
+                                <button class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors"
+                                    id="information-tab" 
+                                    data-tabs-target="#information" 
+                                    type="button" 
+                                    role="tab" 
+                                    aria-controls="information" 
+                                    aria-selected="true">
+                                    Information
+                                </button>
+                            </li>
+                            <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
+                                <button class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors" 
+                                    id="courses-tab" 
+                                    data-tabs-target="#courses" 
+                                    type="button" 
+                                    role="tab" 
+                                    aria-controls="courses" 
+                                    aria-selected="false">
+                                    Courses
+                                </button>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="space-y-4">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Email') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $user->email }}</p>
-                        @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                            <p class="text-sm mt-2 text-yellow-600">
-                                {{ __('Your email address is unverified.') }}
-                            </p>
-                        @endif
+                <!-- Tab Content -->
+                <div id="profile-show-tab-content" class="flex-grow">
+                    <div class="hidden p-4 rounded-lg bg-white dark:bg-gray-800" 
+                    id="information" role="tabpanel" aria-labelledby="information-tab">
+                        <!-- User Details Display -->
+                        @include('profile.partials.user_information')
                     </div>
 
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Account Age') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $accountage }}</p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Birth Date') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">
-                            @if($user->details->birth_date)
-                                {{ \Carbon\Carbon::parse($user->details->birth_date)->format('F j, Y') }}
-                            @else
-                                {{ __('Not provided') }}
-                            @endif
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Phone Number') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $user->details->phone ?? __('Not provided') }}</p>
+                    <div class="hidden p-4 rounded-lg bg-white dark:bg-gray-800" 
+                    id="courses" role="tabpanel" aria-labelledby="courses-tab">
+                        <!-- Courses Section -->
+                        @include('profile.partials.user_course_information')
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('[data-tabs-target]');
+            const tabContent = document.querySelectorAll('[role="tabpanel"]');
+            const activeTabKey = 'activeShowTab';
+
+            // Initialize tabs
+            const initializeTabs = (targetId = null) => {
+                const savedTabId = targetId || localStorage.getItem(activeTabKey) || tabs[0]?.getAttribute('data-tabs-target');
+                if (!savedTabId) return;
+
+                tabs.forEach(tab => {
+                    const isActive = tab.getAttribute('data-tabs-target') === savedTabId;
+                    tab.setAttribute('aria-selected', isActive);
+                    tab.classList.toggle('bg-gray-50', isActive);
+                    tab.classList.toggle('text-purple-600', isActive);
+                });
+
+                tabContent.forEach(content => {
+                    content.classList.toggle('hidden', content.id !== savedTabId.substring(1));
+                });
+            };
+
+            // Set initial active tab
+            initializeTabs();
+
+            // Handle tab clicks
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-tabs-target');
+                    localStorage.setItem(activeTabKey, targetId);
+                    initializeTabs(targetId);
+                });
+            });
+        });
+    </script>
 </x-app-layout>

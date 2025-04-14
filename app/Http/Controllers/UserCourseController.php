@@ -43,6 +43,28 @@ class UserCourseController extends Controller
         return view('user.course', compact('userCourses', 'availableCourses'));
     }
 
+    public function feed() 
+    {  
+        $userId = Auth::id();
+        // Get all available courses
+        $availableCourses = Course::when(auth::user()->role === 'user', function ($query) {
+                $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
+            })
+            ->get();
+        return view('user.course_feed', compact('availableCourses'));
+    }
+
+    public function userFeed()
+    {
+        $userId = Auth::id();
+        // Get all user courses on libraries
+                // Get all user courses with updated data
+                $userCourses = UserCourse::where('user_id', $userId)
+                ->with('course')
+                ->get();
+                return view('user.user_course_feed', compact('userCourses'));
+    }
+
     public function detail($name, $courseId) 
     {
         $userId = Auth::id();
