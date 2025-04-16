@@ -25,6 +25,13 @@ class UserCourse extends Model
         'last_opened',
     ];
 
+    // Casts for timestamp fields
+    protected $casts = [
+        'last_opened' => 'datetime',
+        'completed_at' => 'datetime',
+        'course_completed' => 'boolean'
+    ];
+
     // Define relationships
     public function user() {
         return $this->belongsTo(User::class);

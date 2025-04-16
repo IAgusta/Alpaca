@@ -1,73 +1,87 @@
-<h3 class="text-lg font-medium text-gray-900 mb-2">New Popular Courses</h3>
+<!-- Slider Section -->
 <div class="relative">
+    <!-- Swiper Container -->
     <div class="swiper mySwiper">
         <div class="swiper-wrapper">
             @foreach($topCourses as $course)
-            <div class="swiper-slide">
-                <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}">
-                    <div class="relative w-full h-[250px] rounded-lg overflow-hidden text-white flex items-center"
-                        style="background-image: url('{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}'); background-size: cover; background-position: center;">
-                    
-                        <!-- Dark Overlay -->
-                        <div class="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm"></div>
-                    
+                <div class="swiper-slide relative overflow-hidden">
+                    <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}">
+                        <!-- Background Image -->
+                        <div class="absolute inset-0 w-full h-[400px] z-0">
+                            <div class="w-full h-full"
+                                style="background-image: url('{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}');
+                                        background-size: cover;
+                                        background-position: top center;
+                                        filter: blur(3px);">
+                            </div>
+                        </div>
+
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent dark:to-black/70 to-white/70 z-10"></div>
+
                         <!-- Foreground Content -->
-                        <div class="relative z-10 flex gap-6 items-stretch w-full max-w-6xl mx-auto px-6 py-4 h-full">
-                            <!-- Course Cover Image -->
-                            <div class="w-[175px] h-full rounded-md overflow-hidden shadow-lg shrink-0">
+                        <div class="relative z-20 w-full h-full px-3 py-7 mt-7 max-w-7xl mx-auto flex gap-6 items-start">
+                            <!-- Course Image -->
+                            <div class="w-[175px] h-[240px] rounded-md overflow-hidden shadow-lg shrink-0">
                                 <img src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" 
                                      alt="Course Image" 
                                      class="w-full h-full object-cover">
                             </div>
-                    
-                            <div class="flex-1 flex flex-col justify-between overflow-hidden">
-                                <!-- Top (Title + Theme) -->
-                                <div>
-                                    <!-- Big Course Title -->
-                                    <h3 class="text-2xl lg:text-3xl font-extrabold leading-snug truncate">
-                                        {{ $course->name }}
-                                    </h3>
-                            
-                                    <!-- Tags -->
-                                    <div class="mt-2 flex flex-wrap gap-1">
-                                        @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
-                                            <span class="bg-white bg-opacity-20 text-[10px] px-2 py-[2px] rounded-md">
-                                                {{ trim($theme) }}
-                                            </span>
-                                        @endforeach
-                                    </div>
 
-                                    <div class="mt-2 max-h-[100px] overflow-y-auto pr-2 text-sm text-white/90 custom-scrollbar">
-                                        <p>
-                                            {{ $course->description ?? 'No description available.' }}
-                                        </p>
-                                    </div>
+                            <!-- Course Content -->
+                            <div class="flex-1 dark:text-white text-black flex flex-col h-full">
+                                <!-- Title -->
+                                <h2 class="font-bold text-xl line-clamp-5 sm:line-clamp-2 lg:text-2xl overflow-hidden">
+                                    {{ $course->name }}
+                                </h2>
+
+                                <!-- Tags -->
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
+                                        <span class="dark:bg-white/20 bg-slate-200 text-xs px-2 py-1 rounded-md">
+                                            {{ trim($theme) }}
+                                        </span>
+                                    @endforeach
                                 </div>
-                            
-                                <!-- Bottom (Author) -->
-                                <div class="text-[11px] text-white/70 italic">
+
+                                <!-- Description -->
+                                <div class="mt-2 max-h-[100px] overflow-y-auto pr-2 text-sm text-black dark:text-white/90 custom-scrollbar">
+                                    <p>{{ $course->description ?? 'No description available.' }}</p>
+                                </div>
+
+                                <!-- Author -->
+                                <div class="text-sm text-black dark:text-white/70 italic mt-2">
                                     <p>{{ $course->authorUser->name }}</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
             @endforeach
         </div>
     </div>
 
+    <!-- Static Title -->
+    <div class="absolute w-full top-2 z-10">
+        <div class="max-w-7xl mx-auto px-3">
+            <h1 class="text-xl lg:text-2xl font-bold text-black dark:text-white">Popular New Courses</h1>
+        </div>
+    </div>
 
-    <!-- Navigation (Bottom Right) -->
-    <div class="absolute right-4 bottom-4 flex items-center gap-4 z-10">
-        <span id="slide-number" class="text-sm text-white">No. 1</span>
-        <button id="prevSlide" class="text-white hover:text-gray-300">&lt;</button>
-        <button id="nextSlide" class="text-white hover:text-gray-300">&gt;</button>
+
+    <!-- Navigation Outside of Swiper -->
+    <div class="absolute w-full bottom-4 z-10">
+        <div class="max-w-7xl mx-auto px-6 flex justify-end items-center gap-4">
+            <span id="slide-number" class="text-lg text-black dark:text-white">No. 1</span>
+            <button id="prevSlide" class="dark:text-white text-black hover:text-gray-300 text-2xl font-bold">&lt;</button>
+            <button id="nextSlide" class="dark:text-white text-black hover:text-gray-300 text-2xl font-bold">&gt;</button>
+        </div>
     </div>
 </div>
 
+<!-- Swiper Script -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const swiper = new Swiper(".mySwiper", {
             loop: true,
             navigation: {

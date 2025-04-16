@@ -1,4 +1,4 @@
-<nav x-data="{ open: false, pluginsOpen: false, loading: false }" class="bg-white border-b border-gray-100 fixed top-0 left-0 w-full z-10">
+<nav x-data="{ open: false, pluginsOpen: false, loading: false }" class="bg-white border-b border-gray-100 fixed top-0 left-0 w-full z-50">
     <!-- Loading Bar -->
     <div x-show="loading" class="fixed top-0 left-0 w-full h-1 bg-blue-500 z-50" x-transition></div>
 
@@ -125,6 +125,10 @@
                     </ul>
                     
                     <div class="py-1">
+                        <div>
+                            <a href="{{ route('settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">{{ __('Settings') }}</a>
+                        </div>
+
                         <!-- Log Out -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

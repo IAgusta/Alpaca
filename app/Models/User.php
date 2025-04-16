@@ -101,7 +101,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
         if (!$lastActivity) return false;
 
-        $lastActivityTime = \Carbon\Carbon::createFromTimestamp($lastActivity);
-        return $lastActivityTime->diffInMinutes(now()) <= 5;
+        $lastActivityTime = Carbon::createFromTimestamp($lastActivity);
+        $isOnline = $lastActivityTime->diffInMinutes(now()) <= 30;
+
+        // Update last_seen if user is going offline
+        if (!$isOnline && $this->last_seen < $lastActivityTime) {
+            $this->update(['last_seen' => $lastActivityTime]);
+        }
+
+        return $isOnline;
     }
 }

@@ -1,6 +1,13 @@
-<h3 class="text-lg font-medium text-gray-900">
-    Your Courses Progress</h3>
-<div class="mt-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="flex justify-between">
+    <h3 class="text-2xl font-bold text-gray-900">
+    Your Progress</h3>
+    <a href="{{ route('user.course') }}">
+        <span class="material-symbols-outlined">
+            arrow_forward
+        </span>
+    </a>
+</div>
+<div class="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
     @foreach ($userCourses as $userCourse)
         <a href="{{ route('user.course.detail', ['name' => Str::slug($userCourse->course->name),'courseId' => $userCourse->course->id])  }}" class="block">
             <div class="border p-3 rounded-lg shadow-md bg-white flex flex-col group hover:bg-slate-500">
@@ -16,15 +23,20 @@
                         {{ $userCourse->course->name }}
                     </h4>
                     <p class="text-xs text-gray-500 group-hover:text-gray-200">
-                        Progress: 
+                        @php
+                            $totalModules = $userCourse->course->modules->count();
+                            $progressPercentage = $totalModules > 0 ? ($userCourse->completed_modules / $totalModules) * 100 : 0;
+                        @endphp
+                        @if($progressPercentage == 100)
+                            Completed {{ $userCourse->completed_at?->diffForHumans() ?? 'N/A' }}
+                        @else
+                            Last opened {{ $userCourse->last_opened?->diffForHumans() ?? 'Never' }}
+                        @endif
                     </p>
+                    <p class="text-xs text-gray-500 group-hover:text-gray-200 mt-1">Progress:</p>
                     
                     <!-- Progress Bar -->
-                    @php
-                        $totalModules = $userCourse->course->modules->count();
-                        $progressPercentage = $totalModules > 0 ? ($userCourse->completed_modules / $totalModules) * 100 : 0;
-                    @endphp
-                    <div class="w-full bg-gray-300 rounded-full h-2 mt-1">
+                    <div class="w-full bg-gray-300 rounded-full h-2">
                         <div class="bg-green-500 h-2 rounded-full" style="width: {{ $progressPercentage }}%;"></div>
                     </div>
                 </div>

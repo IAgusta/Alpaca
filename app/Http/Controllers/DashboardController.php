@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $latestCourses = Cache::remember('latest_courses', now()->addMinutes(1), function () {
             return Course::whereRaw("LOWER(name) NOT LIKE '%test%'")
                 ->orderBy('updated_at', 'desc')
-                ->take(10)
+                ->take(15)
                 ->get();
         });
 

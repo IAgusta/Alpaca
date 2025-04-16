@@ -1,38 +1,38 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+    <!-- Full-Width Top Courses -->
+    <div class="w-full">
+        @include('user.component.top_courses')
+    </div>
 
     <div class="py-6">
-        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
+        <!-- Constrained Content -->
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="col-span-2">
-                        {{-- Top 10 Favorit Courses --}}
-                        @include('user.component.top_courses')
-
-                        {{-- User Courses --}}
-                        <div class="col-span-2 mt-7">
-                            @if ($user->role != 'user')
-                                @include('admin.admin')
-                            @else
-                                @include('user.component.dashboard_user_course')
-                            @endif
-                        </div>
-                    </div>
-                    {{-- Latest Courses Update --}}
-                    <div>
-                        @include('user.component.latest_course')
-                    </div>
+                {{-- Latest Update Courses --}}
+                <div class="mt-7">
+                    @include('user.component.latest_course')
                 </div>
 
-                {{-- Plugins --}}
-                @include('partials.plugins')
+                <div class="lg:flex my-7">
+                    {{-- Shortcut/Admin Panel --}}
+                    <div class="w-1/4">
+                        {{-- Plugins --}}
+                        @include('partials.plugins')
+                    </div>
+
+                    {{-- User Courses --}}
+                    <div class="w-3/4">
+                        @if ($user->role != 'user')
+                            @include('admin.admin')
+                        @else
+                            @include('user.component.dashboard_user_course')
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </x-app-layout>

@@ -37,6 +37,7 @@ Route::get('/documentation-esp32', function () { return view('plugins.documentat
 Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
+Route::get('/settings', function() {return view('settings');})->name('settings');
 
 Route::middleware(['auth'])->group(function () {
     // User course routes

@@ -1,7 +1,7 @@
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+<div class="gap-6">
     <div>
-        <h3 class="text-lg font-medium text-gray-900">Shortcut</h3>
-        <div class="mt-2 flex flex-wrap gap-4">
+        <h3 class="text-2xl font-bold text-gray-900">Shortcut</h3>
+        <div class="mt-4 flex flex-wrap gap-4">
             <!-- Robot Control -->
             <a href="{{ route('plugins.robotControl') }}" class="group">
                 <div class="relative w-24 h-24 border rounded-lg shadow-md overflow-hidden bg-gray-200 hover:bg-slate-500 transition duration-300 flex items-center justify-center">

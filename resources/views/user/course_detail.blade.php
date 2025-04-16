@@ -66,7 +66,7 @@
                                 <div>
                                     <h3 class="font-bold text-sm uppercase">Author</h3>
                                     <div class="flex flex-wrap gap-2 mt-1">
-                                        <a href="#">
+                                        <a href="/{{ $course->authorUser->username }}">
                                             <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300 truncate max-w-[120px]"
                                                 title="{{ $course->authorUser->name }}">
                                                 {{ Str::limit($course->authorUser->name, 12, "") ?? 'Unknown' }}
