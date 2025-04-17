@@ -94,21 +94,19 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isOnline()
     {
+        // Get the most recent session's activity for this user
         $lastActivity = DB::table('sessions')
             ->where('user_id', $this->id)
             ->latest('last_activity')
             ->value('last_activity');
-
+    
+        // If no activity found, consider the user offline
         if (!$lastActivity) return false;
-
+    
+        // Convert the timestamp to a Carbon instance
         $lastActivityTime = Carbon::createFromTimestamp($lastActivity);
-        $isOnline = $lastActivityTime->diffInMinutes(now()) <= 30;
-
-        // Update last_seen if user is going offline
-        if (!$isOnline && $this->last_seen < $lastActivityTime) {
-            $this->update(['last_seen' => $lastActivityTime]);
-        }
-
-        return $isOnline;
+    
+        // Determine if the user is online (active in the last 30 minutes)
+        return $lastActivityTime->diffInMinutes(now()) <= 30;
     }
 }

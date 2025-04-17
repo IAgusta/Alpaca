@@ -9,17 +9,11 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden">
                 {{-- Latest Update Courses --}}
-                <div class="mt-7">
+                <div class="my-7">
                     @include('user.component.latest_course')
                 </div>
 
-                <div class="lg:flex my-7">
-                    {{-- Shortcut/Admin Panel --}}
-                    <div class="w-1/4">
-                        {{-- Plugins --}}
-                        @include('partials.plugins')
-                    </div>
-
+                <div class="lg:flex my-7 gap-7">
                     {{-- User Courses --}}
                     <div class="w-3/4">
                         @if ($user->role != 'user')
@@ -27,6 +21,12 @@
                         @else
                             @include('user.component.dashboard_user_course')
                         @endif
+                    </div>
+
+                    {{-- Shortcut/Admin Panel --}}
+                    <div class="w-1/4">
+                        {{-- Plugins --}}
+                        @include('partials.plugins')
                     </div>
                 </div>
             </div>

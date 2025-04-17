@@ -62,7 +62,7 @@
     </div>
 
     <!-- Static Title -->
-    <div class="absolute w-full top-2 z-10">
+    <div class="absolute w-full top-3 z-10">
         <div class="max-w-7xl mx-auto px-3">
             <h1 class="text-xl lg:text-2xl font-bold text-black dark:text-white">Popular New Courses</h1>
         </div>
@@ -82,8 +82,18 @@
 <!-- Swiper Script -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Get total number of slides
+        const totalSlides = document.querySelectorAll('.swiper-slide').length;
+        // Generate random initial slide
+        const randomInitialSlide = Math.floor(Math.random() * totalSlides);
+
         const swiper = new Swiper(".mySwiper", {
             loop: true,
+            initialSlide: randomInitialSlide,
+            autoplay: {
+                delay: 15000, // 15 seconds
+                disableOnInteraction: false, // Continue autoplay after user interaction
+            },
             navigation: {
                 nextEl: "#nextSlide",
                 prevEl: "#prevSlide",

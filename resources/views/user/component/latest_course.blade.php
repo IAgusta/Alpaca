@@ -2,7 +2,9 @@
     <h3 class="text-2xl font-bold text-gray-900">Latest Update Courses</h3>
     <a href="{{ route('user.course') }}">
         <span class="material-symbols-outlined">
-            arrow_forward
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
+            </svg>
         </span>
     </a>
 </div>
@@ -26,20 +28,26 @@
                     {{ $course->name }}
                 </h4>
                 
-                <!-- Module Progress / Info -->
-                <p class="text-xs text-gray-500 mt-1">
-                    {{ $course->modules_count ?? 'No' }} modules
-                </p>
+                <div class="flex justify-between items-center mt-1">
+                    <!-- Module Progress / Info -->
+                    <p class="text-xs text-gray-500 mt-1">
+                        @if($course->modules->count() > 0)
+                            {{ Str::limit($course->modules->first()->title, 30) }}
+                        @else
+                            No modules yet
+                        @endif
+                    </p>
+
+                    <!-- Timestamp -->
+                    <div class="text-xs text-gray-400 whitespace-nowrap">
+                        {{ \Carbon\Carbon::parse($course->updated_at)->diffForHumans() }}
+                    </div>
+                </div>
 
                 <!-- Author -->
-                <p class="text-xs text-gray-400">
+                <p class="text-xs text-gray-400 mt-1">
                     {{ $course->authorUser->name }}
                 </p>
-            </div>
-
-            <!-- Timestamp -->
-            <div class="text-xs text-gray-400 whitespace-nowrap">
-                {{ \Carbon\Carbon::parse($course->updated_at)->diffForHumans() }}
             </div>
         </a>
     @endforeach

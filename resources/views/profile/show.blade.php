@@ -114,34 +114,28 @@
         document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('[data-tabs-target]');
             const tabContent = document.querySelectorAll('[role="tabpanel"]');
-            const activeTabKey = 'activeShowTab';
 
-            // Initialize tabs
-            const initializeTabs = (targetId = null) => {
-                const savedTabId = targetId || localStorage.getItem(activeTabKey) || tabs[0]?.getAttribute('data-tabs-target');
-                if (!savedTabId) return;
-
+            // Set default active tab (information)
+            const setActiveTab = (targetId) => {
                 tabs.forEach(tab => {
-                    const isActive = tab.getAttribute('data-tabs-target') === savedTabId;
+                    const isActive = tab.getAttribute('data-tabs-target') === targetId;
                     tab.setAttribute('aria-selected', isActive);
                     tab.classList.toggle('bg-gray-50', isActive);
                     tab.classList.toggle('text-purple-600', isActive);
                 });
 
                 tabContent.forEach(content => {
-                    content.classList.toggle('hidden', content.id !== savedTabId.substring(1));
+                    content.classList.toggle('hidden', content.id !== targetId.substring(1));
                 });
             };
 
-            // Set initial active tab
-            initializeTabs();
+            // Set information tab as default
+            setActiveTab('#information');
 
             // Handle tab clicks
             tabs.forEach(tab => {
                 tab.addEventListener('click', function () {
-                    const targetId = this.getAttribute('data-tabs-target');
-                    localStorage.setItem(activeTabKey, targetId);
-                    initializeTabs(targetId);
+                    setActiveTab(this.getAttribute('data-tabs-target'));
                 });
             });
         });

@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\UserDetail;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
+use App\Models\Course;
 
 class ProfileController extends Controller
 {
@@ -199,11 +200,20 @@ class ProfileController extends Controller
         $images = $details->image ? json_decode($details->image, true) : [];
         $accountage = $user->created_at->diffForHumans();
     
+        $createdCourses = null;
+        if (in_array($user->role, ['admin', 'trainer', 'owner'])) {
+            $createdCourses = Course::where('author', $user->id)
+                ->with(['modules', 'authorUser'])
+                ->orderBy('popularity', 'desc')
+                ->paginate(10);
+        }
+
         return view('profile.show', [
             'user' => $user,
             'details' => $details,
             'images' => $images,
             'accountage' => $accountage,
+            'createdCourses' => $createdCourses,
         ]);
     }
 

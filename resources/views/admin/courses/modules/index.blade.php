@@ -1,4 +1,4 @@
-<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+<div class="bg-slate-100 overflow-hidden shadow-sm sm:rounded-lg p-6">
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white"> {{ __('Kelas :') }} {{ $course->name }}</h3>
