@@ -1,4 +1,3 @@
-<h2 class="text-md font-semibold mb-3">Your Course</h2>
 <div class="flex flex-wrap gap-7 justify-start">
     @foreach ($userCourses as $userCourse)
         <div class="relative bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col" style="width: 208px; height: 350px;">

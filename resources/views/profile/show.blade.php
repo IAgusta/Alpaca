@@ -115,6 +115,12 @@
             const tabs = document.querySelectorAll('[data-tabs-target]');
             const tabContent = document.querySelectorAll('[role="tabpanel"]');
 
+            // Function to get URL parameters
+            const getUrlParam = (param) => {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            };
+
             // Set default active tab (information)
             const setActiveTab = (targetId) => {
                 tabs.forEach(tab => {
@@ -129,8 +135,9 @@
                 });
             };
 
-            // Set information tab as default
-            setActiveTab('#information');
+            // Check for tab parameter in URL, otherwise default to information
+            const activeTab = getUrlParam('tab');
+            setActiveTab(activeTab ? `#${activeTab}` : '#information');
 
             // Handle tab clicks
             tabs.forEach(tab => {

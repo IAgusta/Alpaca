@@ -13,22 +13,40 @@ use Illuminate\Support\Facades\Log;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-    
-        if ($user->role === 'trainer') {
-            $courses = Course::with('authorUser')
-                ->withCount('userProgress')
-                ->where('author', $user->id)
-                ->get();
-        } else {
-            $courses = Course::with('authorUser')
-                ->withCount('userProgress')
-                ->get();
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'name');
+        $direction = $request->input('direction', 'asc');
+
+        $query = Course::with('authorUser')->withCount('userProgress');
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%')
+                  ->orWhere('theme', 'like', '%' . $search . '%')
+                  ->orWhereHas('authorUser', function($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%');
+                  });
+            });
         }
-    
-        return view('admin.courses.index', compact('courses'));
+
+        if (Auth::user()->role === 'trainer') {
+            $query->where('author', Auth::id());
+        }
+
+        // Add sorting
+        $query->orderBy($sort, $direction);
+        
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $courses */
+        $courses = $query->orderBy($sort, $direction)->paginate(11)->withQueryString();
+        
+        if ($request->ajax()) {
+            return view('admin.courses.component.available_course', compact('courses'))->render();
+        }
+
+        return view('admin.courses.index', compact('courses', 'search', 'sort', 'direction'));
     }
 
     public function create()

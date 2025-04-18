@@ -17,6 +17,10 @@ class Kernel extends HttpKernel
         // ...existing middleware...
     ];
 
+    protected $commands = [
+        \App\Console\Commands\PruneSessions::class,
+    ];
+
     /**
      * The application's route middleware groups.
      *

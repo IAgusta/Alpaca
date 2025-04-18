@@ -205,7 +205,9 @@ class ProfileController extends Controller
             $createdCourses = Course::where('author', $user->id)
                 ->with(['modules', 'authorUser'])
                 ->orderBy('popularity', 'desc')
-                ->paginate(10);
+                ->paginate(10)
+                ->withQueryString()
+                ->appends(['tab' => 'courses']);
         }
 
         return view('profile.show', [

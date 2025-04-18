@@ -14,6 +14,11 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $userId = Auth::id();
+        
+        // Get saved course IDs for the user
+        $userSavedCourses = UserCourse::where('user_id', $userId)
+            ->pluck('course_id');
+
         $topCourses = Cache::remember('top_courses', now()->addHours(12), function () {
             return Course::whereRaw("LOWER(name) NOT LIKE '%test%'")
                 ->where('created_at', '>=', now()->subDays(30))
@@ -38,6 +43,6 @@ class DashboardController extends Controller
             $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
         })->with('course')->take(4)->get();
 
-        return view('dashboard', compact('user','topCourses','latestCourses', 'userCourses'));
+        return view('dashboard', compact('user', 'topCourses', 'latestCourses', 'userCourses', 'userSavedCourses'));
     }
 }

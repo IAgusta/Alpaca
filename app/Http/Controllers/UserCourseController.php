@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 
 class UserCourseController extends Controller
 {
-    public function index() 
+    public function index(Request $request)
     {
         $userId = Auth::id();
         // Update total_modules for all user courses
@@ -28,41 +28,102 @@ class UserCourseController extends Controller
             }
         }
 
-        // Get all user courses with updated data
+        // Get limited user courses (6 items)
         $userCourses = UserCourse::where('user_id', $userId)
             ->with('course')
+            ->take(6)
             ->get();
 
-        // Get available courses that the user hasn't added yet
-        $availableCourses = Course::whereNotIn('id', $userCourses->pluck('course_id'))
+        // Get limited available courses (12 items)
+        $availableCourses = Course::whereNotIn('id', UserCourse::where('user_id', $userId)->pluck('course_id'))
             ->when(auth::user()->role === 'user', function ($query) {
                 $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
             })
+            ->take(12)
             ->get();
 
         return view('user.course', compact('userCourses', 'availableCourses'));
     }
 
-    public function feed() 
-    {  
-        $userId = Auth::id();
-        // Get all available courses
-        $availableCourses = Course::when(auth::user()->role === 'user', function ($query) {
+    public function feed(Request $request) 
+    {
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'updated_at');
+        $direction = $request->input('direction', 'desc');
+
+        $query = Course::whereNotIn('id', UserCourse::where('user_id', Auth::id())->pluck('course_id'))
+            ->when(auth::user()->role === 'user', function ($query) {
                 $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
-            })
-            ->get();
-        return view('user.course_feed', compact('availableCourses'));
+            });
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%')
+                  ->orWhere('theme', 'like', '%' . $search . '%')
+                  ->orWhereHas('authorUser', function($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        // Handle different sort options
+        switch ($sort) {
+            case 'popularity':
+                $query->orderBy('popularity', $direction);
+                break;
+            case 'name':
+            case 'created_at':
+            case 'updated_at':
+                $query->orderBy($sort, $direction);
+                break;
+            default:
+                $query->orderBy('name', 'asc');
+        }
+
+        $availableCourses = $query->paginate(12)->withQueryString();
+        return view('user.course_feed', compact('availableCourses', 'search', 'sort', 'direction'));
     }
 
-    public function userFeed()
+    public function userFeed(Request $request)
     {
-        $userId = Auth::id();
-        // Get all user courses on libraries
-                // Get all user courses with updated data
-                $userCourses = UserCourse::where('user_id', $userId)
-                ->with('course')
-                ->get();
-                return view('user.user_course_feed', compact('userCourses'));
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'name');
+        $direction = $request->input('direction', 'asc');
+
+        $query = UserCourse::where('user_id', Auth::id())
+            ->with('course');
+        
+        if ($search) {
+            $query->whereHas('course', function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%')
+                  ->orWhere('theme', 'like', '%' . $search . '%')
+                  ->orWhereHas('authorUser', function($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        // Handle different sort options
+        switch ($sort) {
+            case 'name':
+                $query->join('courses', 'user_course_progress.course_id', '=', 'courses.id')
+                      ->orderBy('courses.name', $direction)
+                      ->select('user_course_progress.*');
+                break;
+            case 'completion':
+                $query->orderBy('course_completed', $direction)
+                      ->orderBy('completed_modules', $direction);
+                break;
+            default:
+                $query->join('courses', 'user_course_progress.course_id', '=', 'courses.id')
+                      ->orderBy('courses.name', 'asc')
+                      ->select('user_course_progress.*');
+        }
+
+        $userCourses = $query->paginate(12)->withQueryString();
+        return view('user.user_course_feed', compact('userCourses', 'search', 'sort', 'direction'));
     }
 
     public function detail($name, $courseId) 

@@ -1,6 +1,6 @@
 <div class="flex justify-between">
     <h3 class="text-2xl font-bold text-gray-900">Latest Update Courses</h3>
-    <a href="{{ route('user.course') }}">
+    <a href="{{ route('course.feed', ['sort' => 'latest']) }}">
         <span class="material-symbols-outlined">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                 <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
@@ -23,10 +23,15 @@
 
             <!-- Details -->
             <div class="flex-1">
-                <!-- Course Name -->
-                <h4 class="text-sm font-bold text-gray-800 group-hover:text-blue-600 truncate">
-                    {{ $course->name }}
-                </h4>
+                <!-- Course Name with Own Tag -->
+                <div class="flex items-center gap-2">
+                    <h4 class="text-sm font-bold text-gray-800 group-hover:text-blue-600 truncate">
+                        {{ $course->name }}
+                    </h4>
+                    @if($userSavedCourses->contains($course->id))
+                        <span class="px-2 py-1 text-[10px] bg-blue-100 text-blue-800 rounded-full">Own</span>
+                    @endif
+                </div>
                 
                 <div class="flex justify-between items-center mt-1">
                     <!-- Module Progress / Info -->
