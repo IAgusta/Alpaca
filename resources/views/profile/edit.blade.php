@@ -1,7 +1,8 @@
 <x-app-layout>
+    @section('title', 'Setting Profile - '. config('app.name') )
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <a href="{{ route('profile.index') }}">{{ __('Profile') }}</a>
+            <a href="{{ route('profile.index') }}">{{ __('Profile Management') }}</a>
         </h2>
     </x-slot>
 

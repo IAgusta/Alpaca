@@ -27,44 +27,49 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
 
     /**
-     * Attempt to authenticate the request's credentials. and stop user that already goten soft delete to login
+     * Attempt to authenticate the request's credentials.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
-    
+
+        $input = $this->input('email');
+        $field = filter_var($input, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        
         $credentials = [
-            'email' => Str::lower($this->input('email')),
+            $field => $field === 'email' ? Str::lower($input) : $input,
             'password' => $this->input('password'),
         ];
-    
+
         // Find the user including soft-deleted ones
-        $user = \App\Models\User::withTrashed()->where('email', $credentials['email'])->first();
-    
+        $user = \App\Models\User::withTrashed()
+            ->where($field, $credentials[$field])
+            ->first();
+
         // Check if the user exists and is soft deleted
         if ($user && $user->trashed()) {
             throw ValidationException::withMessages([
                 'email' => 'Your account has been deleted. Please contact support.',
             ]);
         }
-    
+
         // Attempt authentication for non-deleted users
         if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
-    
+
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
-    
+
         RateLimiter::clear($this->throttleKey());
     }
 

@@ -1,61 +1,63 @@
 <x-app-layout>
+    @section('title', 'Course Management - '. config('app.name'))
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Kelas') }}
+                {{ __('Courses') }}
             </h2>
-            <div class="flex items-center gap-4">
-                <!-- Sort Dropdown -->
-                <div class="relative">
-                    <button id="sortDropdownButton" data-dropdown-toggle="sortDropdown" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg text-sm px-3 py-2 text-center inline-flex items-center border" type="button">
-                        <span class="mr-2">Sort by: {{ ucfirst($sort) }}</span>
-                        <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
-                    <div id="sortDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
-                        <ul class="py-2 text-sm text-gray-700" aria-labelledby="sortDropdownButton">
-                            <li>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'name', 'direction' => $sort === 'name' && $direction === 'asc' ? 'desc' : 'asc']) }}" 
-                                   class="block px-4 py-2 hover:bg-gray-100">
-                                    Name {{ $sort === 'name' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => $sort === 'created_at' && $direction === 'asc' ? 'desc' : 'asc']) }}" 
-                                   class="block px-4 py-2 hover:bg-gray-100">
-                                    Created Date {{ $sort === 'created_at' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ request()->fullUrlWithQuery(['sort' => 'updated_at', 'direction' => $sort === 'updated_at' && $direction === 'asc' ? 'desc' : 'asc']) }}" 
-                                   class="block px-4 py-2 hover:bg-gray-100">
-                                    Updated Date {{ $sort === 'updated_at' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <!-- Search Input -->
-                <div class="w-64">
-                    <form action="{{ route('admin.courses.index') }}" method="GET">
-                        <input type="hidden" name="sort" value="{{ $sort }}">
-                        <input type="hidden" name="direction" value="{{ $direction }}">
-                        <input type="text" 
-                               name="search" 
-                               value="{{ $search ?? '' }}"
-                               placeholder="Search courses..."
-                               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                    </form>
-                </div>
-            </div>
         </div>
     </x-slot>
 
     <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden p-7">
+                <div class="justify-end flex items-center gap-4 mb-7">
+                    <!-- Sort Dropdown -->
+                    <div class="relative">
+                        <button id="sortDropdownButton" data-dropdown-toggle="sortDropdown" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg text-sm px-3 py-2 text-center inline-flex items-center border" type="button">
+                            <span class="mr-2">Sort by: {{ ucfirst($sort) }}</span>
+                            <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="sortDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
+                            <ul class="py-2 text-sm text-gray-700" aria-labelledby="sortDropdownButton">
+                                <li>
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'name', 'direction' => $sort === 'name' && $direction === 'asc' ? 'desc' : 'asc']) }}" 
+                                       class="block px-4 py-2 hover:bg-gray-100">
+                                        Name {{ $sort === 'name' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => $sort === 'created_at' && $direction === 'asc' ? 'desc' : 'asc']) }}" 
+                                       class="block px-4 py-2 hover:bg-gray-100">
+                                        Created Date {{ $sort === 'created_at' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ request()->fullUrlWithQuery(['sort' => 'updated_at', 'direction' => $sort === 'updated_at' && $direction === 'asc' ? 'desc' : 'asc']) }}" 
+                                       class="block px-4 py-2 hover:bg-gray-100">
+                                        Updated Date {{ $sort === 'updated_at' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Input -->
+                    <div class="w-64">
+                        <form action="{{ route('admin.courses.index') }}" method="GET">
+                            <input type="hidden" name="sort" value="{{ $sort }}">
+                            <input type="hidden" name="direction" value="{{ $direction }}">
+                            <input type="text" 
+                                   name="search" 
+                                   value="{{ $search ?? '' }}"
+                                   placeholder="Search courses..."
+                                   class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Course Cards -->
                 <div class="flex flex-wrap gap-7 justify-start">
                     <!-- Add New Course Card - Fixed Position -->

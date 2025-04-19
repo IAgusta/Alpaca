@@ -1,7 +1,14 @@
 <div class="space-y-6">
+    @php
+        $user = auth()->user();
+        $url = in_array($user->role, ['user', 'trainer'])
+            ? route('course.feed', ['search' => $user->name])
+            : route('admin.courses.index', ['search' => $user->name]);
+    @endphp
+
     <div class="flex justify-between">
         <h3 class="text-2xl font-bold text-gray-900">Created Courses</h3>
-        <a href="#">
+        <a href="{{ $url }}">
             <span class="material-symbols-outlined">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
                     <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>

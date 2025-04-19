@@ -1,7 +1,8 @@
 <x-app-layout>
+    @section('title', 'Controller - '. config('app.name'))
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Plugins - Robot Controller') }}
+            {{ __('Controller') }}
             <a href="{{ route('documentation')}}" class="ml-3" id="documentation-link">
                 <x-secondary-button> {{ __('Documentation') }}</x-secondary-button>
             </a>

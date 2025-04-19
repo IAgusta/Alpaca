@@ -1,11 +1,6 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }} {{ $user->name }}
-        </h2>
-    </x-slot>
-
-    <div class="py-6">
+    @section('title',$user->name . ' Profile - ' . config('app.name'))
+    <div class="py-3">
         <div class="max-w-5xl min-h-screen mx-auto sm:px-6 lg:px-8 space-y-6">
             <!-- Banner Section -->
             <div class="relative w-full h-52 rounded-xl overflow-hidden mt-6">

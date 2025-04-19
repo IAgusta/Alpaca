@@ -40,7 +40,7 @@
                 <a href="https://github.com/IAgusta/Alpaca" target="_blank">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="30" height="30" alt="GitHub">
                 </a>
-                <a href="https://discord.gg/ExzAJfgE" target="_blank">
+                <a href="https://discord.gg/m6RMwKkjj2" target="_blank">
                     <img src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/62fddf0fde45a8baedcc7ee5_847541504914fd33810e70a0ea73177e%20(2)-1.png" width="30" height="30" alt="Discord">
                 </a>
                 <a href="https://trakteer.id/eiko_hachiichi/tip" target="_blank">

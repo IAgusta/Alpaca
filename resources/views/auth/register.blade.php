@@ -1,4 +1,5 @@
 <x-guest-layout>
+    @section('title', 'Register to ' . config('app.name'))
     <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 mt-10 mb-3">Buat Akun Barumu</h2>
     <form method="POST" action="{{ route('register') }}">
         @csrf

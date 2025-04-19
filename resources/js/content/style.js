@@ -9,6 +9,7 @@ import YouTube from 'https://esm.sh/@tiptap/extension-youtube@2.6.6';
 import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.6.6';
 import FontFamily from 'https://esm.sh/@tiptap/extension-font-family@2.6.6';
 import { Color } from 'https://esm.sh/@tiptap/extension-color@2.6.6';
+import ImageResize from 'tiptap-extension-resize-image';
 
 document.addEventListener("DOMContentLoaded", function () {
     // Initialize TipTap editor for preview containers
@@ -35,7 +36,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 TextAlign.configure({
                     types: ['heading', 'paragraph'], // Ensure alignment is applied to headings and paragraphs
                 }),
-                Image,
+                Image.configure({
+                    allowBase64: true,
+                    HTMLAttributes: {
+                        class: 'resize-image',
+                    },
+                }),
+                ImageResize.configure({
+                    resizeDirections: ['top-right', 'bottom-right', 'bottom-left', 'top-left'],
+                    defaultSize: {
+                        width: 300,
+                        height: 'auto',
+                    },
+                }),
                 YouTube,
             ],
             content: content, // Set the content

@@ -1,4 +1,5 @@
 <x-guest-layout>
+    @section('title', 'Verification to ' . config('app.name'))
     <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 mt-10 mb-3">Verifikasi Akun Anda</h2>
     <div class="mb-4 text-sm text-gray-600">
         {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}

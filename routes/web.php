@@ -30,11 +30,9 @@ Route::get('/faq', function () { return view('faqs');})->name('faq');
 Route::get('/terms', function () { return view('terms');})->name('terms');
 Route::get('/privacy-policy', function () { return view('privacy-policy');})->name('privacy-policy');
 Route::get('/news', function () { return view('news');})->name('news');
-Route::get('/plugins/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
+Route::get('/tools/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
 Route::get('/find-users', function () { return view('plugins.search_user');})->name('plugins.search-users');
 Route::get('/documentation', function(){ return view('plugins.documentation');})->name('documentation');
-Route::get('/documentation-esp32', function () { return view('plugins.documentation.esp32');})->name('documentation.esp32');
-Route::get('/documentation-esp8266', function () { return view('plugins.documentation.esp8266');})->name('documentation.esp8266');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
 Route::get('/settings', function() {return view('settings');})->name('settings');
@@ -45,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/courses/feed', [UserCourseController::class, 'feed'])->name('course.feed');
     Route::get('/courses/library', [UserCourseController::class, 'userFeed'])->name('user.course.library');
     Route::post('/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
-    Route::get('/courses/{name}/{courseId}/detail', [UserCourseController::class, 'detail'])->name('user.course.detail');
+    Route::get('/courses/{name}/{courseId}', [UserCourseController::class, 'detail'])->name('user.course.detail');
     Route::get('/courses/{name}/{courseId}/module/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])->name('course.module.open');
     Route::post('/module-progress/{moduleId}/toggle', [UserCourseController::class, 'toggle'])->name('module.progress.toggle');
     Route::post('/courses/{courseId}/toggle-all', [UserCourseController::class, 'toggleAllModules'])->name('user.course.toggleAll');
@@ -73,7 +71,7 @@ Route::middleware(['auth', 'only.admin'])->group(function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     // Admin course management routes
-    Route::prefix('admin')->group(function () {
+    Route::prefix('manage')->group(function () {
         // Course Routes
         Route::get('/courses-index', [CourseController::class, 'index'])->name('admin.courses.index');
         Route::post('/courses/store', [CourseController::class, 'store'])->name('admin.courses.store');

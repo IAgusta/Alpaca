@@ -1,4 +1,5 @@
 <x-app-layout>
+    @section('title', 'Dashboard - ' . config('app.name'))
     <!-- Full-Width Top Courses -->
     <div class="w-full">
         @include('user.component.top_courses')
@@ -6,16 +7,16 @@
 
     <div class="py-6">
         <!-- Constrained Content -->
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-8xl mx-auto px-3 lg:px-8">
             <div class="bg-white overflow-hidden">
                 {{-- Latest Update Courses --}}
-                <div class="my-7">
+                <div class="my-7 lg:px-8">
                     @include('user.component.latest_course')
                 </div>
 
-                <div class="lg:flex my-7 gap-7">
+                <div class="lg:flex my-7 gap-7 lg:px-8">
                     {{-- User Courses --}}
-                    <div class="w-3/4">
+                    <div class="lg:w-3/4 my-7">
                         @if ($user->role != 'user')
                             @include('admin.admin')
                         @else
@@ -24,7 +25,7 @@
                     </div>
 
                     {{-- Shortcut/Admin Panel --}}
-                    <div class="w-1/4">
+                    <div class="lg:w-1/4 my-7">
                         {{-- Plugins --}}
                         @include('partials.plugins')
                     </div>

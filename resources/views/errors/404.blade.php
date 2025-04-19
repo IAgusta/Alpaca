@@ -1,4 +1,5 @@
 <x-landing-layout> 
+    @section('title', 'Page Not Found')
     <div class="min-h-screen flex items-center justify-center bg-slate-300">
         <main class="grid place-items-center bg-transparent px-6 py-24 sm:py-32 lg:px-8">
             <div class="text-center">

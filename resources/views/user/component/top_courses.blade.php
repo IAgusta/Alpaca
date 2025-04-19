@@ -20,7 +20,7 @@
                         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent dark:to-black/70 to-white/70 z-10"></div>
 
                         <!-- Foreground Content -->
-                        <div class="relative z-20 w-full h-full px-3 py-7 mt-7 max-w-7xl mx-auto flex gap-6 items-start">
+                        <div class="relative z-20 w-full h-full px-3 lg:px-12 py-7 mt-7 max-w-8xl mx-auto flex gap-6 items-start">
                             <!-- Course Image -->
                             <div class="w-[175px] h-[240px] rounded-md overflow-hidden shadow-lg shrink-0">
                                 <img src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" 
@@ -62,16 +62,16 @@
     </div>
 
     <!-- Static Title -->
-    <div class="absolute w-full top-3 z-10">
-        <div class="max-w-7xl mx-auto px-3">
+    <div class="absolute lg:px-8 w-full top-3 z-10">
+        <div class="max-w-8xl mx-auto px-3">
             <h1 class="text-xl lg:text-2xl font-bold text-black dark:text-white">Popular New Courses</h1>
         </div>
     </div>
 
 
     <!-- Navigation Outside of Swiper -->
-    <div class="absolute w-full bottom-4 z-10">
-        <div class="max-w-7xl mx-auto px-6 flex justify-end items-center gap-4">
+    <div class="absolute lg:px-8 w-full bottom-4 z-10">
+        <div class="max-w-8xl mx-auto px-6 flex justify-end items-center gap-4">
             <span id="slide-number" class="text-lg text-black dark:text-white">No. 1</span>
             <button id="prevSlide" class="dark:text-white text-black hover:text-gray-300 text-2xl font-bold">&lt;</button>
             <button id="nextSlide" class="dark:text-white text-black hover:text-gray-300 text-2xl font-bold">&gt;</button>

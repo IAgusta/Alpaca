@@ -1,4 +1,5 @@
 <x-guest-layout>
+    @section('title', 'Forgot Your ' . config('app.name') . ' Account?')
     <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 mt-10 mb-3">Lupa Kata Sandi?</h2>
     <div class="mb-4 text-sm text-gray-600">
         {{ __('Lupa kata sandi Anda? Tidak masalah. Cukup beri tahu kami alamat email Anda dan kami akan mengirimkan tautan pengaturan ulang kata sandi melalui email yang memungkinkan Anda memilih kata sandi baru.') }}

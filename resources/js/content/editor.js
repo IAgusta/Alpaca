@@ -10,7 +10,7 @@ import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.6.6';
 import FontFamily from 'https://esm.sh/@tiptap/extension-font-family@2.6.6';
 import { Color } from 'https://esm.sh/@tiptap/extension-color@2.6.6';
 import Bold from 'https://esm.sh/@tiptap/extension-bold@2.6.6'; // Import the Bold extension
-
+import ImageResize from 'tiptap-extension-resize-image';
 
 window.addEventListener('load', function() {
     if (document.getElementById("wysiwyg-container")) {
@@ -79,7 +79,19 @@ window.addEventListener('load', function() {
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
-            Image,
+            Image.configure({
+                allowBase64: true,
+                HTMLAttributes: {
+                    class: 'resize-image',
+                },
+            }),
+            ImageResize.configure({
+                resizeDirections: ['top-right', 'bottom-right', 'bottom-left', 'top-left'],
+                defaultSize: {
+                    width: 300,
+                    height: 'auto',
+                },
+            }),
             YouTube,
         ],
         content: initialContent, // Set initial content here
@@ -141,10 +153,25 @@ window.addEventListener('load', function() {
         editor.chain().focus().setHorizontalRule().run();
     });
     document.getElementById('addImageButton').addEventListener('click', () => {
-        const url = window.prompt('Enter image URL:', '');
-        if (url) {
-            editor.chain().focus().setImage({ src: url }).run();
-        }
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const result = e.target.result;
+                    editor.chain().focus().setImage({ 
+                        src: result,
+                        alt: file.name,
+                        title: file.name,
+                    }).run();
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+        input.click();
     });
     
     document.getElementById('addVideoButton').addEventListener('click', () => {
@@ -275,7 +302,19 @@ document.querySelectorAll('[id^="preview-container-"]').forEach((container) => {
             TextAlign.configure({
                 types: ['heading', 'paragraph'], // Ensure alignment is applied to headings and paragraphs
             }),
-            Image,
+            Image.configure({
+                allowBase64: true,
+                HTMLAttributes: {
+                    class: 'resize-image',
+                },
+            }),
+            ImageResize.configure({
+                resizeDirections: ['top-right', 'bottom-right', 'bottom-left', 'top-left'],
+                defaultSize: {
+                    width: 300,
+                    height: 'auto',
+                },
+            }),
             YouTube,
         ],
         content: content, // Set the content
@@ -313,7 +352,19 @@ if (document.getElementById("question-wysiwyg-container")) {
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
             }),
-            Image,
+            Image.configure({
+                allowBase64: true,
+                HTMLAttributes: {
+                    class: 'resize-image',
+                },
+            }),
+            ImageResize.configure({
+                resizeDirections: ['top-right', 'bottom-right', 'bottom-left', 'top-left'],
+                defaultSize: {
+                    width: 300,
+                    height: 'auto',
+                },
+            }),
             YouTube,
         ],
         content: questionContent, // Set the content

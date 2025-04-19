@@ -1,4 +1,5 @@
 <x-guest-layout>
+    @section('title', 'Login to ' . config('app.name'))
     <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 mt-10 mb-3">Masuk ke Akun Anda</h2>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -8,8 +9,8 @@
 
         <!-- Email Address -->
         <div>
-            <x-input-label class="mb-3" for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-input-label class="mb-3" for="email" :value="__('Email or Username')" />
+            <x-text-input id="email" class="block mt-1 w-full" type="text" name="email" :value="old('email')" required autofocus autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 

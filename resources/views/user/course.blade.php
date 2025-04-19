@@ -1,7 +1,8 @@
 <x-app-layout>
+    @section('title', 'Courses - ' . config('app.name'))
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Kelas') }} 
+            {{ __('Courses') }} 
         </h2>
     </x-slot>
     <div class="py-6">
@@ -11,7 +12,7 @@
                 <div class="mb-8">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold">Your Courses</h3>
-                        @if($userCourses->count() >= 5)
+                        @if($userCourses->count() >= 6)
                             <a href="{{ route('user.course.library') }}" class="text-blue-600 hover:text-blue-800">See More</a>
                         @endif
                     </div>
@@ -22,7 +23,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold">Available Courses</h3>
-                        @if($availableCourses->count() >= 11)
+                        @if($availableCourses->count() >= 12)
                             <a href="{{ route('course.feed') }}" class="text-blue-600 hover:text-blue-800">See More</a>
                         @endif
                     </div>
