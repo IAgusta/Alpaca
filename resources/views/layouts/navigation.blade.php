@@ -7,7 +7,7 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Hamburger Menu -->
-                <div class="lg:hidden -me-2 flex items-center">
+                <div class="lg:hidden flex items-center">
                     <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                         <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                             <path :class="{'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -76,7 +76,7 @@
                     data-dropdown-trigger="click"
                     data-dropdown-show-classes="ring-2 ring-gray-300 dark:ring-gray-500"
                     data-dropdown-hide-classes=""
-                    class="w-10 h-10 rounded-full cursor-pointer transition-all duration-200" 
+                    class="w-10 h-10 rounded-full cursor-pointer transition-all duration-200  border-1 border-gray-400 dark:border-gray-800" 
                     src="{{ Auth::user()->details->image ? asset('storage/' . (json_decode(Auth::user()->details->image, true)['profile'] ?? '')) : '' }}" 
                     onerror="this.src='{{ asset('storage/profiles/default-profile.png') }}'" 
                     alt="User dropdown">
@@ -101,7 +101,7 @@
                                     <img id="profile-preview" 
                                     src="{{ Auth::user()->details->image ? asset('storage/' . (json_decode(Auth::user()->details->image, true)['profile'] ?? '')) : '' }}" 
                                     onerror="this.src='{{ asset('storage/profiles/default-profile.png') }}'" 
-                                            class="w-8 h-8 border border-blue-500 rounded-full object-cover shadow-lg" 
+                                            class="w-8 h-8 border border-1 border-gray-400 dark:border-gray-800 rounded-full object-cover shadow-lg" 
                                             alt="Profile Image">
                                 </div>
                             </div>

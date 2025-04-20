@@ -219,13 +219,22 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function getAllUsers()
+    public function getAllUsers(Request $request)
     {
-        $users = User::select('id', 'name', 'username', 'role', 'created_at')
-            ->with('details')
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
-
+        $query = User::select('id', 'name', 'username', 'role', 'created_at')
+            ->with('details');
+    
+        // Apply role filter if specified
+        if ($request->role) {
+            $query->where('role', $request->role);
+        }
+    
+        // Apply name sorting
+        $direction = $request->get('sort', 'asc');
+        $query->orderBy('name', $direction);
+    
+        $users = $query->paginate(12);
+    
         $users->getCollection()->transform(function ($user) {
             $avatar = $user->details && $user->details->image 
                 ? json_decode($user->details->image, true)['profile'] ?? null 
@@ -239,10 +248,10 @@ class ProfileController extends Controller
                 'avatar' => $avatar ? asset('storage/' . $avatar) : asset('storage/profiles/default-profile.png')
             ];
         });
-
+    
         return response()->json($users);
     }
-
+    
     public function search(Request $request)
     {
         $query = $request->get('query');
@@ -250,12 +259,22 @@ class ProfileController extends Controller
         if (strlen($query) < 2) {
             return response()->json([]);
         }
-
-        $users = User::where('name', 'LIKE', "%{$query}%")
+    
+        $userQuery = User::where('name', 'LIKE', "%{$query}%")
             ->orWhere('username', 'LIKE', "%{$query}%")
             ->select('id', 'name', 'username', 'role')
-            ->with('details')
-            ->limit(10)
+            ->with('details');
+    
+        // Apply role filter if specified
+        if ($request->role) {
+            $userQuery->where('role', $request->role);
+        }
+    
+        // Apply name sorting
+        $direction = $request->get('sort', 'asc');
+        $userQuery->orderBy('name', $direction);
+    
+        $users = $userQuery->limit(10)
             ->get()
             ->map(function ($user) {
                 $avatar = $user->details && $user->details->image 
@@ -270,7 +289,7 @@ class ProfileController extends Controller
                     'avatar' => $avatar ? asset('storage/' . $avatar) : asset('storage/profiles/default-profile.png')
                 ];
             });
-
+    
         return response()->json($users);
     }
 }

@@ -1,15 +1,16 @@
-import { Editor } from 'https://esm.sh/@tiptap/core@2.6.6';
-import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.6.6';
-import Highlight from 'https://esm.sh/@tiptap/extension-highlight@2.6.6';
-import Underline from 'https://esm.sh/@tiptap/extension-underline@2.6.6';
-import Link from 'https://esm.sh/@tiptap/extension-link@2.6.6';
-import TextAlign from 'https://esm.sh/@tiptap/extension-text-align@2.6.6';
-import Image from 'https://esm.sh/@tiptap/extension-image@2.6.6';
-import YouTube from 'https://esm.sh/@tiptap/extension-youtube@2.6.6';
-import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.6.6';
-import FontFamily from 'https://esm.sh/@tiptap/extension-font-family@2.6.6';
-import { Color } from 'https://esm.sh/@tiptap/extension-color@2.6.6';
+import { Editor } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
+import Highlight from '@tiptap/extension-highlight';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import TextAlign from '@tiptap/extension-text-align';
+import Image from '@tiptap/extension-image';
+import YouTube from '@tiptap/extension-youtube';
+import TextStyle from '@tiptap/extension-text-style';
+import FontFamily from '@tiptap/extension-font-family';
+import { Color } from '@tiptap/extension-color';
 import ImageResize from 'tiptap-extension-resize-image';
+import Bold from '@tiptap/extension-bold';
 
 document.addEventListener("DOMContentLoaded", function () {
     // Initialize TipTap editor for preview containers
@@ -22,11 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
             extensions: [
                 StarterKit.configure({
                     textStyle: false,
-                    bold: false,
-                    marks: {
-                        bold: false,
-                    },
                 }),
+                Bold.configure(),
                 TextStyle,
                 Color,
                 FontFamily,

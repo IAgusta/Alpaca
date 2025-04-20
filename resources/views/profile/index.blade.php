@@ -27,7 +27,7 @@
             <div class="relative px-4 sm:px-8 pb-6 rounded-b-xl">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-4 -mt-16">
                     <!-- Profile Image -->
-                    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg shrink-0">
+                    <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-500 dark:border-gray-900 shadow-lg shrink-0">
                         <img 
                             src="{{ $user->details->image ? asset('storage/' . (json_decode($user->details->image, true)['profile'] ?? '')) : asset('storage/profiles/default-profile.png') }}" 
                             class="w-full h-full object-cover" 

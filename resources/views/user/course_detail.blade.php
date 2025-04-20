@@ -82,7 +82,7 @@
                             {{-- Author Social Media Links --}}
                             <div class="mt-4">
                                 <h3 class="font-bold text-sm uppercase mt-3">Author Social Media</h3>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 mt-1 mb-4">
+                                <div class="grid grid-cols-2 gap-x-4 gap-y-2 mt-1 mb-7">
                                     @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'github'] as $platform)
                                         @php
                                             $socialMediaLinks = $course->authorUser->details->social_media ?? [];

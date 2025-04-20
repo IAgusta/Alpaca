@@ -54,21 +54,21 @@
                     <div class="text-center">
                         <img id="profile-preview-large" 
                              src="{{ $user->details->image ? asset('storage/' . json_decode($user->details->image, true)['profile'] ?? 'profiles/default-profile.png') : asset('storage/profiles/default-profile.png') }}" 
-                             class="w-32 h-32 rounded-full border-4 border-blue-500 object-cover shadow-md"
+                             class="w-32 h-32 rounded-full border-2 border-gray-500 dark:border-gray-800 object-cover shadow-md"
                              alt="Large Preview">
                         <p class="text-sm mb-2">184px</p>
                     </div>
                     <div class="text-center">
                         <img id="profile-preview-medium" 
                             src="{{ $user->details->image ? asset('storage/' . json_decode($user->details->image, true)['profile'] ?? 'profiles/default-profile.png') : asset('storage/profiles/default-profile.png') }}"
-                             class="w-16 h-16 rounded-full border-2 border-blue-400 object-cover"
+                             class="w-16 h-16 rounded-full border-1 border-gray-400 dark:border-gray-800 object-cover"
                              alt="Medium Preview">
                         <p class="text-sm mb-2">64px</p>
                     </div>
                     <div class="text-center">
                         <img id="profile-preview-small" 
                             src="{{ $user->details->image ? asset('storage/' . json_decode($user->details->image, true)['profile'] ?? 'profiles/default-profile.png') : asset('storage/profiles/default-profile.png') }}"
-                             class="w-8 h-8 rounded-full border border-blue-300 object-cover"
+                             class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-800 object-cover"
                              alt="Small Preview">
                         <p class="text-sm mb-2">32px</p>
                     </div>

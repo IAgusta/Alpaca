@@ -1,16 +1,16 @@
-import { Editor } from 'https://esm.sh/@tiptap/core@2.6.6';
-import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2.6.6';
-import Highlight from 'https://esm.sh/@tiptap/extension-highlight@2.6.6';
-import Underline from 'https://esm.sh/@tiptap/extension-underline@2.6.6';
-import Link from 'https://esm.sh/@tiptap/extension-link@2.6.6';
-import TextAlign from 'https://esm.sh/@tiptap/extension-text-align@2.6.6';
-import Image from 'https://esm.sh/@tiptap/extension-image@2.6.6';
-import YouTube from 'https://esm.sh/@tiptap/extension-youtube@2.6.6';
-import TextStyle from 'https://esm.sh/@tiptap/extension-text-style@2.6.6';
-import FontFamily from 'https://esm.sh/@tiptap/extension-font-family@2.6.6';
-import { Color } from 'https://esm.sh/@tiptap/extension-color@2.6.6';
-import Bold from 'https://esm.sh/@tiptap/extension-bold@2.6.6'; // Import the Bold extension
+import { Editor } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
+import Highlight from '@tiptap/extension-highlight';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import TextAlign from '@tiptap/extension-text-align';
+import Image from '@tiptap/extension-image';
+import YouTube from '@tiptap/extension-youtube';
+import TextStyle from '@tiptap/extension-text-style';
+import FontFamily from '@tiptap/extension-font-family';
+import { Color } from '@tiptap/extension-color';
 import ImageResize from 'tiptap-extension-resize-image';
+import Bold from '@tiptap/extension-bold';
 
 window.addEventListener('load', function() {
     if (document.getElementById("wysiwyg-container")) {
@@ -31,24 +31,6 @@ window.addEventListener('load', function() {
             };
         },
     });
-    const CustomBold = Bold.extend({
-        // Override the renderHTML method
-        renderHTML({ mark, HTMLAttributes }) {
-            const { style, ...rest } = HTMLAttributes;
-
-            // Merge existing styles with font-weight
-            const newStyle = 'font-weight: bold;' + (style ? ' ' + style : '');
-
-            return ['span', { ...rest, style: newStyle.trim() }, 0];
-        },
-        // Ensure it doesn't exclude other marks
-        addOptions() {
-            return {
-                ...this.parent?.(),
-                HTMLAttributes: {},
-            };
-        },
-    });
 
     // Get the initial content
     const initialContent = document.getElementById('content-hidden').value;
@@ -58,13 +40,9 @@ window.addEventListener('load', function() {
         element: document.querySelector('#wysiwyg-container'),
         extensions: [
             StarterKit.configure({
-                textStyle: false,
-                bold: false,
-                marks: {
-                    bold: false,
-                },
+                bold: false, // Disable bold in StarterKit
             }),
-            CustomBold,
+            Bold.configure(), // Add Bold extension separately
             TextStyle,
             Color,
             FontSizeTextStyle,
@@ -88,7 +66,7 @@ window.addEventListener('load', function() {
             ImageResize.configure({
                 resizeDirections: ['top-right', 'bottom-right', 'bottom-left', 'top-left'],
                 defaultSize: {
-                    width: 300,
+                    width: 'auto',
                     height: 'auto',
                 },
             }),
@@ -288,13 +266,10 @@ document.querySelectorAll('[id^="preview-container-"]').forEach((container) => {
         extensions: [
             StarterKit.configure({
                 textStyle: false,
-                bold: false,
-                marks: {
-                    bold: false,
-                },
             }),
             TextStyle,
             Color,
+            Bold.configure(),
             FontFamily,
             Highlight,
             Underline,

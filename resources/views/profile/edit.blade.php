@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-5xl min-h-screen mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-7xl min-h-screen mx-auto sm:px-6 lg:px-8 space-y-6">
             <!-- Tabs Container -->
             <div class="lg:flex p-3">
                 <!-- Mobile Dropdown Menu -->

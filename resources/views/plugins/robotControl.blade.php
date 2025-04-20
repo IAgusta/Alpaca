@@ -10,67 +10,88 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden">
-                <!-- IP Address Form -->
-                <div class="p-6 text-gray-900 flex justify-center items-center">
-                    <form id="ip-form" class="w-8xl max-w-md">
-                        <x-input-label for="ip-address" :value="__('IP Address :')" />
-                        <div class="flex flex-row gap-2 mt-2">
-                            <x-text-input id="ip-address" class="block w-full" type="text" name="ip-address" placeholder="Masukan IP Address ESP32/8266" required autofocus />
-                            <x-primary-button id="connect-button" type="button">
-                                {{ __('Connect') }}
-                            </x-primary-button>
+                <div class="grid grid-cols-2 gap-4 p-4 mb-7">
+                    <!-- Connect Using Wi-Fi -->
+                    <div class="border border-gray-400 p-5 rounded-lg shadow-lg flex flex-col items-center">
+                        <div class="flex flex-row items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-32 h-32" viewBox="0 -960 960 960">
+                                <path d="M480-120q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM254-346l-84-86q59-59 138.5-93.5T480-560q92 0 171.5 35T790-430l-84 84q-44-44-102-69t-124-25q-66 0-124 25t-102 69ZM84-516 0-600q92-94 215-147t265-53q142 0 265 53t215 147l-84 84q-77-77-178.5-120.5T480-680q-116 0-217.5 43.5T84-516Z"/>
+                            </svg>
+                            <div class="text-center mt-2">
+                                <h2 class="text-black font-bold text-lg">Connect Using Wi-Fi</h2>
+                                <p class="text-gray-600">Connect your device to the robot's Wi-Fi network.</p>
+                            </div>
                         </div>
-                        <p id="connection-status" class="text-sm text-gray-600 mt-2 hidden"></p>
-                    </form>
+                    </div>
+                    
+                    <!-- Connect Using Bluetooth -->
+                    <div class="border border-gray-400 p-5 rounded-lg shadow-lg flex flex-col items-center">
+                        <div class="flex flex-row items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-32 h-32" viewBox="0 -960 960 960">
+                                <path d="M440-80v-304L256-200l-56-56 224-224-224-224 56-56 184 184v-304h40l228 228-172 172 172 172L480-80h-40Zm80-496 76-76-76-74v150Zm0 342 76-74-76-76v150Z"/>
+                            </svg>
+                            <div class="text-center mt-2">
+                                <h2 class="text-black font-bold text-lg">Connect Using Bluetooth</h2>
+                                <p class="text-gray-600">Connect your device via Bluetooth to control the robot.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- Divider -->
-                <div class="border-b border-gray-300 my-4"></div>
-
-                <!-- Robot Controller -->
-                <div id="robot-controls" class="flex flex-col items-center gap-4 py-6 opacity-50 pointer-events-none">
-                    <h3 class="text-lg font-semibold">{{ __('Robot Controller') }}</h3>
-
-                    <!-- Motor Speed Slider -->
-                    <div class="flex justify-center items-center flex-col gap-4 py-6">
-                        <h3 class="text-lg font-semibold">{{ __('Motor Speed') }}</h3>
-                        <div class="flex gap-4">
-                            <input type="range" min="0" max="100" step="10" id="motorSlider" class="w-64" value="0" />
-                            <p>Speed: <span id="motorSpeed">0</span></p>
+        
+                <div class="grid grid-cols-2 gap-4 p-4">
+                    <!-- Line Follower -->
+                    <div class="border border-gray-400 p-5 rounded-lg shadow-lg flex flex-col items-center">
+                        <div class="flex flex-row items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-32 h-32" viewBox="0 -960 960 960">
+                                <path d="M440-80v-120H160v-80h640v80H520v120h-80Zm-80-420q17 0 28.5-11.5T400-540q0-17-11.5-28.5T360-580q-17 0-28.5 11.5T320-540q0 17 11.5 28.5T360-500Zm240 0q17 0 28.5-11.5T640-540q0-17-11.5-28.5T600-580q-17 0-28.5 11.5T560-540q0 17 11.5 28.5T600-500ZM200-616l66-192q5-14 16.5-23t25.5-9h344q14 0 25.5 9t16.5 23l66 192v264q0 14-9 23t-23 9h-16q-14 0-23-9t-9-23v-48H280v48q0 14-9 23t-23 9h-16q-14 0-23-9t-9-23v-264Zm106-64h348l-28-80H334l-28 80Zm-26 80v120-120Zm0 120h400v-120H280v120Z"/>
+                            </svg>
+                            <div class="text-center mt-2">
+                                <h2 class="text-black font-bold text-lg">Line Follower</h2>
+                                <p class="text-gray-600">Make the Robot Follow the Line</p>
+                            </div>
                         </div>
                     </div>
-
-                    <x-secondary-button id="forward-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
-                        </svg>
-                    </x-secondary-button>
-                    <div class="flex justify-center gap-4">
-                        <x-secondary-button id="left-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            
+                    <!-- Wall Avoider -->
+                    <div class="border border-gray-400 p-5 rounded-lg shadow-lg flex flex-col items-center">
+                        <div class="flex flex-row items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-32 h-32" viewBox="0 -960 960 960">
+                                <path d="M160-240v-200 200ZM80-440l84-240q6-18 21.5-29t34.5-11h183q-3 20-3 40t3 40H234l-42 120h259q17 24 38 44.5t47 35.5H160v200h560v-163q21-3 41-9t39-15v307q0 17-11.5 28.5T760-80h-40q-17 0-28.5-11.5T680-120v-40H200v40q0 17-11.5 28.5T160-80h-40q-17 0-28.5-11.5T80-120v-320Zm540 160q25 0 42.5-17.5T680-340q0-25-17.5-42.5T620-400q-25 0-42.5 17.5T560-340q0 25 17.5 42.5T620-280Zm-360 0q25 0 42.5-17.5T320-340q0-25-17.5-42.5T260-400q-25 0-42.5 17.5T200-340q0 25 17.5 42.5T260-280Zm420-200q-83 0-141.5-58.5T480-680q0-82 58-141t142-59q83 0 141.5 58.5T880-680q0 83-58.5 141.5T680-480Zm-20-160h40v-160h-40v160Zm20 80q8 0 14-6t6-14q0-8-6-14t-14-6q-8 0-14 6t-6 14q0 8 6 14t14 6Z"/>
                             </svg>
-                        </x-secondary-button>
-                        <x-danger-button id="stop-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-sign-stop" viewBox="0 0 16 16">
-                                <path d="M3.16 10.08c-.931 0-1.447-.493-1.494-1.132h.653c.065.346.396.583.891.583.524 0 .83-.246.83-.62 0-.303-.203-.467-.637-.572l-.656-.164c-.61-.147-.978-.51-.978-1.078 0-.706.597-1.184 1.444-1.184.853 0 1.386.475 1.436 1.087h-.645c-.064-.32-.352-.542-.797-.542-.472 0-.77.246-.77.6 0 .261.196.437.553.522l.654.161c.673.164 1.06.487 1.06 1.11 0 .736-.574 1.228-1.544 1.228Zm3.427-3.51V10h-.665V6.57H4.753V6h3.006v.568H6.587Z"/>
-                                <path fill-rule="evenodd" d="M11.045 7.73v.544c0 1.131-.636 1.805-1.661 1.805-1.026 0-1.664-.674-1.664-1.805V7.73c0-1.136.638-1.807 1.664-1.807s1.66.674 1.66 1.807Zm-.674.547v-.553c0-.827-.422-1.234-.987-1.234-.572 0-.99.407-.99 1.234v.553c0 .83.418 1.237.99 1.237.565 0 .987-.408.987-1.237m1.15-2.276h1.535c.82 0 1.316.55 1.316 1.292 0 .747-.501 1.289-1.321 1.289h-.865V10h-.665zm1.436 2.036c.463 0 .735-.272.735-.744s-.272-.741-.735-.741h-.774v1.485z"/>
-                                <path fill-rule="evenodd" d="M4.893 0a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353L11.46.146A.5.5 0 0 0 11.107 0zM1 5.1 5.1 1h5.8L15 5.1v5.8L10.9 15H5.1L1 10.9z"/>
-                            </svg>
-                        </x-danger-button>
-                        <x-secondary-button id="right-button">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-                            </svg>
-                        </x-secondary-button>
+                            <div class="text-center mt-2">
+                                <h2 class="text-black font-bold text-lg">Wall Avoider</h2>
+                                <p class="text-gray-600">Make the Robot Avoid Walls</p>
+                            </div>
+                        </div>
                     </div>
-                    <x-secondary-button id="backward-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
-                        </svg>
-                    </x-secondary-button>
+            
+                    <!-- Manual Control -->
+                    <div class="border border-gray-400 p-5 rounded-lg shadow-lg flex flex-col items-center">
+                        <div class="flex flex-row items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" viewBox="0 -960 960 960">
+                                <path d="m272-440 208 120 208-120-168-97v137h-80v-137l-168 97Zm168-189v-17q-44-13-72-49.5T340-780q0-58 41-99t99-41q58 0 99 41t41 99q0 48-28 84.5T520-646v17l280 161q19 11 29.5 29.5T840-398v76q0 22-10.5 40.5T800-252L520-91q-19 11-40 11t-40-11L160-252q-19-11-29.5-29.5T120-322v-76q0-22 10.5-40.5T160-468l280-161Zm0 378L200-389v67l280 162 280-162v-67L520-251q-19 11-40 11t-40-11Zm40-469q25 0 42.5-17.5T540-780q0-25-17.5-42.5T480-840q-25 0-42.5 17.5T420-780q0 25 17.5 42.5T480-720Zm0 560Z"/>
+                            </svg>
+                            <div class="text-center mt-2">
+                                <h2 class="text-black font-bold text-lg">Manual Control</h2>
+                                <p class="text-gray-600">Control the Robot Manually by Yourself</p>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Coming Soon -->
+                    <div class="border border-gray-400 p-5 rounded-lg shadow-lg flex flex-col items-center">
+                        <div class="flex flex-row items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" viewBox="0 -960 960 960">
+                                <path d="M424-320q0-81 14.5-116.5T500-514q41-36 62.5-62.5T584-637q0-41-27.5-68T480-732q-51 0-77.5 31T365-638l-103-44q21-64 77-111t141-47q105 0 161.5 58.5T698-641q0 50-21.5 85.5T609-475q-49 47-59.5 71.5T539-320H424Zm56 240q-33 0-56.5-23.5T400-160q0-33 23.5-56.5T480-240q33 0 56.5 23.5T560-160q0 33-23.5 56.5T480-80Z"/>
+                            </svg>
+                            <div class="text-center mt-2">
+                                <h2 class="text-black font-bold text-lg">Coming Soon</h2>
+                                <p class="text-gray-600">More features are on the way!</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
