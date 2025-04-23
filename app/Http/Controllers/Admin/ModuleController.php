@@ -30,13 +30,15 @@ class ModuleController extends Controller
             'description' => 'nullable|string',
         ]);
 
+        $lastPosition = Module::where('course_id', $course_id)->max('position') ?? 0;
+
         $module = Module::create([
             'course_id' => $course_id,
             'title' => $request->title,
             'description' => $request->description,
+            'position' => $lastPosition + 1,
         ]);
 
-        // Update the course's updated_at timestamp
         $module->course->touch();
 
         return back()->with('success', 'New Module Chapter is Added into ' . $module->course->name);
@@ -73,5 +75,26 @@ class ModuleController extends Controller
         $course->touch();
 
         return back()->with('success', 'Module deleted successfully.');
+    }
+
+    public function reorder(Request $request, Course $course)
+    {
+        $request->validate([
+            'positions' => 'required|array',
+            'positions.*.id' => 'required|numeric',
+            'positions.*.position' => 'required|numeric'
+        ]);
+
+        $positions = $request->input('positions');
+    
+        foreach ($positions as $position) {
+            Module::where('id', $position['id'])
+                ->where('course_id', $course->id)
+                ->update(['position' => $position['position']]);
+        }
+
+        $course->touch();
+    
+        return response()->json(['success' => true]);
     }
 }

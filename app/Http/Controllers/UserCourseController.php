@@ -51,7 +51,7 @@ class UserCourseController extends Controller
         $sort = $request->input('sort', 'updated_at');
         $direction = $request->input('direction', 'desc');
 
-        $query = Course::whereNotIn('id', UserCourse::where('user_id', Auth::id())->pluck('course_id'))
+        $query = Course::query()
             ->when(auth::user()->role === 'user', function ($query) {
                 $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
             });
@@ -81,7 +81,7 @@ class UserCourseController extends Controller
                 $query->orderBy('name', 'asc');
         }
 
-        $availableCourses = $query->paginate(12)->withQueryString();
+        $availableCourses = $query->paginate(12);
         return view('user.course_feed', compact('availableCourses', 'search', 'sort', 'direction'));
     }
 
@@ -129,9 +129,9 @@ class UserCourseController extends Controller
     public function detail($name, $courseId) 
     {
         $userId = Auth::id();
-    
-        // Optional: Verify the name matches the course (for SEO)
-        $course = Course::with(['modules.contents'])->findOrFail($courseId);
+        $course = Course::with(['modules' => function($query) {
+            $query->orderBy('position', 'desc'); // Default sort by position descending
+        }])->findOrFail($courseId);
         
         // If you want to ensure URL consistency (recommended)
         $expectedSlug = Str::slug($course->name);

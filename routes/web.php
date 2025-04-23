@@ -85,6 +85,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
             Route::post('/', [ModuleController::class, 'store'])->name('store');
             Route::put('/{module}', [ModuleController::class, 'update'])->name('update');
             Route::delete('/{module}', [ModuleController::class, 'destroy'])->name('destroy');
+            Route::post('/reorder', [ModuleController::class, 'reorder'])->name('reorder');
             
             // Module Content Routes
             Route::prefix('{module}/contents')->name('contents.')->group(function () {

@@ -40,7 +40,7 @@
                         </form>
                     </div>
                 </div>
-                {{-- Available course on feed, that user doesnt save already --}}
+                {{-- Available course for feed --}}
                 @include('user.component.available_course')
                 <!-- Pagination -->
                 <div class="mt-6">

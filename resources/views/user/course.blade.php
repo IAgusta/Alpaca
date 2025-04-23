@@ -22,7 +22,7 @@
                 {{-- Available Courses Section --}}
                 <div>
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-semibold">Available Courses</h3>
+                        <h3 class="text-lg font-semibold">Other Courses</h3>
                         @if($availableCourses->count() >= 12)
                             <a href="{{ route('course.feed') }}" class="text-blue-600 hover:text-blue-800">See More</a>
                         @endif

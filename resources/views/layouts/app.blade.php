@@ -33,7 +33,7 @@
             @endisset
 
             <!-- Success and Error Messages -->
-            <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+            <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-100 w-full max-w-md px-4">
                 @if(session('success'))
                     <x-input-success :messages="[session('success')]" class="mb-4" />
                 @endif

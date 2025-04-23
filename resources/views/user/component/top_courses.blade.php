@@ -17,7 +17,7 @@
                         </div>
 
                         <!-- Gradient Overlay -->
-                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent dark:to-black/70 to-white/70 z-10"></div>
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent dark:to-black/70 to-white/100 z-10"></div>
 
                         <!-- Foreground Content -->
                         <div class="relative z-20 w-full h-full px-3 lg:px-12 py-7 mt-7 max-w-8xl mx-auto flex gap-6 items-start">

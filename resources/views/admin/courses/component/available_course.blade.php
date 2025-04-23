@@ -4,7 +4,7 @@
         <div class="relative">
             <!-- Make the entire image clickable for the modal -->
             <a data-modal-target="crud-modal-module-{{ $course->id }}" data-modal-toggle="crud-modal-module-{{ $course->id }}" class="block cursor-pointer">
-                <img class="w-full h-35 object-cover rounded-t-lg" src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" alt="Course Image" style="width: 206px; height: 154px; object-fit: cover;"/>
+                <img class="w-full h-35 object-cover rounded-t-lg" loading="lazy" src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" alt="Course Image" style="width: 206px; height: 154px; object-fit: cover;"/>
                 <!-- Lock/Unlock Icon -->
                 <div class="absolute top-2 left-2">
                     @if($course->is_locked)

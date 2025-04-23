@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/js/content/editor.js',
+                'resources/js/modules/module-manager.js',
                 'resources/js/content/content-manager.js',
                 'resources/js/content/style.js',
                 'resources/js/data-user.js',

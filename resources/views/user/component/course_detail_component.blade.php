@@ -2,8 +2,8 @@
     @php
         $isUserEnrolled = $userCourses->contains('course_id', $course->id);
         
-        // Get all modules for this course
-        $modules = $course->modules;
+        // Get all modules for this course ordered by position
+        $modules = $course->modules->sortBy('position');
         
         // Get user's read modules
         $readModules = \App\Models\UserModel::where('user_id', auth()->id())
@@ -17,21 +17,18 @@
         
         if ($readModules->count() > 0) {
             if ($readModules->count() == $modules->count()) {
-                // All modules read - point to last module
+                // All modules read - point to last module by position
                 $nextModule = $modules->last();
                 $buttonText = 'Review Last Module';
             } else {
-                // Find the next unread module
-                foreach ($modules as $module) {
-                    if (!$readModules->contains($module->id)) {
-                        $nextModule = $module;
-                        $buttonText = 'Continue Reading';
-                        break;
-                    }
-                }
+                // Find the next unread module by position
+                $nextModule = $modules->first(function($module) use ($readModules) {
+                    return !$readModules->contains($module->id);
+                });
+                $buttonText = 'Continue Reading';
             }
         } else {
-            // No modules read - start with first module
+            // No modules read - start with first module by position
             $nextModule = $modules->first();
         }
     @endphp
