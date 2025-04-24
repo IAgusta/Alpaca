@@ -63,6 +63,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <x-nav-link :href="route('forum')" :active="request()->routeIs('forum')" @click="loading = true">
+                        {{ __('Forums') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -199,6 +203,12 @@
                     </x-responsive-nav-link>
                 </div>
             </div>
+
+            <!-- Forum Disscussion -->
+            <x-responsive-nav-link :href="route('forum')" :active="request()->routeIs('forum')"
+                class="block px-4 py-2 text-base font-medium" @click="loading = true">
+                {{ __('Forums') }}
+            </x-responsive-nav-link>
         </div>
     </div>
 

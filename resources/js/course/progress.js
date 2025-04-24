@@ -1,23 +1,17 @@
 // resources/js/course/progress.js
 
 export function toggleProgress(moduleId, button) {
-    const icon = button.querySelector('.visibility-icon');
     const container = button.closest('.module-container');
+    const isCurrentlyRead = container.dataset.read === 'true';
     
-    // Determine current state from the icon
-    const isRead = icon.textContent.trim() === 'visibility_off';
-    
-    // Optimistic UI update
-    icon.textContent = isRead ? 'visibility' : 'visibility_off';
+    // Update the container's data attribute
+    container.dataset.read = (!isCurrentlyRead).toString();
     
     // Update container classes
-    if (isRead) {
-        container.classList.remove("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
-        container.classList.add("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
-    } else {
-        container.classList.remove("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
-        container.classList.add("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
-    }
+    updateContainerClasses(container, !isCurrentlyRead);
+    
+    // Update the icon
+    updateVisibilityIcon(button, !isCurrentlyRead);
 
     // Send request to server
     fetch(`/module-progress/${moduleId}/toggle`, {
@@ -31,30 +25,48 @@ export function toggleProgress(moduleId, button) {
     .then(data => {
         if (!data.success) {
             // Revert if server failed
-            revertToggleState(button, isRead);
+            container.dataset.read = isCurrentlyRead.toString();
+            updateContainerClasses(container, isCurrentlyRead);
+            updateVisibilityIcon(button, isCurrentlyRead);
             console.error("Failed to update progress");
         }
         updateCourseProgressUI();
+        updateToggleAllButtonState();
     })
     .catch(error => {
         console.error("Error:", error);
-        revertToggleState(button, isRead);
+        // Revert on error
+        container.dataset.read = isCurrentlyRead.toString();
+        updateContainerClasses(container, isCurrentlyRead);
+        updateVisibilityIcon(button, isCurrentlyRead);
     });
 }
 
-function revertToggleState(button, previousState) {
-    const icon = button.querySelector('.visibility-icon');
-    const container = button.closest('.module-container');
-    
-    icon.textContent = previousState ? 'visibility_off' : 'visibility';
-    
-    if (previousState) {
-        container.classList.add("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
+function updateContainerClasses(container, isRead) {
+    if (isRead) {
         container.classList.remove("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
+        container.classList.add("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
     } else {
         container.classList.remove("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
         container.classList.add("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
     }
+}
+
+function updateVisibilityIcon(button, isRead) {
+    const existingIcon = button.querySelector('.visibility-icon');
+    const newIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    newIcon.setAttribute("class", "visibility-icon w-6 h-6");
+    newIcon.setAttribute("viewBox", "0 -960 960 960");
+    newIcon.setAttribute("fill", "currentColor");
+    
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", isRead 
+        ? "m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Z"
+        : "M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"
+    );
+    
+    newIcon.appendChild(path);
+    existingIcon.replaceWith(newIcon);
 }
 
 export function updateCourseProgressUI(completedModules = null, totalModules = null, courseCompleted = null) {
@@ -93,9 +105,14 @@ export function toggleAllModules(courseId) {
     const button = document.getElementById('toggleAllButton');
     const moduleContainers = document.querySelectorAll('.module-container');
     
-    // Determine current action from button text
-    const isMarkingAsRead = button.textContent.includes('Mark All As Read');
-    const newReadState = isMarkingAsRead; // true if marking as read, false if unread
+    // Determine current action from actual module states instead of button text
+    const totalModules = moduleContainers.length;
+    const readModules = Array.from(moduleContainers)
+        .filter(container => container.dataset.read === 'true')
+        .length;
+    
+    const isMarkingAsRead = readModules < totalModules;
+    const newReadState = isMarkingAsRead;
     
     // Optimistic UI update - change immediately
     button.disabled = true;
@@ -103,19 +120,10 @@ export function toggleAllModules(courseId) {
     
     // Update all modules visually first
     moduleContainers.forEach(container => {
-        const icon = container.querySelector('.visibility-icon');
-        
-        // Update icon
-        icon.textContent = newReadState ? 'visibility_off' : 'visibility';
-        
-        // Update container classes
-        if (newReadState) {
-            container.classList.remove("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
-            container.classList.add("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
-        } else {
-            container.classList.remove("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
-            container.classList.add("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
-        }
+        container.dataset.read = newReadState.toString();
+        updateContainerClasses(container, newReadState);
+        const button = container.querySelector('.toggle-button');
+        updateVisibilityIcon(button, newReadState);
     });
 
     // Send request to server
@@ -156,20 +164,29 @@ function revertAllModulesUI(previousState) {
     const moduleContainers = document.querySelectorAll('.module-container');
     
     moduleContainers.forEach(container => {
-        const icon = container.querySelector('.visibility-icon');
-        
-        icon.textContent = previousState ? 'visibility_off' : 'visibility';
-        
-        if (previousState) {
-            container.classList.remove("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
-            container.classList.add("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
-        } else {
-            container.classList.remove("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
-            container.classList.add("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
-        }
+        container.dataset.read = previousState.toString();
+        updateContainerClasses(container, previousState);
+        const button = container.querySelector('.toggle-button');
+        updateVisibilityIcon(button, previousState);
     });
     
     button.textContent = previousState ? 'Mark All As Unread' : 'Mark All As Read';
+}
+
+function updateToggleAllButtonState() {
+    const button = document.getElementById('toggleAllButton');
+    if (!button) return;
+
+    const moduleContainers = document.querySelectorAll('.module-container');
+    const totalModules = moduleContainers.length;
+    if (totalModules === 0) return;
+
+    const readModules = Array.from(moduleContainers)
+        .filter(container => container.dataset.read === 'true')
+        .length;
+
+    // Update button text based on current state
+    button.textContent = readModules === totalModules ? 'Mark All As Unread' : 'Mark All As Read';
 }
 
 // Initialize functions when DOM is loaded
@@ -187,4 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
             toggleAllModules(courseId);
         }
     });
+
+    // Initialize toggle all button state
+    updateToggleAllButtonState();
 });

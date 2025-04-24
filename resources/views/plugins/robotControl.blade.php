@@ -302,7 +302,7 @@
             if (method === 'wifi') {
               const ip = input.value.trim();
               if (!ip.match(/^(\d{1,3}\.){3}\d{1,3}$/)) throw new Error("Invalid IP format");
-              url = `http://${ip}/connect`;
+              url = `https://${ip}/connect`;
             } else {
               url = `/bluetooth-connect`; // Placeholder endpoint
             }

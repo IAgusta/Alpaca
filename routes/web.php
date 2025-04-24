@@ -36,6 +36,7 @@ Route::get('/documentation', function(){ return view('plugins.documentation');})
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/email/verify', function () { return view('auth.verify-email'); })->middleware('auth')->name('verification.notice');
 Route::get('/settings', function() {return view('settings');})->name('settings');
+Route::get('/forum', function(){ return view('plugins.forum');})->name('forum');
 
 Route::middleware(['auth'])->group(function () {
     // User course routes
