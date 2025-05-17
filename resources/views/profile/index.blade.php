@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('title', 'Profile - ' . config('app.name'))
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
             {{ __('Profile') }}
         </h2>
     </x-slot>
@@ -65,7 +65,7 @@
             </div>
 
             <!-- User Details Display -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 bg-white p-6 rounded-lg">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 dark:bg-gray-500 shadow p-4 rounded-lg">
                 <div class="space-y-4">
                     <div>
                         <h3 class="text-sm font-medium text-gray-500">{{ __('Username') }}</h3>

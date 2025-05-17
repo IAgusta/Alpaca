@@ -44,8 +44,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/courses/feed', [UserCourseController::class, 'feed'])->name('course.feed');
     Route::get('/courses/library', [UserCourseController::class, 'userFeed'])->name('user.course.library');
     Route::post('/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
-    Route::get('/courses/{name}/{courseId}', [UserCourseController::class, 'detail'])->name('user.course.detail');
-    Route::get('/courses/{name}/{courseId}/module/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])->name('course.module.open');
+    
+    Route::get('/{name}/{courseId}', [UserCourseController::class, 'detail'])
+        ->name('user.course.detail')
+        ->where(['courseId' => '[0-9]+', 'name' => '[a-zA-Z0-9-]+']);
+    Route::get('/{name}/{courseId}/chapter/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])
+        ->name('course.module.open')
+        ->where(['courseId' => '[0-9]+', 'moduleId' => '[0-9]+', 'name' => '[a-zA-Z0-9-]+']);
+
     Route::post('/module-progress/{moduleId}/toggle', [UserCourseController::class, 'toggle'])->name('module.progress.toggle');
     Route::post('/courses/{courseId}/toggle-all', [UserCourseController::class, 'toggleAllModules'])->name('user.course.toggleAll');
     Route::post('/courses/clear-history/{courseId}', [UserCourseController::class, 'clearHistory'])->name('user.course.clearHistory');
@@ -105,7 +111,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::get('/api/search-users', [ProfileController::class, 'search'])->name('api.users.search');
 Route::get('/api/all-users', [ProfileController::class, 'getAllUsers'])->name('api.users.all');
 
-// Move the username route to be the very last route
+// Update username route constraint to exclude numeric patterns that could match course IDs
 Route::get('/{username}', [ProfileController::class, 'show'])
     ->name('profile.show')
-    ->where('username', '^(?!dashboard$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|email$|courses-index$).*$');
+    ->where('username', '^(?!.*[0-9]+$)(?!dashboard$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$).*$');

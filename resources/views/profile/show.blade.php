@@ -27,7 +27,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
                             <!-- Name and Role -->
                             <div class="mb-2 sm:mb-0">
-                                <h1 class="text-2xl font-bold">{{ $user->name }}</h1>
+                                <h1 class="text-3xl font-bold dark:text-white">{{ $user->name }}</h1>
                                 <span class="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-xs mt-1">
                                     {{ Str::ucfirst($user->role ?? 'User') }}
                                 </span>
@@ -56,13 +56,13 @@
             <div class="lg:flex">
                 <!-- Tab List -->
                 <div class="flex overflow-x-auto lg:flex-col lg:w-48 lg:shrink-0">
-                    <div class="bg-white rounded-l-lg w-full">
+                    <div class="bg-white dark:bg-gray-600 lg:rounded-l-lg w-full shadow">
                         <ul class="flex flex-row lg:flex-col w-full text-sm font-medium text-center" 
                             id="profile-show-tab"
                             data-tabs-toggle="#profile-show-tab-content"
                             role="tablist">
-                            <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
-                                <button class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors"
+                            <li class="me-2 lg:ml-2 lg:me-0 lg:my-2" role="presentation">
+                                <button class="w-full p-3 text-start lg:rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     id="information-tab" 
                                     data-tabs-target="#information" 
                                     type="button" 
@@ -72,8 +72,8 @@
                                     Information
                                 </button>
                             </li>
-                            <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
-                                <button class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors" 
+                            <li class="me-2 lg:ml-2 lg:me-0 lg:my-2" role="presentation">
+                                <button class="w-full p-3 text-start lg:rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" 
                                     id="courses-tab" 
                                     data-tabs-target="#courses" 
                                     type="button" 
@@ -88,14 +88,14 @@
                 </div>
 
                 <!-- Tab Content -->
-                <div id="profile-show-tab-content" class="flex-grow">
-                    <div class="hidden p-4 rounded-lg bg-white dark:bg-gray-800" 
+                <div id="profile-show-tab-content" class="flex-grow mb-7">
+                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow"  
                     id="information" role="tabpanel" aria-labelledby="information-tab">
                         <!-- User Details Display -->
                         @include('profile.partials.user_information')
                     </div>
 
-                    <div class="hidden p-4 rounded-lg bg-white dark:bg-gray-800" 
+                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
                     id="courses" role="tabpanel" aria-labelledby="courses-tab">
                         <!-- Courses Section -->
                         @include('profile.partials.user_course_information')
@@ -122,6 +122,7 @@
                     const isActive = tab.getAttribute('data-tabs-target') === targetId;
                     tab.setAttribute('aria-selected', isActive);
                     tab.classList.toggle('bg-gray-50', isActive);
+                    tab.classList.toggle('dark:bg-gray-700', isActive);
                     tab.classList.toggle('text-purple-600', isActive);
                 });
 

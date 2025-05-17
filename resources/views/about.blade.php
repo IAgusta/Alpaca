@@ -1,124 +1,165 @@
 <x-landing-layout>
-    <div id="carouselExampleIndicators" class="carousel slide mt-0" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
+    <!-- Hero Page -->
+    <div class="relative isolate px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl py-20 sm:py-32 lg:py-20">
+          <div class="text-center">
+            <h1 class="text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-7xl">Learning Management System to enrich your online courses.</h1>
+            <p class="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">Our LMS website offers a seamless and interactive learning experience, allowing users to access courses, track progress, and engage with content anytime, anywhere.</p>
+            <div class="mt-10 flex items-center justify-center gap-x-6">
+              <a href="{{ route('dashboard') }}" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get started</a>
+              <a href="{{ route('about') }}" class="text-sm/6 font-semibold text-gray-900">Learn more <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
         </div>
-        <div class="carousel-inner" style="max-height: 600px;">
-            <div class="carousel-item active">
-                <img src="img/1.jpg" class="d-block w-100" alt="Slide 1" style="height: 600px; object-fit: cover;">
-                <div class="container">
-                    <div class="carousel-caption text-start">
-                    <h3>Teknologi tidak hanya sebatas penemuan</h1>
-                    <p class="opacity-75">Teknologi dapat berarti perkembangan dalam melakukan sesuatu.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="img/3.jpg" class="d-block w-100" alt="Slide 2" style="height: 600px; object-fit: cover;">
-                <div class="container">
-                    <div class="carousel-caption text-start">
-                    <h3>Tidak ada kata terlalu cepat atau terlambat dalam belajar teknologi</h1>
-                    <p class="opacity-75">Belajar teknologi membuatmu berpikir kritis dan terbuka.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="img/2.jpg" class="d-block w-100" alt="Slide 3" style="height: 600px; object-fit: cover;">
-                <div class="container">
-                    <div class="carousel-caption text-start">
-                    <h3>Gabung Sekarang.</h1>
-                    <p class="opacity-75">Bergabunglah bersama kami dan tingkatkan kemampuan dalam berteknologi</p>
-                    <p><a class="btn rounded-login-btn" href="/register"><i class="bi bi-box-arrow-in-right"></i> Coba Sekarang</a></p>
-                    </div>
-                </div>
-            </div>
+        <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+          <div class="relative left-[calc(50%+3rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
         </div>
+    </div>
+
+    <!-- Feature Section -->
+    <div class="overflow-hidden py-24 sm:py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+            <div class="lg:pt-4 lg:pr-8">
+              <div class="lg:max-w-lg">
+                <h2 class="text-base/7 font-semibold text-indigo-600">Learn faster</h2>
+                <p class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">A Better Learning Management System</p>
+                <p class="mt-6 text-lg/8 text-gray-600">Website features a fun and engaging UI, making learning an enjoyable experience for all users!</p>
+                <dl class="mt-5 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
+                  <div class="relative pl-9">
+                    <dt class="inline font-semibold text-gray-900">
+                      <svg class="absolute top-1 left-1 size-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path fill-rule="evenodd" d="M5.5 17a4.5 4.5 0 0 1-1.44-8.765 4.5 4.5 0 0 1 8.302-3.046 3.5 3.5 0 0 1 4.504 4.272A4 4 0 0 1 15 17H5.5Zm3.75-2.75a.75.75 0 0 0 1.5 0V9.66l1.95 2.1a.75.75 0 1 0 1.1-1.02l-3.25-3.5a.75.75 0 0 0-1.1 0l-3.25 3.5a.75.75 0 1 0 1.1 1.02l1.95-2.1v4.59Z" clip-rule="evenodd" />
+                      </svg>
+                      Make You'r Own Courses.
+                    </dt>
+                    <dd class="inline">With Trainer, create and manage your own courses, customizing content to provide the best learning experience for your students..</dd>
+                  </div>
+                  <div class="relative pl-9">
+                    <dt class="inline font-semibold text-gray-900">
+                      <svg class="absolute top-1 left-1 size-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z" clip-rule="evenodd" />
+                      </svg>
+                      Make it Private.
+                    </dt>
+                    <dd class="inline">Lock your courses for private classes, giving you full control over who can access your content.</dd>
+                  </div>
+                  <div class="relative pl-9">
+                    <dt class="inline font-semibold text-gray-900">
+                      <svg class="absolute top-1 left-1 size-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                        <path d="M4.632 3.533A2 2 0 0 1 6.577 2h6.846a2 2 0 0 1 1.945 1.533l1.976 8.234A3.489 3.489 0 0 0 16 11.5H4c-.476 0-.93.095-1.344.267l1.976-8.234Z" />
+                        <path fill-rule="evenodd" d="M4 13a2 2 0 1 0 0 4h12a2 2 0 1 0 0-4H4Zm11.24 2a.75.75 0 0 1 .75-.75H16a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75h-.01a.75.75 0 0 1-.75-.75V15Zm-2.25-.75a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75H13a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75h-.01Z" clip-rule="evenodd" />
+                      </svg>
+                      Server Integrated.
+                    </dt>
+                    <dd class="inline">Our courses are securely saved with server integration, ensuring seamless access and progress tracking anytime, anywhere.</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+            <img src="img/course-selection-user.png" alt="course screenshot" class="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0" width="2432" height="1442">
+          </div>
+        </div>
+    </div>
+
+    @include('partials.top-courses')
+
+    <!-- Bento Grid -->
+    <div class="py-24 sm:py-32">
+      <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
+        <h2 class="text-center text-base/7 font-semibold text-indigo-600">Alpaca Features</h2>
+        <p class="mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl">We offer you with much features</p>
+    
+        <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-1">
+    
+          <!-- First Column -->
+          <div class="flex flex-col gap-4">
+            <!-- Many Courses -->
+            <div class="relative">
+              <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem]"></div>
+              <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
+                <div class="px-8 pt-8 sm:px-10 sm:pt-10">
+                  <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Many Courses</p>
+                  <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">We provide a variety of free courses.</p>
+                </div>
+                <div class="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
+                  <img class="w-full max-lg:max-w-xs" src="img/course_selection.png" alt="courses-image">
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-t-[2rem]"></div>
+            </div>
+    
+            <!-- Integrated Exercise -->
+            <div class="relative">
+              <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem]"></div>
+              <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
+                <div class="px-8 pt-8 sm:px-10 sm:pt-10">
+                  <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Integrated Exercise</p>
+                  <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Offers integrated exercises to enhance learning.</p>
+                </div>
+                <div class="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
+                  <img class="w-full max-lg:max-w-xs" src="img/exercise-form-trainer.png" alt="exercise-image">
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-t-[2rem]"></div>
+            </div>
+          </div>
+    
+          <!-- Mobile Friendly Center -->
+          <div class="flex items-center justify-center">
+            <div class="relative w-full">
+              <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-[2rem]"></div>
+              <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-[calc(2rem+1px)]">
+                <div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0">
+                  <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Mobile friendly</p>
+                  <p class="my-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">
+                    Our website is fully mobile-friendly, ensuring a smooth and responsive experience on any device.
+                  </p>
+                </div>
+                <div class="relative min-h-fit w-full flex justify-center items-center">
+                  <div class="relative w-full max-w-xs overflow-hidden rounded-t-lg border border-gray-700 bg-gray-900 shadow-2xl">
+                    <img class="w-full h-full object-cover object-top" src="img/mobile-display.png" alt="mobile-display">
+                  </div>
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-[2rem]"></div>
+            </div>
+          </div>
+    
+          <!-- Right Column -->
+          <div class="flex flex-col gap-4">
+            <!-- User Finding -->
+            <div class="relative">
+              <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem]"></div>
+              <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
+                <div class="px-8 pt-8 sm:px-10 sm:pt-10">
+                  <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">User Finding</p>
+                  <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Find the Correct Trainer or User Easily.</p>
+                </div>
+                <div class="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
+                  <img class="w-full max-lg:max-w-xs" src="img/find_user.png" alt="user-finding-image">
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-t-[2rem]"></div>
+            </div>
+    
+            <!-- Profile Custom -->
+            <div class="relative">
+              <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-[2rem]"></div>
+              <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
+                <div class="px-8 pt-8 sm:px-10 sm:pt-10">
+                  <p class="mt-2 text-lg font-medium tracking-tight text-gray-950 max-lg:text-center">Profile Custom</p>
+                  <p class="mt-2 max-w-lg text-sm/6 text-gray-600 max-lg:text-center">Have features for customizing your profile.</p>
+                </div>
+                <div class="flex flex-1 items-center justify-center px-8 max-lg:pt-10 max-lg:pb-12 sm:px-10 lg:pb-2">
+                  <img class="w-full max-lg:max-w-xs" src="img/profile_management.png" alt="profile-image">
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-px rounded-lg ring-1 shadow-sm ring-black/5 max-lg:rounded-t-[2rem]"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     
-    <div id="about-us" class="container marketing mt-5">
-        <div class="row">
-            <div class="col-lg-4">  
-                <h2>Alpha Path Academy</h2>
-                <p>Di era digital yang berkembang pesat, teknologi bukan lagi pilihan—melainkan kebutuhan...</p>
-                <a href="#introduction" class="btn rounded-login-btn">Baca Selengkapnya</a>
-            </div>
-            <div class="col-lg-4">
-                <h2>Tim Kami</h2>
-                <p>Kami adalah tim yang terdiri dari pendidik dan mahasiswa teknologi dari Putera Indonesia YPTK Padang...</p>
-                <a href="#our-team" class="btn rounded-login-btn">Baca Selengkapnya</a>
-            </div>
-            <div class="col-lg-4">
-                <h2>Pengalaman Kami</h2>
-                <p>Kami bukan hanya tim pengembang dan pendidik, tetapi juga telah memiliki pengalaman langsung dalam mengajar teknologi...</p>
-                <a href="#experiences" class="btn rounded-login-btn">Baca Selengkapnya</a>
-            </div>
-        </div>
-        <hr class="featurette-divider">
-        <div class="row featurette">
-            <div id="introduction" class="col-md-7">
-                <h2>Welcome to Alpha Path Academy</h2>
-                <p>Alpha Path Academy atau disingkat Alpaca, merupakan sebuah website pembelajaran yang memiliki berbagai macam jenis kursus dan modul di dalamnya.</p><p> Di Alpha Path Academy, kami percaya bahwa setiap anak harus memiliki kesempatan untuk mengembangkan keterampilan digital sejak usia dini. Platform kami dirancang khusus untuk memperkenalkan dunia teknologi kepada anak-anak dengan cara yang menyenangkan dan interaktif. 
-                </p><p>Kami mengajarkan dasar-dasar pemrograman, berpikir logis, dan pemecahan masalah dengan metode yang mudah dipahami oleh anak-anak. Dengan cara ini, kami membantu mereka tidak hanya untuk masa depan di bidang teknologi, tetapi juga dalam kehidupan sehari-hari yang semakin bergantung pada literasi digital. Dengan pelajaran interaktif, proyek langsung, dan kurikulum bertahap, kami membangun fondasi yang kuat agar anak-anak dapat menjelajahi, bereksperimen, dan berkembang di dunia teknologi.</p>
-            </div>
-        </div>
-        <hr class="featurette-divider">
-
-        <div id="our-team" class="row featurette">
-        <p>Mari Kenali AT Academy Team Lebih jauh</p>
-            <div class="col-md-7">
-                <h3>Ikraam Agusta</h3>
-                <p>Pengembang dan pembuat website Alpha Path Academy.</p>
-                <p>Mahasiswa tingkat akhir yang memiliki minat dalam dunia teknologi dan berkontribusi dalam pengembangan platform edukasi berbasis teknologi.</p>
-            </div>
-            <div class="col-md-5 text-center">
-                <img src="img/image(ikraam.).jpg" class="img-fluid rounded shadow p-1" alt="Ikraam Agusta" style="max-width: 250px; max-height: 250px;">
-            </div>
-        </div>
-        <hr class="featurette-divider">
-        <div class="row featurette">
-            <div class="col-md-7 order-md-2">
-                <h3>Muhammad Habil Alfarisy</h3>
-                <p>Pencetus nama dan ide dari Alpha Team.</p>
-                <p>Memiliki visi dalam membangun platform edukasi yang inovatif dan membantu anak-anak dalam menghadapi dunia teknologi.</p>
-            </div>
-            <div class="col-md-5 order-md-1 text-center">
-                <img src="img/image(habil.).jpg" class="img-fluid rounded shadow p-1" alt="Muhammad Habil Alfarisy" style="max-width: 250px; max-height: 250px;">
-            </div>
-        </div>
-        <hr class="featurette-divider">
-        <div class="row featurette">
-            <div class="col-md-7">
-                <h3>Imam Rahmad</h3>
-                <p>Salah satu anggota tim yang berperan dalam penyampaian materi pembelajaran. Merupakan seorang keturunan cina-pariaman yang sangat mendedikasikan dirinya untuk menjadi seorang MC Arsip Biru. Agar bisa mengajak kencan seluruh murid yang ada di SMU Ganeha terutama Shiroko. Beliau juga memiliki Waifu kapal yang sangat dicintainya. Bahkan beliau ingin pergi ke Isekai dan bertemu dengan para waifunya.</p>
-            </div>
-            <div class="col-md-5 text-center">
-                <img src="img/image(imam.).jpg" class="img-fluid rounded shadow p-1" alt="Imam Rahmad" style="max-width: 250px; max-height: 250px;">
-            </div>
-        </div>
-        <hr class="featurette-divider">
-        <div class="row featurette">
-            <div class="col-md-7 order-md-2">
-                <h3>Billy Hendrik, S.Kom, M.Kom, Ph.D</h3>
-                <p>Seorang mentor dan pendidik berpengalaman dari Universitas Putera Indonesia YPTK Padang yang membimbing tim dalam pengembangan platform edukasi.</p>
-            </div>
-            <div class="col-md-5 order-md-1 text-center">
-                <img src="img/Image(pak billy.).jpg" class="img-fluid rounded shadow p-1" alt="Billy Hendrik" style="max-width: 250px; max-height: 250px;">
-            </div>
-        </div>
-        <hr class="featurette-divider">
-        <div id="experiences" class="row featurette">
-            <h2>Pengalaman Kami dalam Mengajar</h2>    
-            <div class="col-md-7">
-                <p>Mengajarkan teknologi kepada anak-anak adalah pengalaman yang luar biasa bagi kami. Di SD Adzkia 1 Padang, kami memperkenalkan dunia robotika, Arduino, ESP32, Internet of Things (IoT), dan web server kepada para siswa sejak dini. Dengan metode yang menyenangkan dan interaktif, kami membuktikan bahwa anak-anak mampu memahami konsep teknologi yang sering dianggap sulit, asalkan diajarkan dengan cara yang tepat.</p>
-                <p>Kami memulai dengan dasar-dasar robotika, di mana siswa belajar tentang komponen robot dan cara mengontrolnya. Dengan menggunakan Arduino dan ESP32, mereka mulai memahami bagaimana perangkat keras dan perangkat lunak bekerja bersama untuk menciptakan sistem yang cerdas. Kami juga mengenalkan konsep Internet of Things (IoT), yang memungkinkan mereka menghubungkan perangkat ke internet untuk berbagai keperluan, seperti mengontrol robot dari jarak jauh atau mengumpulkan data sensor secara real-time<p>
-                <p>Melihat antusiasme dan rasa ingin tahu mereka adalah kepuasan tersendiri bagi kami. Pengalaman ini semakin memperkuat komitmen kami untuk terus mengembangkan metode pembelajaran teknologi yang ramah anak.</p>
-                <p>Ayo Bergabung bersama Kami!</p>
-            </div>
-            <div class="col-md-5 text-center">
-                <img src="img/joinus.jpg" class="img-fluid rounded shadow p-1" alt="our experiences" style="max-width: 500px; max-height: 350px;">
-            </div>
-        </div>
-    </div>
 </x-landing-layout>

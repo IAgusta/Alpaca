@@ -202,7 +202,7 @@ class ProfileController extends Controller
     
         $createdCourses = null;
         if (in_array($user->role, ['admin', 'trainer', 'owner'])) {
-            $createdCourses = Course::where('author', $user->id)
+            $createdCourses = Course::where('author', $user->id)->where('name', 'not like', '%test%')
                 ->with(['modules', 'authorUser'])
                 ->orderBy('popularity', 'desc')
                 ->paginate(10)

@@ -1,4 +1,4 @@
-<nav x-data="{ open: false, pluginsOpen: false, loading: false }" class="bg-white border-b border-gray-100 fixed top-0 left-0 w-full z-30">
+<nav x-data="{ open: false, pluginsOpen: false, loading: false }" class="bg-white dark:bg-gray-800 dark:border-gray-900 border-b border-gray-100 fixed top-0 left-0 w-full z-30">
     <!-- Loading Bar -->
     <div x-show="loading" class="fixed top-0 left-0 w-full h-1 bg-blue-500 z-50" x-transition></div>
 
@@ -20,7 +20,7 @@
                     <a href="{{ auth()->check() ? route('dashboard') : route('home') }}"
                         class="flex items-center space-x-2" @click="loading = true">
                          <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                         <span class="text-gray-800 font-semibold">Alpaca</span>
+                         <span class="text-gray-800 dark:text-white font-semibold">Alpaca</span>
                      </a>
                 </div>
 
@@ -86,7 +86,7 @@
                     alt="User dropdown">
 
                     <!-- Dropdown menu -->
-                    <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
+                    <div id="userDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
                         <!-- Banner and Profile Image Wrapper -->
                         <a href="{{ route('profile.index') }}" class="flex flex-col items-center relative">
                             <div class="relative w-full h-16">
@@ -94,7 +94,7 @@
                                 <img id="banner" 
                                 src="{{ Auth::user()->details->image ? asset('storage/' . (json_decode(Auth::user()->details->image, true)['banner'] ?? '')) : '' }}" 
                                 onerror="this.src='{{ asset('storage/profiles/patterns.png') }}'" 
-                                        class="w-full h-full object-cover" 
+                                        class="w-full h-full object-cover rounded-t-lg" 
                                         alt="Banner Image">
 
                                 <!-- Dark Overlay (30-40% opacity) -->

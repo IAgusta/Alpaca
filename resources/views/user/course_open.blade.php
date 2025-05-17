@@ -39,7 +39,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 h-screen overflow-hidden">
+        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8 overflow-hidden">
             <div class="lg:grid lg:grid-cols-5 gap-4 h-full">
                 <!-- Left Sidebar -->
                 <div class="hidden lg:block col-span-1 rounded-lg p-4 h-full overflow-y-auto">
@@ -72,8 +72,8 @@
                 </div>
 
                 <!-- Content Area -->
-                <div class="col-span-3 p-2 bg-white overflow-hidden shadow-sm sm:rounded-lg h-full flex">
-                    <div class="w-full max-w-6xl p-4 overflow-y-auto" id="main-content">
+                <div class="col-span-3 p-2 bg-white shadow-sm sm:rounded-lg h-full flex">
+                    <div class="w-full max-w-6xl p-4 h-auto" id="main-content">
                         <div class="module-content" data-module-id="{{ $module->id }}">
                             <h1 class="text-2xl font-bold mt-4 flex items-center">
                                 {{ $module->title }}

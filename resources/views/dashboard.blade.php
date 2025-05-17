@@ -8,7 +8,7 @@
     <div class="py-6">
         <!-- Constrained Content -->
         <div class="max-w-8xl mx-auto px-3 lg:px-8">
-            <div class="bg-white overflow-hidden">
+            <div class=" overflow-hidden">
                 {{-- Latest Update Courses --}}
                 <div class="my-7 lg:px-8">
                     @include('user.component.latest_course')

@@ -64,7 +64,7 @@
     <!-- Static Title -->
     <div class="absolute lg:px-8 w-full top-3 z-10">
         <div class="max-w-8xl mx-auto px-3">
-            <h1 class="text-xl lg:text-2xl font-bold text-black dark:text-white">Popular New Courses</h1>
+            <h1 class="text-xl lg:text-2xl font-bold text-black dark:text-white">Popular New Titles</h1>
         </div>
     </div>
 

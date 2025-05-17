@@ -1,10 +1,17 @@
 <div class="space-y-6">
     @php
         $user = auth()->user();
-        $url = in_array($user->role, ['user', 'trainer'])
-            ? route('course.feed', ['search' => $user->name])
-            : route('admin.courses.index', ['search' => $user->name]);
+
+        if ($user) {
+            $url = in_array($user->role, ['user', 'trainer'])
+                ? route('course.feed', ['search' => $user->name])
+                : route('admin.courses.index', ['search' => $user->name]);
+        } else {
+            // fallback URL for guests
+            $url = route('course.feed'); // or route('login') or any default
+        }
     @endphp
+
 
     <div class="flex justify-between">
         <h3 class="text-2xl font-bold text-gray-900">Created Courses</h3>

@@ -1,9 +1,9 @@
 <div class="flex justify-between">
-    <h3 class="text-2xl font-bold text-gray-900">
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
     Your Progress</h3>
     <a href="{{ route('user.course.library') }}">
         <span class="material-symbols-outlined">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="dark:fill-white">
                 <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
             </svg>
         </span>

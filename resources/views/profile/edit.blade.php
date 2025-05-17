@@ -7,7 +7,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-7xl min-h-screen mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-7xl min-h-screen mx-auto sm:px-6 lg:px-8 space-y-6 ">
             <!-- Tabs Container -->
             <div class="lg:flex p-3">
                 <!-- Mobile Dropdown Menu -->
@@ -46,32 +46,32 @@
 
                 <!-- Desktop Vertical Tabs -->
                 <div class="hidden lg:block w-52 shrink-0">
-                    <div class="bg-white rounded-l-lg">
+                    <div class="bg-white dark:bg-gray-600 rounded-l-lg w-full shadow">
                         <ul class="flex flex-col w-full text-sm font-medium text-center" role="tablist">
-                            <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
+                            <li class="me-2 lg:ml-2 lg:me-0 lg:my-2" role="presentation">
                                 <button data-tabs-target="#update-profile" 
-                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors"
+                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     role="tab">Update Profile</button>
                             </li>
-                            <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
+                            <li class="me-2 lg:ml-2 lg:me-0 lg:mb-2" role="presentation">
                                 <button data-tabs-target="#update-profile-pictures"
-                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors"
+                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     role="tab">Change Pictures</button>
                             </li>
-                            <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
+                            <li class="me-2 lg:ml-2 lg:me-0 lg:mb-2" role="presentation">
                                 <button data-tabs-target="#update-link-account"
-                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors"
+                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     role="tab">Social Media Links</button>
                             </li>
-                            <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
+                            <li class="me-2 lg:ml-2 lg:me-0 lg:mb-2" role="presentation">
                                 <button data-tabs-target="#update-password"
-                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors"
+                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     role="tab">Change Password</button>
                             </li>
                             @unless(auth()->user()->role === 'owner')
-                                <li class="me-2 lg:me-0 lg:mb-2" role="presentation">
+                                <li class="me-2 lg:ml-2 lg:me-0" role="presentation">
                                     <button data-tabs-target="#delete-account"
-                                        class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 transition-colors"
+                                        class="w-full p-3 text-start rounded-bl-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                         role="tab">Delete Account</button>
                                 </li>
                             @endunless
@@ -81,24 +81,24 @@
 
                 <!-- Tab Content -->
                 <div id="profile-tab-content" class="flex-grow">
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800" 
+                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
                     id="update-profile" role="tabpanel" aria-labelledby="update-profile-tab">
                         @include('profile.partials.update-profile-information-form')
-                    </div>
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800" 
+                    </div> 
+                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
                     id="update-profile-pictures" role="tabpanel" aria-labelledby="update-profile-pictures-tab">
                         @include('profile.partials.update-profile-pictures')
                     </div>
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800" 
+                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
                     id="update-link-account" role="tabpanel" aria-labelledby="update-link-account">
                         @include('profile.partials.social-media-profile-information-modal')
                     </div>
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800" 
+                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
                     id="update-password" role="tabpanel" aria-labelledby="update-password-tab">
                         @include('profile.partials.update-password-form')
                     </div>
                     @unless(auth()->user()->role === 'owner')
-                        <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800" 
+                        <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
                         id="delete-account" role="tabpanel" aria-labelledby="delete-account-tab">
                             @include('profile.partials.delete-user-form')
                         </div>

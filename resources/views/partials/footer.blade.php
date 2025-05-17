@@ -11,13 +11,13 @@
                   <a href="{{ route('user.course') }}" class=" hover:underline">Kelas Online</a>
               </li>
               <li class="mb-4">
-                  <a href="{{ route('plugins.search-users') }}" class="hover:underline">Cari Murid</a>
+                  <a href="{{ route('plugins.search-users') }}" class="hover:underline">Cari Pengguna</a>
               </li>
               <li class="mb-4">
                   <a href="{{ route('plugins.robotControl') }}" class="hover:underline">Kontrol Robot</a>
               </li>
               <li class="mb-4">
-                  <a href="{{ route('prices') }}" class="hover:underline">Langganan</a>
+                  <a href="{{ route('prices') }}" class="hover:underline">Fitur dan Harga</a>
               </li>
           </ul>
         </div>

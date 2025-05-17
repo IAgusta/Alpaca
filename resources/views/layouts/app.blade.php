@@ -7,16 +7,18 @@
 
         <title>@yield('title', config('app.name', 'Laravel'))</title>
 
+        <script src="resources/js/settings/setting.js"></script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-        <link rel="stylesheet" href="resources/css/styles.css">
+        <link rel="stylesheet" href="/resources/css/styles.css">
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/settings/appearance.js'])
     </head>
-    <body class="font-sans antialiased pt-16"> <!-- Add pt-16 to offset the height of the fixed navigation bar -->
+    <body class="font-sans antialiased pt-16 bg-white dark:bg-gray-900">
         <div class="min-h-screen flex flex-col">
         @auth
             @include('layouts.navigation')
@@ -25,8 +27,8 @@
         @endauth
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-8xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="bg-white dark:text-white dark:bg-gray-800 shadow">
+                    <div class="max-w-8xl dark:text-white mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>

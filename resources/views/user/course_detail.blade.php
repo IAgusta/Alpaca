@@ -15,7 +15,7 @@
         </div>
 
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden">
+            <div class=" overflow-hidden">
                 <!-- Top section with background image -->
                 <div class="relative">
                     <!-- Content -->
