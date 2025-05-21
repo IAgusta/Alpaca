@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('robot', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->unique()->constrained()->onDelete('cascade');
+            $table->string('api_key')->unique()->nullable();
+            $table->timestamp('api_key_last_reset')->nullable();
             $table->string('command')->nullable();
             $table->boolean('status')->default(0);
             $table->timestamps();

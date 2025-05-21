@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
+use App\Models\robot;
 
 class RobotController extends Controller
 {
@@ -103,5 +105,32 @@ class RobotController extends Controller
 
         // Assuming the speed is updated successfully
         return response()->json(['success' => true]);
+    }
+
+    public function generateApiKey(Request $request)
+    {
+        $user = Auth::user();
+        $robot = robot::firstOrCreate(['user_id' => $user->id]);
+        
+        if (!$robot->canResetApiKey()) {
+            return response()->json([
+                'error' => 'You can only reset your API key once per week'
+            ], 429);
+        }
+
+        $apiKey = $robot->generateApiKey();
+        return response()->json(['api_key' => $apiKey]);
+    }
+
+    public function getApiKey()
+    {
+        $user = Auth::user();
+        $robot = robot::firstOrCreate(['user_id' => $user->id]);
+
+        return response()->json([
+            'api_key' => $robot->api_key,
+            'can_reset' => $robot->canResetApiKey(),
+            'next_reset' => $robot->api_key_last_reset?->addWeek()
+        ]);
     }
 }
