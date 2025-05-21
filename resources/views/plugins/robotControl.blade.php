@@ -199,7 +199,8 @@
     @vite(['resources/js/robot-control.js'])
     <script>
         let currentConnection = null;
-        
+        let ws = null;
+
         window.addEventListener("DOMContentLoaded", () => {
           ['wifi', 'bluetooth'].forEach(type => {
             document.getElementById(`${type}-overlay`).classList.add('hidden');
@@ -208,6 +209,34 @@
             document.getElementById(`${type}-disconnect`).classList.add('hidden');
           });
         });
+
+        function initWebSocket(ip) {
+            ws = new WebSocket(`ws://${ip}:81`);
+            
+            ws.onopen = function() {
+                console.log('Connected to ESP32 WebSocket');
+            };
+            
+            ws.onmessage = function(evt) {
+                const data = JSON.parse(evt.data);
+                handleRobotResponse(data);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket connection closed');
+                setTimeout(function() {
+                    initWebSocket(ip);
+                }, 2000);
+            };
+        }
+
+        function handleRobotResponse(data) {
+            if (data.type === 'sensor') {
+                updateSensorDisplay(data);
+            } else if (data.type === 'status') {
+                updateRobotStatus(data);
+            }
+        }
         
         function expandCard(type) {
           const card = document.getElementById(`${type}-card`);
@@ -263,6 +292,10 @@
               disconnectBtn.classList.remove('hidden');
               if (input) input.style.display = 'none';
               currentConnection = method;
+
+              if (method === 'wifi' && res.ok) {
+                  initWebSocket(input.value);
+              }
         
               // Disable other card
               const other = method === 'wifi' ? 'bluetooth' : 'wifi';

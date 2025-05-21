@@ -23,7 +23,7 @@ Route::get('/robot/connect', [RobotController::class, 'connect']);
 
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');
 Route::get('/', [LandingPageController::class, 'index'])->name('home');
-Route::get('/about', function () { return view('about'); })->name('about');
+Route::get('/about', [LandingPageController::class, 'index'])->name('about');
 Route::get('/contact', function () { return view('contact');})->name('contact');
 Route::get('/price', function () { return view('prices');})->name('prices');
 Route::get('/faq', function () { return view('faqs');})->name('faq');

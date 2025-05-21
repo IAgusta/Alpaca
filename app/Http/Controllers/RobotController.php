@@ -28,12 +28,42 @@ class RobotController extends Controller
     public function sendCommand($command, Request $request)
     {
         $ip = $request->query('ip');
+        
+        if (!$ip) {
+            return response()->json(['error' => 'IP not provided'], 400);
+        }
 
-        // Implement the logic to send the command to the ESP32
-        // For example, you can send an HTTP request to the ESP32
+        try {
+            $response = Http::get("http://$ip/command/$command");
+            return response()->json([
+                'success' => true,
+                'esp32_response' => $response->body()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
-        // Assuming the command is sent successfully
-        return response()->json(['success' => true]);
+    public function handleWebSocket(Request $request)
+    {
+        $esp32_ip = $this->getESP32IP();
+        $command = $request->input('command');
+        
+        if (!$esp32_ip) {
+            return response()->json(['error' => 'ESP32 not connected'], 400);
+        }
+
+        try {
+            $response = Http::get("http://$esp32_ip/ws-command", [
+                'command' => $command
+            ]);
+            return response()->json(['success' => true, 'data' => $response->json()]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function setSpeed(Request $request)

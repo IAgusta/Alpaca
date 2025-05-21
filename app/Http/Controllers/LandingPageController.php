@@ -20,5 +20,6 @@ class LandingPageController extends Controller
         });
         
         return view('welcome', compact('favoriteCourses'));
+        return view('about', compact('favoriteCourses'));
     }
 }
