@@ -20,11 +20,21 @@ class DashboardController extends Controller
             ->pluck('course_id');
 
         $topCourses = Cache::remember('top_courses', now()->addHours(12), function () {
+            $recentCourses = Course::whereRaw("LOWER(name) NOT LIKE '%test%'")
+            ->where('created_at', '>=', now()->subDays(30))
+            ->orderBy('popularity', 'desc')
+            ->take(10)
+            ->get();
+
+            // If no recent courses, fallback to all courses
+            if ($recentCourses->isEmpty()) {
             return Course::whereRaw("LOWER(name) NOT LIKE '%test%'")
-                ->where('created_at', '>=', now()->subDays(90))
                 ->orderBy('popularity', 'desc')
                 ->take(10)
                 ->get();
+            }
+
+            return $recentCourses;
         });
         
         $latestCourses = Cache::remember('latest_courses', now()->addMinutes(1), function () {

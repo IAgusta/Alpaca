@@ -2,13 +2,13 @@
   <div class="mx-auto w-full max-w-screen-xl">
     <div class="grid grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-5">
         <div class="flex items-center justify-center">
-            <img src="img/logo.png" class="max-w-full h-auto invert" alt="logo-application">
+            <img src="img/logo.png" class="max-w-full h-auto invert dark:invert-0" alt="logo-application">
         </div>
         <div>
           <h2 class="mb-4 text-sm font-semibold text-gray-900 uppercase dark:text-white">Product</h2>
           <ul class="text-gray-500 dark:text-gray-400 font-medium">
               <li class="mb-4">
-                  <a href="{{ route('user.course') }}" class=" hover:underline">Kelas Online</a>
+                  <a href="{{ route('course.feed') }}" class=" hover:underline">Kelas Online</a>
               </li>
               <li class="mb-4">
                   <a href="{{ route('plugins.search-users') }}" class="hover:underline">Cari Pengguna</a>

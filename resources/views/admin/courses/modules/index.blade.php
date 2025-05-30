@@ -33,23 +33,23 @@
                         <div class="flex gap-2">
                             <!-- Desktop buttons (visible on lg and above) -->
                             <div class="hidden lg:flex justify-center gap-2">
-                                <a data-modal-target="crud-modal-module-edit-{{ $module->id }}" data-modal-toggle="crud-modal-module-edit-{{ $module->id }}">
-                                    <x-primary-button>
-                                        {{ __('Ubah') }}
-                                    </x-primary-button>
-                                </a>
-                        
                                 <a href="{{ route('admin.courses.modules.contents.index', ['course' => $course->id, 'module' => $module->id]) }}">
                                     <x-primary-button>
-                                        {{ __('Atur') }}
+                                        {{ __('Open') }}
                                     </x-primary-button>
                                 </a>
-                        
+                            
+                                <a data-modal-target="crud-modal-module-edit-{{ $module->id }}" data-modal-toggle="crud-modal-module-edit-{{ $module->id }}">
+                                    <x-primary-button>
+                                        {{ __('Edit') }}
+                                    </x-primary-button>
+                                </a>
+                                                
                                 <x-danger-button
                                     x-data=""
                                     x-on:click.prevent="$dispatch('open-modal', 'confirm-module-deletion-{{ $module->id }}')"
                                 >
-                                    {{ __('Hapus') }}
+                                    {{ __('Delete') }}
                                 </x-danger-button>
                             </div>
                         
