@@ -16,13 +16,15 @@
 
                 <div class="lg:flex my-7 gap-7 lg:px-8">
                     {{-- User Courses --}}
-                    <div class="lg:w-3/4 my-7">
-                        @if ($user->role != 'user')
-                            @include('admin.admin')
-                        @else
-                            @include('user.component.dashboard_user_course')
-                        @endif
-                    </div>
+                    @if (Auth::check())
+                        <div class="lg:w-3/4 my-7">
+                            @if ($user->role != 'user')
+                                @include('admin.admin')
+                            @else
+                                @include('user.component.dashboard_user_course')
+                            @endif
+                        </div>
+                    @endif
 
                     {{-- Shortcut/Admin Panel --}}
                     <div class="lg:w-1/4 my-7">

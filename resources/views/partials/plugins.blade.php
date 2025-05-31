@@ -31,35 +31,45 @@
                 </div>
             </a>
 
-            @if (Auth::user()->role != 'user')
-                <!-- Course Management -->
-                <a href="{{ route('admin.courses.index') }}" class="group relative w-28 h-28 rounded-xl shadow-md overflow-hidden bg-gradient-to-br from-blue-100 to-blue-300 hover:from-blue-300 hover:to-blue-500 transition duration-300 transform hover:scale-105">
-                    <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-800" viewBox="0 -960 960 960" fill="currentColor">
-                            <path d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/>
-                        </svg>
-                    </div>
-
-                    <!-- Text (Hidden by default, appears centered on hover) -->
-                    <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        Course
-                    </div>
-                </a>
-            @else
-                {{-- User Course --}}
-                <a href="{{ route('user.course') }}" class="group relative w-28 h-28 rounded-xl shadow-md overflow-hidden bg-gradient-to-br from-blue-100 to-blue-300 hover:from-blue-300 hover:to-blue-500 transition duration-300 transform hover:scale-105">
+            @guest
+                {{-- Guest Course Feed --}}
+                <a href="{{ route('course.feed') }}" class="group relative w-28 h-28 rounded-xl shadow-md overflow-hidden bg-gradient-to-br from-blue-100 to-blue-300 hover:from-blue-300 hover:to-blue-500 transition duration-300 transform hover:scale-105">
                     <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-800" viewBox="0 -960 960 960" fill="currentColor">
                             <path d="M320-320h480v-480h-80v280l-100-60-100 60v-280H320v480Zm0 80q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm360-720h200-200Zm-200 0h480-480Z"/>
                         </svg>
                     </div>
-
-                    <!-- Text (Hidden by default, appears centered on hover) -->
                     <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        Course
+                        Course Feed
                     </div>
                 </a>
-            @endif
+            @else
+                @if (Auth::user()->role != 'user')
+                    <!-- Course Management -->
+                    <a href="{{ route('admin.courses.index') }}" class="group relative w-28 h-28 rounded-xl shadow-md overflow-hidden bg-gradient-to-br from-blue-100 to-blue-300 hover:from-blue-300 hover:to-blue-500 transition duration-300 transform hover:scale-105">
+                        <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-800" viewBox="0 -960 960 960" fill="currentColor">
+                                <path d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/>
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Course
+                        </div>
+                    </a>
+                @else
+                    {{-- User Course --}}
+                    <a href="{{ route('user.course') }}" class="group relative w-28 h-28 rounded-xl shadow-md overflow-hidden bg-gradient-to-br from-blue-100 to-blue-300 hover:from-blue-300 hover:to-blue-500 transition duration-300 transform hover:scale-105">
+                        <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-800" viewBox="0 -960 960 960" fill="currentColor">
+                                <path d="M320-320h480v-480h-80v280l-100-60-100 60v-280H320v480Zm0 80q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm360-720h200-200Zm-200 0h480-480Z"/>
+                            </svg>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            Course
+                        </div>
+                    </a>
+                @endif
+            @endguest
         </div>
     </div>
 </div>   

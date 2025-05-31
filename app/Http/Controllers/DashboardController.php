@@ -15,9 +15,8 @@ class DashboardController extends Controller
         $user = Auth::user();
         $userId = Auth::id();
         
-        // Get saved course IDs for the user
-        $userSavedCourses = UserCourse::where('user_id', $userId)
-            ->pluck('course_id');
+        // Get saved course IDs for authenticated users only
+        $userSavedCourses = $user ? UserCourse::where('user_id', $userId)->pluck('course_id') : collect([]);
 
         $topCourses = Cache::remember('top_courses', now()->addHours(12), function () {
             $recentCourses = Course::whereRaw("LOWER(name) NOT LIKE '%test%'")
@@ -47,11 +46,12 @@ class DashboardController extends Controller
                 ->get();
         });
 
-        $userCourses = UserCourse::where('user_id', $userId)
-        ->whereHas('course', function ($query) {
-            // Removed the id != 1 condition
-            $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
-        })->with('course')->take(4)->get();
+        // Only get user courses if authenticated
+        $userCourses = $user ? UserCourse::where('user_id', $userId)
+            ->whereHas('course', function ($query) {
+                $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
+            })->with('course')->take(4)->get()
+            : collect([]);
 
         return view('dashboard', compact('user', 'topCourses', 'latestCourses', 'userCourses', 'userSavedCourses'));
     }
