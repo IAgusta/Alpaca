@@ -1,11 +1,9 @@
 <div class="space-y-6">
     @php
-        $user = auth()->user();
-
-        if ($user) {
+        if (isset($user)) {
             $url = in_array($user->role, ['user', 'trainer'])
-                ? route('course.feed', ['search' => $user->name])
-                : route('admin.courses.index', ['search' => $user->name]);
+                ?  route('admin.courses.index', ['search' => $user->name])
+                : route('course.feed', ['search' => $user->name]);
         } else {
             // fallback URL for guests
             $url = route('course.feed'); // or route('login') or any default

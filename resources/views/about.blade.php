@@ -1,4 +1,5 @@
 <x-landing-layout>
+  @section('title', 'About Us - ' . config('app.name'))
     <!-- Hero Page -->
     <div class="relative isolate px-6 lg:px-8">
         <div class="mx-auto max-w-2xl py-20 sm:py-32 lg:py-20">

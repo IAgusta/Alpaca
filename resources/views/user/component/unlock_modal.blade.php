@@ -21,12 +21,12 @@
                         <div class="flex my-2">
                             <x-text-input id="lock_password" class="block mt-1 w-full" type="password" name="lock_password" required />
                             <x-input-error :messages="$errors->get('lock_password')" class="mt-2" />
-                            <button class="ml-2 px-4 py-2 rounded-lg flex items-center bg-orange-400 hover:bg-orange-500" type="submit">
-                                <span class="material-symbols-outlined">lock_open</span>
+                            <button class="ml-2 mt-1 px-4 py-2 rounded-lg flex items-center bg-orange-400 hover:bg-orange-500" type="submit">
+                                <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M240-160h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Zm0 80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h280v-80q0-83 58.5-141.5T720-920q83 0 141.5 58.5T920-720h-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80h120q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Z"/></svg></span>
                                 <span class="ml-2">Buka</span>
                             </button>
                         </div>
-                        <span class="text-xs text-gray-500 dark:text-gray-400">Tidak Punya Password? <a href="" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Minta Izin</a></span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">Tidak Punya Password? <a href="/{{ $course->authorUser->username }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Minta Izin</a></span>
                     </div>
                 </form>
             </div>

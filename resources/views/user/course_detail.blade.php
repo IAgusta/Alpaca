@@ -37,9 +37,6 @@
                                 <p class="text-gray-800 my-4">{{ $course->authorUser->name ?? 'Unknown' }}</p>
                                 @include('user.component.course_detail_component')
 
-                                <!-- Unlock modal -->
-                                @include('user.component.unlock_modal')
-
                                 <div class="mt-4 flex flex-wrap gap-2">
                                     @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
                                     <a href="{{ route('course.feed', ['search' => trim($theme)]) }}">
@@ -76,6 +73,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Unlock modal -->
+                    @include('user.component.unlock_modal')
 
                     <!-- Share Modal -->
                     <div id="shareModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">

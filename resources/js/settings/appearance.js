@@ -84,12 +84,20 @@ if (document.getElementById('settingsForm')) {
             
             SettingsManager.saveSettings(newSettings);
             
-            // Show feedback using Toast or similar
-            const toast = document.createElement('div');
-            toast.textContent = 'Settings saved and applied globally!';
-            toast.className = 'fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            // Show feedback using input-success component
+            const successDiv = document.createElement('div');
+            successDiv.innerHTML = `
+                <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+                    <div class="flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                        <svg class="shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                        </svg>
+                        <div class="ms-3 text-sm font-medium">Settings saved and applied globally!</div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(successDiv);
+            setTimeout(() => successDiv.remove(), 5000);
         });
     });
 }
