@@ -1,3 +1,3 @@
-<x-landing-layout>
+<x-app-layout>
     @section('title', 'Our Contact - ' . config('app.name'))    
-</x-landing-layout>
+</x-app-layout>

@@ -20,11 +20,7 @@
     </head>
     <body class="font-sans antialiased pt-16 bg-white dark:bg-gray-900">
         <div class="min-h-screen flex flex-col">
-        @auth
             @include('layouts.navigation')
-        @else
-            @include('partials.header')
-        @endauth
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white dark:text-white dark:bg-gray-800 shadow">

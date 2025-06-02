@@ -1,4 +1,4 @@
-<x-landing-layout>
+<x-app-layout>
   @section('title', 'Our Plans - '. config('app.name'))
   <div class="relative isolate bg-transparent px-6 pt-4 sm:py-16 lg:px-8">
       <div class="absolute inset-x-0 -top-3 -z-10 transform-gpu overflow-hidden px-36 blur-3xl" aria-hidden="true">
@@ -144,4 +144,4 @@
           </div>
         </div>
   </div>
-</x-landing-layout>
+</x-app-layout>

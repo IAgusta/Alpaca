@@ -26,50 +26,49 @@
 
                 <!-- Desktop Navigation Links -->
                 <div class="hidden lg:flex space-x-8 sm:-my-px sm:ms-10 items-center">
-                    @auth
-                        <!-- Authenticated Navigation Items -->
-                        <!-- Dashboard Link -->
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" @click="loading = true">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
+                    <!-- Dashboard Link -->
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" @click="loading = true">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
 
-                        <!-- Courses Link -->
-                        <x-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
-                            :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')" @click="loading = true">
-                            {{ __('Courses') }}
-                        </x-nav-link>
+                    <!-- Courses Link -->
+                    <x-nav-link :href="auth()->check() && in_array(auth()->user()->role, ['admin', 'trainer', 'owner']) 
+                        ? route('admin.courses.index') 
+                        : route('user.course')" 
+                        :active="request()->routeIs('admin.courses.index') || request()->routeIs('user.course')" 
+                        @click="loading = true">
+                        {{ __('Courses') }}
+                    </x-nav-link>
 
-                        <x-nav-link :href="route('plugins.search-users')" :active="request()->routeIs('plugins.search-users')" @click="loading = true">
-                            {{ __('Find User') }}
-                        </x-nav-link>
+                    <x-nav-link :href="route('plugins.search-users')" :active="request()->routeIs('plugins.search-users')" @click="loading = true">
+                        {{ __('Find User') }}
+                    </x-nav-link>
 
-                        <!-- Plugins Dropdown -->
-                        <div class="relative">
-                            <button @click="pluginsOpen = !pluginsOpen" 
-                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                                {{ __('Tools') }}
-                                <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </button>
+                    <!-- Plugins Dropdown -->
+                    <div class="relative">
+                        <button @click="pluginsOpen = !pluginsOpen" 
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            {{ __('Tools') }}
+                            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
 
-                            <!-- Plugins Dropdown Content -->
-                            <div x-show="pluginsOpen" @click.away="pluginsOpen = false" 
-                                class="absolute left-0 top-full z-20 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                                <div class="py-1">
-                                    <!-- Robot Control Link -->
-                                    <x-dropdown-link :href="route('plugins.robotControl')" 
-                                        :active="request()->routeIs('plugins.robotControl')" @click="loading = true">
-                                        {{ __('Robot Control') }}
-                                    </x-dropdown-link>
-                                </div>
+                        <!-- Plugins Dropdown Content -->
+                        <div x-show="pluginsOpen" @click.away="pluginsOpen = false" 
+                            class="absolute left-0 top-full z-20 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                            <div class="py-1">
+                                <x-dropdown-link :href="route('plugins.robotControl')" 
+                                    :active="request()->routeIs('plugins.robotControl')" @click="loading = true">
+                                    {{ __('Robot Control') }}
+                                </x-dropdown-link>
                             </div>
                         </div>
+                    </div>
 
-                        <x-nav-link :href="route('forum')" :active="request()->routeIs('forum')" @click="loading = true">
-                            {{ __('Forums') }}
-                        </x-nav-link>
-                    @endauth
+                    <x-nav-link :href="route('forum')" :active="request()->routeIs('forum')" @click="loading = true">
+                        {{ __('Forums') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -181,6 +180,11 @@
                                 <a href="{{ route('login') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white">Login</a>
                                 <a href="{{ route('register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white">Register</a>
                             </div>
+                            <div class="py-1">
+                                <div>
+                                    <a href="{{ route('settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">{{ __('Settings') }}</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endauth
@@ -199,8 +203,10 @@
             </x-responsive-nav-link>
 
             <!-- Courses Link -->
-            <x-responsive-nav-link :href="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? route('admin.courses.index') : route('user.course')" 
-                :active="auth()->user()->role === 'admin' || auth()->user()->role === 'trainer' || auth()->user()->role === 'owner' ? request()->routeIs('admin.courses.index') : request()->routeIs('user.course')"
+            <x-responsive-nav-link :href="auth()->check() && in_array(auth()->user()->role, ['admin', 'trainer', 'owner'])
+                ? route('admin.courses.index')
+                : route('user.course')"
+                :active="request()->routeIs('admin.courses.index') || request()->routeIs('user.course')"
                 class="block px-4 py-2 text-base font-medium" @click="loading = true">
                 {{ __('Courses') }}
             </x-responsive-nav-link>

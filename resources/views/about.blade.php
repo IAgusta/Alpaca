@@ -1,4 +1,4 @@
-<x-landing-layout>
+<x-app-layout>
   @section('title', 'About Us - ' . config('app.name'))
     <!-- Hero Page -->
     <div class="relative isolate px-6 lg:px-8">
@@ -162,5 +162,4 @@
         </div>
       </div>
     </div>
-    
-</x-landing-layout>
+</x-app-layout>

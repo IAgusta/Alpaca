@@ -19,7 +19,6 @@ class LandingPageController extends Controller
                 ->get();
         });
         
-        return view('welcome', compact('favoriteCourses'));
         return view('about', compact('favoriteCourses'));
     }
 }
