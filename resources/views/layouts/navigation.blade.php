@@ -197,7 +197,7 @@
         class="fixed top-16 left-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <!-- Dashboard Link -->
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" 
+            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" 
                 class="block px-4 py-2 text-base font-medium" @click="loading = true">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>

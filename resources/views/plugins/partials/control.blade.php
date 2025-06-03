@@ -11,16 +11,17 @@
     }
 }" class="p-4">
     <div class="relative">
+        <h2 class="text-xl font-bold text-center">Select Mode</h2>
+        <p class="text-center text-gray-600 mb-3">Choose the job you want your robot to do:</p>
         <!-- Grid Container -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" 
-             :class="{ 'md:grid-cols-1': activeMode }">
-            
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Line Follower Card -->
-            <div :class="{ 
-                'col-span-full order-first': activeMode === 'line',
-                'scale-90 opacity-70': activeMode && activeMode !== 'line'
-            }" class="bg-white rounded-xl shadow-lg transition-all duration-300">
-                <div class="p-4 flex items-center justify-between" @click="activeMode = activeMode === 'line' ? null : 'line'">
+            <div x-show="!activeMode || activeMode === 'line'"
+                :class="{ 
+                    'col-span-full': activeMode === 'line'
+                }" 
+                class="bg-white rounded-xl shadow-lg transition-all duration-300">
+                <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'line' ? null : 'line'">
                     <div class="flex items-center space-x-4">
                         <div class="p-3 rounded-lg bg-green-100">
                             <img src="/icons/car.svg" class="w-8 h-8" alt="Line Follower">
@@ -89,11 +90,12 @@
             </div>
 
             <!-- Wall Avoider Card -->
-            <div :class="{ 
-                'col-span-full order-first': activeMode === 'wall',
-                'scale-90 opacity-70': activeMode && activeMode !== 'wall'
-            }" class="bg-white rounded-xl shadow-lg transition-all duration-300">
-                <div class="p-4 flex items-center justify-between" @click="activeMode = activeMode === 'wall' ? null : 'wall'">
+            <div x-show="!activeMode || activeMode === 'wall'"
+                :class="{ 
+                    'col-span-full': activeMode === 'wall'
+                }" 
+                class="bg-white rounded-xl shadow-lg transition-all duration-300">
+                <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'wall' ? null : 'wall'">
                     <div class="flex items-center space-x-4">
                         <div class="p-3 rounded-lg bg-blue-100">
                             <img src="/icons/sensor.svg" class="w-8 h-8" alt="Wall Avoider">
@@ -205,11 +207,12 @@
             </div>
 
             <!-- Manual Control Card -->
-            <div :class="{ 
-                'col-span-full order-first': activeMode === 'manual',
-                'scale-90 opacity-70': activeMode && activeMode !== 'manual'
-            }" class="bg-white rounded-xl shadow-lg transition-all duration-300">
-                <div class="p-4 flex items-center justify-between" @click="activeMode = activeMode === 'manual' ? null : 'manual'">
+            <div x-show="!activeMode || activeMode === 'manual'"
+                :class="{ 
+                    'col-span-full': activeMode === 'manual'
+                }" 
+                class="bg-white rounded-xl shadow-lg transition-all duration-300">
+                <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'manual' ? null : 'manual'">
                     <div class="flex items-center space-x-4">
                         <div class="p-3 rounded-lg bg-purple-100">
                             <img src="/icons/control.svg" class="w-8 h-8" alt="Manual Control">
@@ -301,11 +304,12 @@
             </div>
 
             <!-- Coming Soon Card -->
-            <div :class="{ 
-                'col-span-full order-first': activeMode === 'soon',
-                'scale-90 opacity-70': activeMode && activeMode !== 'soon'
-            }" class="bg-white rounded-xl shadow-lg transition-all duration-300">
-                <div class="p-4 flex items-center justify-between" @click="activeMode = activeMode === 'soon' ? null : 'soon'">
+            <div x-show="!activeMode || activeMode === 'soon'"
+                :class="{ 
+                    'col-span-full': activeMode === 'soon'
+                }" 
+                class="bg-white rounded-xl shadow-lg transition-all duration-300">
+                <div class="p-4 flex cursor-pointer items-center justify-between" @click="activeMode = activeMode === 'soon' ? null : 'soon'">
                     <div class="flex items-center space-x-4">
                         <div class="p-3 rounded-lg bg-gray-100">
                             <img src="/icons/question.svg" class="w-8 h-8" alt="Coming Soon">

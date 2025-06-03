@@ -21,6 +21,19 @@
     <body class="font-sans antialiased pt-16 bg-white dark:bg-gray-900">
         <div class="min-h-screen flex flex-col">
             @include('layouts.navigation')
+            @guest
+                @include('partials.need-login')
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const modal = document.getElementById('accessModal');
+                        const backdrop = document.getElementById('modalBackdrop');
+                        if (modal && backdrop) {
+                            modal.classList.remove('hidden');
+                            backdrop.classList.remove('hidden');
+                        }
+                    });
+                </script>
+            @endguest
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white dark:text-white dark:bg-gray-800 shadow">
