@@ -13,36 +13,41 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class UserCourseController extends Controller
 {
     public function index(Request $request)
     {
         $userId = Auth::id();
-        // Update total_modules for all user courses
-        $userCourses = UserCourse::where('user_id', $userId)->get();
-        foreach ($userCourses as $userCourse) {
-            $currentTotalModules = Course::find($userCourse->course_id)->modules->count();
-            if ($userCourse->total_modules !== $currentTotalModules) {
-                $userCourse->update(['total_modules' => $currentTotalModules]);
+        
+        return Cache::tags(['user-courses'])->remember("user.courses.home.{$userId}", now()->addMinutes(30), function () use ($userId) {
+            // Update total_modules for all user courses
+            $userCourses = UserCourse::where('user_id', $userId)->get();
+            foreach ($userCourses as $userCourse) {
+                $currentTotalModules = Course::find($userCourse->course_id)->modules->count();
+                if ($userCourse->total_modules !== $currentTotalModules) {
+                    $userCourse->update(['total_modules' => $currentTotalModules]);
+                }
             }
-        }
 
-        // Get limited user courses (6 items)
-        $userCourses = UserCourse::where('user_id', $userId)
-            ->with('course')
-            ->take(6)
-            ->get();
+            // Get limited user courses (6 items)
+            $userCourses = UserCourse::where('user_id', $userId)
+                ->with(['course.authorUser', 'course.modules'])
+                ->take(6)
+                ->get();
 
-        // Get limited available courses (12 items)
-        $availableCourses = Course::whereNotIn('id', UserCourse::where('user_id', $userId)->pluck('course_id'))
-            ->when(auth::user()->role === 'user', function ($query) {
-                $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
-            })
-            ->take(12)
-            ->get();
+            // Get limited available courses (12 items)
+            $availableCourses = Course::whereNotIn('id', UserCourse::where('user_id', $userId)->pluck('course_id'))
+                ->when(auth::user()->role === 'user', function ($query) {
+                    $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
+                })
+                ->with(['authorUser', 'modules'])
+                ->take(12)
+                ->get();
 
-        return view('user.course', compact('userCourses', 'availableCourses'));
+            return view('user.course', compact('userCourses', 'availableCourses'))->render();
+        });
     }
 
     public function feed(Request $request) 
@@ -50,38 +55,44 @@ class UserCourseController extends Controller
         $search = $request->input('search');
         $sort = $request->input('sort', 'updated_at');
         $direction = $request->input('direction', 'desc');
+        $userId = Auth::id();
 
-        $query = Course::query()
-            ->when(auth::user()->role === 'user', function ($query) {
-                $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
-            });
-        
-        if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%')
-                  ->orWhere('theme', 'like', '%' . $search . '%')
-                  ->orWhereHas('authorUser', function($q) use ($search) {
-                      $q->where('name', 'like', '%' . $search . '%');
-                  });
-            });
-        }
+        $cacheKey = "courses.feed.{$search}.{$sort}.{$direction}.{$userId}";
 
-        // Handle different sort options
-        switch ($sort) {
-            case 'popularity':
-                $query->orderBy('popularity', $direction);
-                break;
-            case 'name':
-            case 'created_at':
-            case 'updated_at':
-                $query->orderBy($sort, $direction);
-                break;
-            default:
-                $query->orderBy('name', 'asc');
-        }
+        $availableCourses = Cache::tags(['courses'])->remember($cacheKey, now()->addMinutes(30), function () use ($search, $sort, $direction) {
+            $query = Course::with(['authorUser', 'modules'])
+                ->when(auth::user()->role === 'user', function ($query) {
+                    $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
+                });
+            
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('description', 'like', '%' . $search . '%')
+                      ->orWhere('theme', 'like', '%' . $search . '%')
+                      ->orWhereHas('authorUser', function($q) use ($search) {
+                          $q->where('name', 'like', '%' . $search . '%');
+                      });
+                });
+            }
 
-        $availableCourses = $query->paginate(12);
+            // Handle different sort options
+            switch ($sort) {
+                case 'popularity':
+                    $query->orderBy('popularity', $direction);
+                    break;
+                case 'name':
+                case 'created_at':
+                case 'updated_at':
+                    $query->orderBy($sort, $direction);
+                    break;
+                default:
+                    $query->orderBy('name', 'asc');
+            }
+
+            return $query->paginate(12);
+        });
+
         return view('user.course_feed', compact('availableCourses', 'search', 'sort', 'direction'));
     }
 
@@ -129,43 +140,50 @@ class UserCourseController extends Controller
     public function detail($name, $courseId) 
     {
         $userId = Auth::id();
-        $course = Course::with(['modules' => function($query) {
-            $query->orderBy('position', 'desc'); // Default sort by position descending
-        }])->findOrFail($courseId);
         
-        // If you want to ensure URL consistency (recommended)
-        $expectedSlug = Str::slug($course->name);
-        if ($expectedSlug !== $name) {
-            // Redirect to correct URL if name doesn't match
-            return redirect()->route('user.course.detail', [
-                'name' => $expectedSlug,
-                'courseId' => $courseId
-            ]);
-        }
+        return Cache::tags(['courses', "course-{$courseId}"])->remember("course.detail.{$courseId}.{$userId}", now()->addMinutes(30), function () use ($userId, $courseId, $name) {
+            $course = Course::with([
+                'modules' => function($query) {
+                    $query->orderBy('position', 'desc');
+                },
+                'authorUser',
+                'modules.contents'
+            ])->findOrFail($courseId);
+            
+            // If you want to ensure URL consistency (recommended)
+            $expectedSlug = Str::slug($course->name);
+            if ($expectedSlug !== $name) {
+                // Redirect to correct URL if name doesn't match
+                return redirect()->route('user.course.detail', [
+                    'name' => $expectedSlug,
+                    'courseId' => $courseId
+                ]);
+            }
 
-        // Fetch user progress for this course
-        $courseProgress = UserCourse::where('user_id', $userId)
-        ->where('course_id', $courseId)
-        ->first();
-    
-        // Rest of your existing logic...
-        $userHasCourse = UserCourse::where('user_id', $userId)
+            // Fetch user progress for this course
+            $courseProgress = UserCourse::where('user_id', $userId)
             ->where('course_id', $courseId)
-            ->exists();
-    
-        if ($userHasCourse) {
-            UserCourse::where('user_id', $userId)
+            ->first();
+        
+            // Rest of your existing logic...
+            $userHasCourse = UserCourse::where('user_id', $userId)
                 ->where('course_id', $courseId)
-                ->update(['last_opened' => now()]);
-        }
-    
-        $userCourses = UserCourse::where('user_id', $userId)
-            ->with('course')
-            ->get();
-    
-        $savedCourses = UserCourse::where('course_id', $courseId)->count();
-    
-        return view('user.course_detail', compact('course', 'userCourses', 'savedCourses', 'courseProgress'));
+                ->exists();
+        
+            if ($userHasCourse) {
+                UserCourse::where('user_id', $userId)
+                    ->where('course_id', $courseId)
+                    ->update(['last_opened' => now()]);
+            }
+        
+            $userCourses = UserCourse::where('user_id', $userId)
+                ->with('course')
+                ->get();
+        
+            $savedCourses = UserCourse::where('course_id', $courseId)->count();
+        
+            return view('user.course_detail', compact('course', 'userCourses', 'savedCourses', 'courseProgress'))->render();
+        });
     }
 
     public function add(Request $request)
@@ -222,6 +240,9 @@ class UserCourseController extends Controller
         // Update course popularity
         $course->timestamps = false; // Disable timestamp updates
         $course->updateQuietly(['popularity' => $course->popularity + 1]); // Update quietly
+
+        // Clear relevant caches
+        Cache::tags(['courses', 'user-courses'])->flush();
     
         return back()->with('success', 'Course added to Bookmark.');
     }
@@ -429,6 +450,9 @@ class UserCourseController extends Controller
 
         // Delete the course progress
         $userCourse->deleteCourse();
+
+        // Clear relevant caches
+        Cache::tags(['courses', 'user-courses'])->flush();
 
         return back()->with('success', 'Course Bookmark Removed successfully.');
     }

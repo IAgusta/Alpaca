@@ -40,7 +40,7 @@
                 <svg class="h-6 w-5 flex-none text-indigo-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
                   <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
                 </svg>
-                Materi Pembelajaran yang dapat didownload
+                Materi Pembelajaran yang dapat diunduh
               </li>
             </ul>
             <a href="{{ route('register') }}" aria-describedby="tier-hobby" class="mt-8 block rounded-md px-3.5 py-2.5 text-center text-sm font-semibold text-indigo-600 ring-1 ring-indigo-200 ring-inset hover:ring-indigo-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:mt-10">Bergabung Sekarang</a>
@@ -50,7 +50,7 @@
           <div class="bg-white/60 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0 rounded-3xl">
             <h3 id="tier-hobby" class="text-base/7 font-semibold text-indigo-600">Sigma Alpaca</h3>
             <p class="mt-4 flex items-baseline gap-x-2">
-              <span class="text-5xl font-semibold tracking-tight text-gray-900">100k</span>
+              <span class="text-5xl font-semibold tracking-tight text-gray-900">50k</span>
               <span class="text-xl font-semibold text-gray-600">/bulan</span>
             </p>
             <p class="mt-6 text-base/7 text-gray-600">Paket Rencana yang tepat untuk belajar secara teratur dengan penawaran yang menggiurkan.</p>
@@ -89,7 +89,14 @@
                 <svg class="h-6 w-5 flex-none text-indigo-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
                   <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
                 </svg>
-                Badge dan Avatar Premium
+                Badge dan Avatar Premium 
+                  <span class="inline-flex items-center gap-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-white text-xs font-semibold px-2.5 py-0.5 rounded-full relative overflow-hidden group cursor-default">
+                    <span class="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 relative z-10" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span class="relative z-10">Premium+</span>
+                  </span>
               </li> 
               <li class="flex gap-x-3">
                 <svg class="h-6 w-5 flex-none text-indigo-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -107,7 +114,7 @@
             <p class="mt-4 flex items-baseline gap-x-2">
               <span class="text-2xl font-semibold tracking-tight text-white">Bisa dinegosiasikan</span>
             </p>
-            <p class="mt-6 text-base/7 text-gray-300">Paket Tutor dan Perbaikan Skripsi Khusus Kota Padang.</p>
+            <p class="mt-6 text-base/7 text-gray-300">Paket Tutor, Pembuatan maupun Perbaikan Skripsi Khusus Kota Padang.</p>
             <ul role="list" class="mt-8 space-y-3 text-sm/6 text-gray-300 sm:mt-10">
               <li class="flex gap-x-3">
                 <svg class="h-6 w-5 flex-none text-indigo-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">

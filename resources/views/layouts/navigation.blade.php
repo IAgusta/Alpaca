@@ -17,7 +17,7 @@
                 </div>
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}"
+                    <a href="{{ route('home') }}"
                         class="flex items-center space-x-2" @click="loading = true">
                          <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                          <span class="text-gray-800 dark:text-white font-semibold">Alpaca</span>
@@ -27,7 +27,7 @@
                 <!-- Desktop Navigation Links -->
                 <div class="hidden lg:flex space-x-8 sm:-my-px sm:ms-10 items-center">
                     <!-- Dashboard Link -->
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" @click="loading = true">
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')" @click="loading = true">
                         {{ __('Dashboard') }}
                     </x-nav-link>
 

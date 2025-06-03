@@ -1,4 +1,5 @@
 <!-- Courses Section -->
+@if($favoriteCourses->count() > 0)
 <div class="py-16 sm:py-16">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl lg:mx-0">
@@ -8,8 +9,9 @@
         <div class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             @foreach($favoriteCourses as $course)
             <article class="flex max-w-xl flex-col items-start justify-between h-full">
-                <div class="flex items-center gap-x-4 text-xs">
-                    <time datetime="{{ $course->updated_at->format('Y-m-d') }}" class="text-gray-500">{{ $course->updated_at->format('M d, Y') }}</time>
+                <div class="flex items-center gap-x-4 text-xs"><time datetime="{{ optional($course->updated_at)->format('Y-m-d') }}" class="text-gray-500">
+                            {{ optional($course->updated_at)->format('M d, Y') }}
+                        </time>
                     @php
                     $themeString = !empty(trim($course->theme)) ? $course->theme : 'umum';
                     $themes = explode(',', $themeString);
@@ -79,3 +81,4 @@
         </div>
     </div>
 </div>
+@endif

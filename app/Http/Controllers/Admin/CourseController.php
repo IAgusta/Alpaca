@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class CourseController extends Controller
 {
@@ -19,28 +20,29 @@ class CourseController extends Controller
         $sort = $request->input('sort', 'name');
         $direction = $request->input('direction', 'asc');
 
-        $query = Course::with('authorUser')->withCount('userProgress');
-        
-        if ($search) {
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%')
-                  ->orWhere('theme', 'like', '%' . $search . '%')
-                  ->orWhereHas('authorUser', function($q) use ($search) {
-                      $q->where('name', 'like', '%' . $search . '%');
-                  });
-            });
-        }
+        // Generate a unique cache key based on the query parameters
+        $cacheKey = "courses.list.{$search}.{$sort}.{$direction}." . Auth::id();
 
-        if (Auth::user()->role === 'trainer') {
-            $query->where('author', Auth::id());
-        }
+        $courses = Cache::tags(['courses'])->remember($cacheKey, now()->addMinutes(30), function () use ($search, $sort, $direction) {
+            $query = Course::with(['authorUser', 'userProgress'])->withCount('userProgress');
+            
+            if ($search) {
+                $query->where(function($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('description', 'like', '%' . $search . '%')
+                      ->orWhere('theme', 'like', '%' . $search . '%')
+                      ->orWhereHas('authorUser', function($q) use ($search) {
+                          $q->where('name', 'like', '%' . $search . '%');
+                      });
+                });
+            }
 
-        // Add sorting
-        $query->orderBy($sort, $direction);
-        
-        /** @var \Illuminate\Pagination\LengthAwarePaginator $courses */
-        $courses = $query->orderBy($sort, $direction)->paginate(11)->withQueryString();
+            if (Auth::user()->role === 'trainer') {
+                $query->where('author', Auth::id());
+            }
+
+            return $query->orderBy($sort, $direction)->paginate(11)->withQueryString();
+        });
         
         if ($request->ajax()) {
             return view('admin.courses.component.available_course', compact('courses'))->render();
@@ -65,13 +67,16 @@ class CourseController extends Controller
 
         $imagePath = $request->file('image') ? $request->file('image')->store('courses', 'public') : null;
 
-        Course::create([
+        $course = Course::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'image' => $imagePath,
             'author' => Auth::id(),
             'theme' => $request->input('theme'),
         ]);
+
+        // Clear relevant caches
+        Cache::tags(['courses'])->flush();
 
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
     }
@@ -127,6 +132,9 @@ class CourseController extends Controller
         }
     
         $course->save();
+
+        // Clear relevant caches
+        Cache::tags(['courses'])->flush();
     
         return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
     }
@@ -145,6 +153,9 @@ class CourseController extends Controller
     
         // Soft delete the course
         $course->delete();
+
+        // Clear relevant caches
+        Cache::tags(['courses'])->flush();
     
         // Redirect with a success message
         return redirect()->route('admin.courses.index')->with('success', 'Course moved to Trash Bin.');
