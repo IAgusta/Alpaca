@@ -1,1 +1,1 @@
-<img src="{{ asset('img/logo.png') }}" alt="Logo" class="h-9 w-auto">
+<img src="{{ asset('img/logo.png') }}" onerror="this.src='{{ asset('fallback-logo.png') }}'" alt="Logo" class="h-9 w-auto">
