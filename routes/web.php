@@ -13,6 +13,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserModel;
+use App\Http\Controllers\NewsController;
 
 require __DIR__.'/auth.php';
 
@@ -30,7 +31,7 @@ Route::get('/price', function () { return view('prices');})->name('prices');
 Route::get('/faq', function () { return view('faqs');})->name('faq');
 Route::get('/terms', function () { return view('terms');})->name('terms');
 Route::get('/privacy-policy', function () { return view('privacy-policy');})->name('privacy-policy');
-Route::get('/news', function () { return view('news');})->name('news');
+Route::get('/news', [NewsController::class, 'index'])->name('news');
 Route::get('/tools/robot-control', function () { return view('plugins.robotControl');})->name('plugins.robotControl');
 Route::get('/find-users', function () { return view('plugins.search_user');})->name('plugins.search-users');
 Route::get('/documentation', function(){ return view('plugins.documentation');})->name('documentation');

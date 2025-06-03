@@ -69,9 +69,9 @@
                                     role="tab">Change Password</button>
                             </li>
                             @unless(auth()->user()->role === 'owner')
-                                <li class="me-2 lg:ml-2 lg:me-0" role="presentation">
+                                <li class="me-2 mb-2 lg:ml-2 lg:me-0" role="presentation">
                                     <button data-tabs-target="#delete-account"
-                                        class="w-full p-3 text-start rounded-bl-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                        class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                         role="tab">Delete Account</button>
                                 </li>
                             @endunless

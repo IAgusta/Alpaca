@@ -40,9 +40,7 @@
                             <!-- Name and Role -->
                             <div class="mb-2 sm:mb-0">
                                 <h1 class="text-2xl font-bold">{{ $user->name }}</h1>
-                                <span class="inline-block bg-blue-500 text-white px-3 py-1 rounded-full text-xs mt-1">
-                                    {{ Str::ucfirst($user->role ?? 'User') }}
-                                </span>
+                                @include('profile.partials.all.role-badge')
                             </div>
 
                             <!-- Social Media Links with Usernames -->

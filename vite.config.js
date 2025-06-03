@@ -12,7 +12,7 @@ export default defineConfig({
                 'resources/js/content/content-manager.js',
                 'resources/js/content/style.js',
                 'resources/js/data-user.js',
-                'resources/js/robot-control.js',
+                'resources/js/robot/main.js',
                 'resources/js/course-theme.js',
                 'resources/js/table-navbar.js',
                 'resources/js/content-feature.js',
