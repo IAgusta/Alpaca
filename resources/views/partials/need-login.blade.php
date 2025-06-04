@@ -15,7 +15,7 @@
       <img src="/img/cute.gif" alt="Cute character" class="w-64 h-42 rounded-lg">
 
       <!-- Message -->
-      <p class="text-xl font-semibold text-center text-gray-900 dark:text-white">You need to log in to fully access the website.</p>
+      <p class="text-xl font-semibold text-center text-gray-900 dark:text-white">You must log in to fully access the website.</p>
 
       <!-- Buttons -->
       <div class="flex gap-4">
