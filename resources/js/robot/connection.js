@@ -3,10 +3,17 @@ let ws = null;
 
 window.addEventListener("DOMContentLoaded", () => {
     ['wifi', 'api'].forEach(type => {
-        document.getElementById(`${type}-overlay`).classList.add('hidden');
-        document.getElementById(`${type}-spinner`).classList.add('hidden');
-        document.getElementById(`${type}-success`).classList.add('hidden');
-        document.getElementById(`${type}-disconnect`).classList.add('hidden');
+        const overlay = document.getElementById(`${type}-overlay`);
+        const spinner = document.getElementById(`${type}-spinner`);
+        const success = document.getElementById(`${type}-success`);
+        const disconnect = document.getElementById(`${type}-disconnect`);
+        
+        if (overlay && spinner && success && disconnect) {
+            overlay.classList.add('hidden');
+            spinner.classList.add('hidden');
+            success.classList.add('hidden');
+            disconnect.classList.add('hidden');
+        }
     });
 
     if (document.getElementById('api-card')) {
@@ -42,73 +49,67 @@ function handleRobotResponse(data) {
     }
 }
 
-function expandCard(type) {
-    const card = document.getElementById(`${type}-card`);
-    const details = card.querySelector('.details');
-    
-    if (card.classList.contains('disabled')) return;
-    
-    // Collapse other cards
-    ['wifi', 'api'].forEach((c) => {
-        const otherCard = document.getElementById(`${c}-card`);
-        const otherDetails = otherCard.querySelector('.details');
-        if (c !== type) {
-            otherCard.classList.remove('expanded');
-            otherDetails.classList.add('hidden');
-        }
-    });
-    
-    // Toggle selected card
-    const expanded = card.classList.toggle('expanded');
-    details.classList.toggle('hidden', !expanded);
-}
-
-async function connectToESP32(method) {
+window.connectToESP32 = async function(method) {
     const overlay = document.getElementById(`${method}-overlay`);
     const spinner = document.getElementById(`${method}-spinner`);
     const success = document.getElementById(`${method}-success`);
     const disconnectBtn = document.getElementById(`${method}-disconnect`);
-    const card = document.getElementById(`${method}-card`);
-
-    overlay.classList.remove('hidden');
-    spinner.classList.remove('hidden');
-    success.classList.add('hidden');
-    disconnectBtn.classList.add('hidden');
 
     try {
-        let response;
+        overlay.classList.remove('hidden');
+        spinner.classList.remove('hidden');
+        success.classList.add('hidden');
+        disconnectBtn.classList.add('hidden');
+
         if (method === 'wifi') {
             const ip = document.getElementById('wifi-ip').value.trim();
-            if (!ip.match(/^(\d{1,3}\.){3}\d{1,3}$/)) throw new Error("Invalid IP format");
-            response = await fetch(`http://${ip}/connect`);
+            if (!ip.match(/^(\d{1,3}\.){3}\d{1,3}$/)) {
+                throw new Error("Invalid IP format");
+            }
+
+            // Test connection to ESP32
+            const testResponse = await fetch(`http://${ip}/status`);
+            if (!testResponse.ok) {
+                throw new Error("Cannot reach ESP32");
+            }
+
+            // Initialize WebSocket connection
+            initWebSocket(ip);
+            
         } else if (method === 'api') {
             const apiKey = document.getElementById('api-key').value.trim();
             if (!apiKey) throw new Error("API key is required");
-            response = await fetch('/api/robot/connect', {
+
+            const response = await fetch('/api/robot/connect', {
                 headers: {
                     'Authorization': `Bearer ${apiKey}`,
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 }
             });
+
+            if (!response.ok) {
+                throw new Error("Invalid API key");
+            }
         }
 
-        if (!response.ok) throw new Error("Connection failed");
-
+        // Show success state
         spinner.classList.add('hidden');
         success.classList.remove('hidden');
         disconnectBtn.classList.remove('hidden');
 
-        currentConnection = method;
-        
-        // Disable other card
+        // Disable other connection method
         const other = method === 'wifi' ? 'api' : 'wifi';
         document.getElementById(`${other}-card`).classList.add('disabled');
 
+        currentConnection = method;
+
     } catch (err) {
-        alert("Connection failed: " + err.message);
+        console.error(err);
+        alert(err.message);
         overlay.classList.add('hidden');
     }
-}
+};
 
 function disconnect(method) {
     const overlay = document.getElementById(`${method}-overlay`);
@@ -157,7 +158,7 @@ async function loadApiKey() {
     }
 }
 
-async function regenerateApiKey() {
+window.regenerateApiKey = async function() {
     try {
         const response = await fetch('/api/robot/generate-key', {
             method: 'POST',
@@ -173,11 +174,13 @@ async function regenerateApiKey() {
             return;
         }
         
+        // Reload API key after generation
         await loadApiKey();
     } catch (error) {
+        console.error(error);
         alert('Failed to regenerate API key');
     }
-}
+};
 
 function copyApiKey() {
     const apiKeyInput = document.getElementById('api-key');

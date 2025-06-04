@@ -4,14 +4,6 @@
                 {{-- Course Image --}}
                 <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}" class="relative">
                     <img class="w-full h-35 object-cover rounded-t-lg" loading="lazy" src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" alt="Course Image" style="width: 206px; height: 154px; object-fit: cover;"/>
-                    <!-- Lock/Unlock Icon -->
-                    <div class="absolute top-2 left-2">
-                        @if($course->is_locked)
-                            <span class="material-symbols-outlined rounded-full p-1">
-                                lock
-                            </span>
-                        @endif
-                    </div>
                 </a>
                 <!-- Course Details -->
                 <div class="flex flex-col h-full"> <!-- Added container for consistent layout -->
@@ -20,7 +12,13 @@
                             <div class="relative flex flex-col items-center">
                                 <!-- Course Title with Popover Button -->
                                 <h5 class="flex justify-center text-sm font-medium text-gray-900 dark:text-white mx-auto text-center w-40">
-                                    <p class="truncate">{{ $course->name }}</p>
+                                    <p class="truncate flex">
+                                        @if($course->is_locked)
+                                            <svg class="rounded-full p-1 w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                                                <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/>
+                                            </svg>
+                                        @endif
+                                        {{ $course->name }}</p>
                                     <button data-popover-target="popover-{{ $course->id }}" data-popover-placement="bottom" type="button" onclick="event.stopPropagation()">
                                         <svg class="w-3 h-3 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" 
                                             viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

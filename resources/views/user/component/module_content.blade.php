@@ -16,9 +16,6 @@
         <div class="text-center text-black dark:text-white p-8">
             <h3 class="text-2xl font-bold mb-4">Access Restricted</h3>
             <p class="mb-6">Please save this course to access its content</p>
-            <x-primary-button onclick="document.getElementById('saveButton').click()">
-                Save Course
-            </x-primary-button>
         </div>
     </div>
     @endif

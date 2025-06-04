@@ -171,17 +171,43 @@
 </div>
 
 <script>
-function copyUrl() {
-    const urlInput = document.getElementById('courseUrl');
-    urlInput.select();
-    document.execCommand('copy');
-    
-    // Show feedback (optional)
-    const copyButton = urlInput.nextElementSibling;
-    const originalText = copyButton.textContent;
-    copyButton.textContent = 'Copied!';
-    setTimeout(() => {
-        copyButton.textContent = originalText;
-    }, 2000);
-}
+    function copyUrl() {
+        const urlInput = document.getElementById('courseUrl');
+        urlInput.select();
+        urlInput.setSelectionRange(0, 99999); // for mobile devices
+
+        try {
+            // Use modern clipboard API if available
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(urlInput.value);
+            } else {
+                // Fallback for older browsers
+                document.execCommand('copy');
+            }
+        } catch (err) {
+            console.error('Failed to copy: ', err);
+            return;
+        }
+
+        // Show success icon, hide copy icon
+        const copyIcon = document.getElementById('copy-icon');
+        const successIcon = document.getElementById('success-icon');
+        const copyButton = document.getElementById('copyButton');
+
+        copyIcon.classList.add('hidden');
+        successIcon.classList.remove('hidden');
+
+        // Optional: change button color to blue to indicate success
+        copyButton.classList.remove('text-gray-500', 'dark:text-gray-400');
+        copyButton.classList.add('text-blue-600');
+
+        // After 2 seconds, revert to original state
+        setTimeout(() => {
+            successIcon.classList.add('hidden');
+            copyIcon.classList.remove('hidden');
+
+            copyButton.classList.remove('text-blue-600');
+            copyButton.classList.add('text-gray-500', 'dark:text-gray-400');
+        }, 2000);
+    }
 </script>

@@ -20,8 +20,9 @@ class CourseController extends Controller
         $sort = $request->input('sort', 'name');
         $direction = $request->input('direction', 'asc');
 
-        // Generate a unique cache key based on the query parameters
-        $cacheKey = "courses.list.{$search}.{$sort}.{$direction}." . Auth::id();
+        // Generate a unique cache key based on the query parameters and page
+        $page = $request->input('page', 1);
+        $cacheKey = "courses.list.{$search}.{$sort}.{$direction}.{$page}." . Auth::id();
 
         $courses = Cache::tags(['courses'])->remember($cacheKey, now()->addMinutes(30), function () use ($search, $sort, $direction) {
             $query = Course::with(['authorUser', 'userProgress'])->withCount('userProgress');
@@ -45,7 +46,10 @@ class CourseController extends Controller
         });
         
         if ($request->ajax()) {
-            return view('admin.courses.component.available_course', compact('courses'))->render();
+            // Include new course button in the AJAX response
+            $html = view('admin.courses.component.available_course', compact('courses'))->render();
+            $createButton = view('admin.courses.component.create_button')->render();
+            return $createButton . $html;
         }
 
         return view('admin.courses.index', compact('courses', 'search', 'sort', 'direction'));

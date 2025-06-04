@@ -1,11 +1,28 @@
-<div>
+<div x-data="{ 
+    activeMode: null,
+    isWifiConnected: false,
+    isApiConnected: false,
+    connect(type) {
+        connectToESP32(type);
+    },
+    showLoginModal() {
+        document.getElementById('accessModal').classList.remove('hidden');
+        document.getElementById('modalBackdrop').classList.remove('hidden');
+    }
+}">
     <h2 class="text-xl font-bold text-center">Connect to Your ESP32</h2>
     <p class="text-center text-gray-600 mb-3">Choose a connection method below:</p>
     <div id="connect-options" class="grid-cols-none grid lg:grid-cols-2 gap-4 p-4 mb-7">
         <!-- Wi-Fi Card -->
-        <div id="wifi-card" class="bg-white rounded-xl shadow-lg transition-all duration-300" 
-             :class="{ 'col-span-full': activeMode === 'wifi' }">
-            <div class="p-4 cursor-pointer flex items-center justify-between" onclick="expandCard('wifi')">
+        <div id="wifi-card" 
+             class="bg-white rounded-xl shadow-lg transition-all duration-300"
+             :class="{ 'col-span-full': activeMode === 'wifi' }"
+             x-show="!activeMode || activeMode === 'wifi'"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-90"
+             x-transition:enter-end="opacity-100 transform scale-100">
+            <div class="p-4 cursor-pointer flex items-center justify-between" 
+                 @click="activeMode = activeMode === 'wifi' ? null : 'wifi'">
                 <div class="flex items-center space-x-4">
                     <div class="p-3 rounded-lg bg-green-100">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 -960 960 960">
@@ -20,13 +37,17 @@
             </div>
 
             <!-- Expandable Section -->
-            <div class="details hidden p-4 border-t">
+            <div x-show="activeMode === 'wifi'"
+                 x-transition:enter="transition-all ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform -translate-y-4"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 class="p-4 border-t">
                 <div class="flex gap-3 items-center">
                     <input type="text" id="wifi-ip" placeholder="Enter ESP32 IP" 
                         class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:border-blue-500" 
                         onclick="event.stopPropagation();">
                     <button onclick="event.stopPropagation(); connectToESP32('wifi')" 
-                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                         Connect
                     </button>
                 </div>
@@ -53,11 +74,16 @@
         </div>
     
         <!-- API Card -->
-        <div id="api-card" class="bg-white rounded-xl shadow-lg transition-all duration-300" 
+        <div id="api-card" 
+             class="bg-white rounded-xl shadow-lg transition-all duration-300"
              :class="{ 'col-span-full': activeMode === 'api' }"
-             onclick="{{ auth()->check() ? 'expandCard(\'api\')' : '' }}"
-             style="{{ !auth()->check() ? 'opacity: 0.7; cursor: not-allowed;' : '' }}">
-            <div class="p-4 flex items-center justify-between">
+             x-show="!activeMode || activeMode === 'api'"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-90"
+             x-transition:enter-end="opacity-100 transform scale-100"
+             @click="{{ auth()->check() ? 'activeMode = activeMode === \'api\' ? null : \'api\'' : 'showLoginModal()' }}"
+             :class="{ 'opacity-70': {{ !auth()->check() ? 'true' : 'false' }} }">
+            <div class="p-4 cursor-pointer flex items-center justify-between">
                 <div class="flex items-center space-x-4">
                     <div class="p-3 rounded-lg bg-blue-100">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" viewBox="0 0 24 24">
@@ -75,28 +101,59 @@
 
             @auth
             <!-- Expandable Section -->
-            <div class="details hidden p-4 border-t">
+            <div x-show="activeMode === 'api'"
+                 x-transition:enter="transition-all ease-out duration-300"
+                 x-transition:enter-start="opacity-0 transform -translate-y-4"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 class="p-4 border-t">
                 <div class="space-y-3">
-                    <div class="flex items-center gap-2">
-                        <input type="text" id="api-key" readonly
-                            class="flex-1 rounded-lg border border-gray-300 px-3 py-2 bg-gray-50" 
-                            onclick="event.stopPropagation();">
-                        <button onclick="event.stopPropagation(); copyApiKey()" 
-                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                            Copy
-                        </button>
-                    </div>
-                    <div class="flex items-center gap-2 justify-between">
+                    {{-- Display, Copy, Regenerate, and Connect API key (one line flex) --}}
+                    <div class="w-full flex flex-wrap items-center gap-2">
+                        <div class="relative flex-1 min-w-0">
+                            <label for="api-key" class="sr-only">API Key</label>
+                            <input id="api-key" type="text" 
+                                class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg 
+                                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 
+                                    dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                value="Your API key here"
+                                readonly
+                                disabled
+                                onclick="event.stopPropagation();"
+                            >
+                            <button onclick="event.stopPropagation(); copyApiKey()" 
+                                    aria-label="Copy API Key"
+                                    class="absolute end-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 
+                                        hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 inline-flex 
+                                        items-center justify-center">
+                                <!-- Default copy icon -->
+                                <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                    <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
+                                </svg>
+                                <!-- Success icon - toggle visibility as needed -->
+                                <svg class="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12" id="success-icon">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                                </svg>
+                            </button>
+                            <!-- Tooltip -->
+                            <div id="tooltip-copy-api-key" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                                <span id="default-tooltip-message">Copy to clipboard</span>
+                                <span id="success-tooltip-message" class="hidden">Copied!</span>
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>
+                        </div>
                         <button id="regenerate-api" onclick="event.stopPropagation(); regenerateApiKey()"
-                                class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                            Regenerate Key
+                                class="text-black px-3 py-2 rounded-lg dark:text-white hover:bg-gray-300 transition-colors flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" class="w-6 h-6">
+                                <path d="M204-318q-22-38-33-78t-11-82q0-134 93-228t227-94h7l-64-64 56-56 160 160-160 160-56-56 64-64h-7q-100 0-170 70.5T240-478q0 26 6 51t18 49l-60 60ZM481-40 321-200l160-160 56 56-64 64h7q100 0 170-70.5T720-482q0-26-6-51t-18-49l60-60q22 38 33 78t11 82q0 134-93 228t-227 94h-7l64 64-56 56Z"/>
+                            </svg>
                         </button>
-                        <span id="next-reset" class="text-sm text-gray-500"></span>
+                        <button onclick="event.stopPropagation(); connectWithApiKey()" 
+                                class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
+                            Connect
+                        </button>
                     </div>
-                    <button onclick="event.stopPropagation(); connectWithApiKey()" 
-                            class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                        Connect Using API Key
-                    </button>
+                    <span id="next-reset" class="text-sm text-gray-500"></span>
                 </div>
             </div>
             @endauth
@@ -118,6 +175,8 @@
         </div>
     </div>
 </div>
+
+@include('partials.need-login')
 
 <style>
     .connection-card.disabled {

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use App\Models\robot;
+use Illuminate\Support\Str;
 
 class RobotController extends Controller
 {
@@ -83,28 +84,33 @@ class RobotController extends Controller
 
     public function connect(Request $request)
     {
-        $ip = $request->query('ip');
-
-        // Implement the logic to test the connection to the ESP32
-        $response = Http::get("http://$ip");
-
-        if ($response->successful() && $response->json('status') === 'ESP32 Robot Server Active') {
-            return response()->json(['success' => true]);
+        try {
+            $ip = $request->query('ip');
+            $response = Http::timeout(5)->get("http://{$ip}/status");
+            
+            if ($response->successful()) {
+                return response()->json(['success' => true]);
+            }
+            
+            throw new \Exception('Connection failed');
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
-
-        return response()->json(['success' => false], 500);
     }
 
-    public function updateSpeed(Request $request)
+    public function createApiKey()
     {
-        $ip = $request->query('ip');
-        $value = $request->query('value');
-
-        // Implement the logic to update the motor speed on the ESP32
-        // For example, you can send an HTTP request to the ESP32
-
-        // Assuming the speed is updated successfully
-        return response()->json(['success' => true]);
+        $user = Auth::user();
+        $robot = Robot::firstOrCreate(
+            ['user_id' => $user->id],
+            ['api_key' => Str::random(32)]
+        );
+        
+        return response()->json([
+            'api_key' => $robot->api_key,
+            'can_reset' => $robot->canResetApiKey(),
+            'next_reset' => $robot->api_key_last_reset?->addWeek()
+        ]);
     }
 
     public function generateApiKey(Request $request)

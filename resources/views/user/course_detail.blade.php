@@ -83,7 +83,7 @@
                             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                        Share Course
+                                    Share Course
                                     </h3>
                                     <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="shareModal">
                                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
@@ -92,10 +92,26 @@
                                     </button>
                                 </div>
                                 <div class="p-4 md:p-5">
-                                    <div class="flex items-center gap-2">
-                                        <input type="text" id="courseUrl" value="{{ url()->current() }}" class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" readonly>
-                                        <button onclick="copyUrl()" class="px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
-                                            Copy
+                                    <div class="w-full max-w-full relative">
+                                    <label for="courseUrl" class="sr-only">Course URL</label>
+                                    <input type="text" id="courseUrl" value="{{ url()->current() }}" readonly
+                                            class="col-span-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
+                                                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-14 dark:bg-gray-700
+                                                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500
+                                                    dark:focus:border-blue-500"
+                                            onclick="event.stopPropagation();">
+                                        <button id="copyButton" onclick="copyUrl()" aria-label="Copy Course URL"
+                                                class="absolute end-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400
+                                                    hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 inline-flex items-center justify-center transition-colors">
+                                        <!-- Default copy icon -->
+                                        <svg id="copy-icon" class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                                            <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
+                                        </svg>
+
+                                        <!-- Success check icon, hidden initially -->
+                                        <svg id="success-icon" class="w-4 h-4 text-blue-600 hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
+                                        </svg>
                                         </button>
                                     </div>
                                 </div>

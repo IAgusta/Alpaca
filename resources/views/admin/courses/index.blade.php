@@ -62,7 +62,7 @@
                 </div>                
                 
                 <!-- Course Cards -->
-                <div class="flex flex-wrap gap-7 justify-start">
+                <div id="course-cards-container" class="flex flex-wrap gap-7 justify-start">
                     <!-- Add New Course Card - Fixed Position -->
                     <div data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create"
                     class="cursor-pointer bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col items-center justify-center p-4" style="width: 208px; height: 350px;">
@@ -78,8 +78,8 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="mt-6">
-                    {{ $courses->links() }}
+                <div class="mt-6" id="pagination-links">
+                    {{ $courses->onEachSide(1)->links() }}
                 </div>
             </div>
         </div>
