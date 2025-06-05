@@ -1,4 +1,4 @@
-<div class="bg-white overflow-hidden shadow-sm rounded-lg p-6">
+<div class="bg-white dark:bg-gray-700 border dark:border-gray-800 overflow-hidden shadow-sm rounded-lg p-6">
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
             Membuat Bagian Kelas
@@ -19,7 +19,7 @@
             <div class="mb-4 md:mb-0 md:w-1/2">
                 <x-input-label for="description" :value="__('Deskripsi')" />
                 <textarea id="description" name="description" rows="2"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
+                class="mt-1 block w-full border-gray-300 dark:bg-gray-600 dark:text-white dark:border-gray-800 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
                 placeholder="Description is an optional, you can just ignore it if doesn't want to make the description"></textarea>
             </div>
         </div>

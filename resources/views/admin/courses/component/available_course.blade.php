@@ -129,11 +129,11 @@
                 @csrf
                 @method('delete')
 
-                <h2 class="text-lg font-medium text-gray-900">
+                <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                     {{ __('Apakah anda yakin menghapus kursus ini?') }}
                 </h2>
 
-                <p class="mt-1 text-sm text-gray-600">
+                <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
                     {{ __('Ketika anda menghapus kursus ini, semua data yang tersimpan akan dihapus. Tolong konfirmasi dengan memasukkan nama kursus.') }}
                 </p>
                 <div class="mt-6">

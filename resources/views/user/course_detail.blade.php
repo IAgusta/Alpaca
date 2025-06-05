@@ -5,7 +5,7 @@
         <!-- Background Image -->
         <div class="absolute inset-0 w-full h-[250px] lg:h-[275px] z-0 overflow-hidden">
             <!-- Gradient Overlay - make sure it covers the entire container -->
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent/0 via-transparent/0 to-white/100 dark:to-black/10 z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent/0 via-transparent/0 dark:via-black/20 to-white/100 dark:to-black/60 z-10"></div>
             <div class="w-full h-full"
                 style="background-image: url('{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}');
                         background-size: cover;
@@ -26,15 +26,15 @@
                                 class="w-32 h-44 md:w-40 md:h-56 lg:w-52 lg:h-72 lg:mr-4 md:mr-2 object-cover rounded-lg shadow-lg" 
                                 loading="lazy">
                             <div class="flex-1">
-                                <h1 class="text-4xl font-extrabold lg:mb-3 mb-2 text-black">{{ $course->name }}</h1>
+                                <h1 class="text-4xl font-extrabold lg:mb-3 mb-2 text-black dark:text-white">{{ $course->name }}</h1>
                                 {{-- Need to enable cURL SSL --}}
                                 {{-- @php
                                     $tr = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
                                     $translatedName = $tr->translate($course->name);
                                 @endphp --}}
 
-                                <h2 class="text-2xl font-bold mb-6 lg:mb-11 text-black">{{-- $translatedName --}} {{ $course->name }}</h2>
-                                <p class="text-gray-800 my-4">{{ $course->authorUser->name ?? 'Unknown' }}</p>
+                                <h2 class="text-2xl font-bold mb-6 lg:mb-11 text-black dark:text-white">{{-- $translatedName --}} {{ $course->name }}</h2>
+                                <p class="text-gray-800 dark:text-gray-300 my-4">{{ $course->authorUser->name ?? 'Unknown' }}</p>
                                 @include('user.component.course_detail_component')
 
                                 <div class="mt-4 flex flex-wrap gap-2">
@@ -44,10 +44,10 @@
                                     </a>
                                     @endforeach
                                 </div>
-                                <div class="mt-4 flex items-center gap-4 text-gray-800">
+                                <div class="mt-4 flex items-center gap-4 text-gray-800 dark:text-gray-300">
                                     <div class="flex items-center">
                                         <span class="material-symbols-outlined">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="text-gray-800 dark:text-white" fill="currentColor">
                                                 <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/>
                                             </svg>
                                         </span>
@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="flex items-center">
                                         <span class="material-symbols-outlined">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="text-gray-800 dark:text-white" fill="currentColor">
                                                 <path d="M160-80v-560q0-33 23.5-56.5T240-720h320q33 0 56.5 23.5T640-640v560L400-200 160-80Zm80-121 160-86 160 86v-439H240v439Zm480-39v-560H280v-80h440q33 0 56.5 23.5T800-800v560h-80ZM240-640h320-320Z"/>
                                             </svg>
                                         </span>
@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="flex items-center">
                                         <span class="material-symbols-outlined">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="text-gray-800 dark:text-white" fill="currentColor">
                                                 <path d="M880-80 720-240H320q-33 0-56.5-23.5T240-320v-40h440q33 0 56.5-23.5T760-440v-280h40q33 0 56.5 23.5T880-640v560ZM160-473l47-47h393v-280H160v327ZM80-280v-520q0-33 23.5-56.5T160-880h440q33 0 56.5 23.5T680-800v280q0 33-23.5 56.5T600-440H240L80-280Zm80-240v-280 280Z"/>
                                             </svg>
                                         </span>
@@ -122,7 +122,7 @@
 
                 <!-- Rest of the content -->
                 <div class="p-7">
-                    <p class="mt-4 text-gray-700">{{ $course->description ?? 'This course doesn`t have any description' }}</p>
+                    <p class="mt-4 text-gray-700 dark:text-gray-400">{{ $course->description ?? 'This course doesn`t have any description' }}</p>
                     <div class="mt-6">
                         <div class="mt-2 lg:grid lg:grid-cols-3 gap-4">
                             {{-- Courses more Details --}}
@@ -130,7 +130,7 @@
                                 <!-- Author / Themes -->
                                 <div class="flex gap-4">
                                     <div>
-                                        <h3 class="font-bold text-sm uppercase">Author</h3>
+                                        <h3 class="font-bold text-sm uppercase dark:text-white">Author</h3>
                                         <div class="flex flex-wrap gap-2 mt-1">
                                             <a href="/{{ $course->authorUser->username }}">
                                                 <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-lg dark:bg-blue-900 dark:text-blue-300 truncate max-w-[120px]"
@@ -141,7 +141,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-sm uppercase">Themes</h3>
+                                        <h3 class="font-bold text-sm uppercase dark:text-white">Themes</h3>
                                         <div class="flex flex-wrap gap-2 mt-1">
                                             @foreach(explode(',', $course->theme ?? 'Umum') as $theme)
                                             <a href="{{ route('course.feed', ['search' => trim($theme)]) }}">
@@ -153,7 +153,7 @@
                                 </div>
                                 {{-- Author Social Media Links --}}
                                 <div class="mt-4">
-                                    <h3 class="font-bold text-sm uppercase mt-3">Author Social Media</h3>
+                                    <h3 class="font-bold text-sm uppercase mt-3 dark:text-white">Author Social Media</h3>
                                     <div class="grid grid-cols-2 gap-x-4 gap-y-2 mt-1 mb-7">
                                         @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'github'] as $platform)
                                             @php
@@ -173,9 +173,10 @@
                                             @endphp
                                             @if ($link)
                                                 <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1">
-                                                    <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5">
+                                                    <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5 dark:bg-gray-300 rounded-full p-1 bg-white">
+                                                    {{-- Display username if available --}}
                                                     @if ($username)
-                                                        <span class="text-sm">{{ $username }}</span>
+                                                        <span class="text-sm dark:text-white">{{ $username }}</span>
                                                     @endif
                                                 </a>
                                             @endif

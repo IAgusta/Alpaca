@@ -1,4 +1,4 @@
-<div class="bg-slate-100 overflow-hidden shadow-sm rounded-lg p-6">
+<div class="bg-gray-100 dark:bg-gray-600 overflow-hidden shadow-sm rounded-lg p-6">
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white"> {{ __('Kelas :') }} {{ $course->name }}</h3>
@@ -16,7 +16,7 @@
     <div class="relative my-2">
         <ul class="space-y-2 sortable-list" data-url="{{ route('admin.courses.modules.reorder', ['course' => $course->id]) }}">
             @forelse($modules->sortBy('position') as $module)
-                <li class="bg-white border rounded-lg shadow-sm p-4 module-item" data-id="{{ $module->id }}" data-position="{{ $module->position }}">
+                <li class="bg-white dark:bg-gray-700 border dark:border-gray-800 rounded-lg shadow-sm p-4 module-item" data-id="{{ $module->id }}" data-position="{{ $module->position }}">
                     <div class="flex items-start gap-4">
                         <!-- Drag Handle -->
                         <div class="cursor-grab drag-handle mt-2">
@@ -27,8 +27,8 @@
 
                         <!-- Module Title -->
                         <div class="flex-1">
-                            <h3 class="font-medium text-gray-900">{{ $module->title }}</h3>
-                            <p class="text-sm text-gray-500">{{ $module->description ?? 'No description available' }}</p>
+                            <h3 class="font-medium text-gray-900 dark:text-white">{{ $module->title }}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-200">{{ $module->description ?? 'No description available' }}</p>
                         </div>
 
                         <!-- Actions -->
@@ -100,11 +100,11 @@
                                     @csrf
                                     @method('delete')
 
-                                    <h2 class="text-lg font-medium text-gray-900">
+                                    <h2 class="text-lg font-medium text-gray-900 dark:text-white">
                                         {{ __('Apakah anda yakin menghapus bagian dari kelas ini?') }}
                                     </h2>
 
-                                    <p class="mt-1 text-sm text-gray-600">
+                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
                                         {{ __('Ketika dihapus, bagian dan isinya akan dihapus secara permanen.') }}
                                     </p>
 

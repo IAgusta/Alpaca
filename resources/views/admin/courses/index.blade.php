@@ -2,7 +2,7 @@
     @section('title', 'Course Management - '. config('app.name'))
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
                 {{ __('Courses') }}
             </h2>
         </div>
@@ -10,14 +10,14 @@
 
     <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden p-7">
+            <div class=" overflow-hidden p-7">
                 <div class="justify-end flex items-center mb-7">
                     <!-- Combined Sort + Search -->
-                    <div class="flex items-center border border-gray-300 rounded-lg bg-white">
+                    <div class="flex lg:mr-3 items-center border border-gray-300 rounded-lg bg-gray-300 dark:bg-gray-600">
                         <!-- Sort Dropdown -->
                         <div class="relative">
                             <button id="sortDropdownButton" data-dropdown-toggle="sortDropdown" type="button"
-                                class="text-gray-500 hover:bg-gray-100 px-3 py-2 text-sm inline-flex items-center">
+                                class="text-gray-500 rounded-l-lg dark:text-white dark:hover:bg-gray-700 hover:bg-gray-100 px-3 py-2 text-sm inline-flex items-center">
                                 <span class="mr-2">Sort by: {{ ucfirst($sort) }}</span>
                                 <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -26,23 +26,23 @@
                                 </svg>
                             </button>
                             <div id="sortDropdown"
-                                class="z-10 hidden absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 mt-2">
+                                class="z-10 hidden absolute bg-white dark:bg-gray-600 divide-y dark:text-white divide-gray-100 rounded-lg shadow w-44 mt-2">
                                 <ul class="py-2 text-sm text-gray-700" aria-labelledby="sortDropdownButton">
                                     <li>
                                         <a href="{{ request()->fullUrlWithQuery(['sort' => 'name', 'direction' => $sort === 'name' && $direction === 'asc' ? 'desc' : 'asc']) }}"
-                                            class="block px-4 py-2 hover:bg-gray-100">
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
                                             Name {{ $sort === 'name' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ request()->fullUrlWithQuery(['sort' => 'created_at', 'direction' => $sort === 'created_at' && $direction === 'asc' ? 'desc' : 'asc']) }}"
-                                            class="block px-4 py-2 hover:bg-gray-100">
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
                                             Created Date {{ $sort === 'created_at' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ request()->fullUrlWithQuery(['sort' => 'updated_at', 'direction' => $sort === 'updated_at' && $direction === 'asc' ? 'desc' : 'asc']) }}"
-                                            class="block px-4 py-2 hover:bg-gray-100">
+                                            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white">
                                             Updated Date {{ $sort === 'updated_at' ? ($direction === 'asc' ? '↑' : '↓') : '' }}
                                         </a>
                                     </li>
@@ -56,7 +56,7 @@
                             <input type="hidden" name="direction" value="{{ $direction }}">
                             <input type="text" name="search" value="{{ $search ?? '' }}"
                                 placeholder="Search courses..."
-                                class="w-full border-none focus:ring-0 focus:outline-none text-sm px-3 py-2">
+                                class="w-full rounded-r-lg dark:text-white dark:bg-gray-600 border-none focus:ring-0 focus:outline-none text-sm px-3 py-2">
                         </form>
                     </div>
                 </div>                
@@ -78,7 +78,7 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="mt-6" id="pagination-links">
+                <div class="mt-6 lg:mr-4" id="pagination-links">
                     {{ $courses->onEachSide(1)->links() }}
                 </div>
             </div>

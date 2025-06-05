@@ -5,7 +5,7 @@
             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li class="inline-flex items-center">
                     <a href="{{ route('admin.courses.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                        <h2 class="font-semibold text-xl text-gray-800 leading-tight hover:text-blue-600">{{ __('Course') }}</h2>
+                        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight hover:text-blue-600">{{ __('Course') }}</h2>
                     </a>
                 </li>
                 <li class="inline-flex items-center">
@@ -14,7 +14,7 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                         </svg>
                         <a data-modal-target="crud-modal-module-{{ $course->id }}" data-modal-toggle="crud-modal-module-{{ $course->id }}">
-                            <h2 class="truncate cursor-pointer font-semibold text-xl text-gray-800 leading-tight hover:text-blue-600">{{ Str::limit($course->name, 18, '...')  }}</h2>
+                            <h2 class="truncate cursor-pointer font-semibold text-xl text-gray-800 dark:text-gray-300 leading-tight hover:text-blue-600">{{ Str::limit($course->name, 18, '...')  }}</h2>
                         </a>
                     </div>
                 </li>
@@ -45,7 +45,7 @@
     </x-slot>
 
     <div class="py-6 max-w-6xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden sm:rounded-lg p-6">
+        <div class="overflow-hidden sm:rounded-lg p-6">
             <a href="#" onclick="window.history.back();">
                 <x-secondary-button class="mb-4">
                     {{ __('Kembali') }}
@@ -57,10 +57,10 @@
 
             <!-- Preview Section -->
             <div class="mt-6">
-                <h3 class="text-lg font-semibold text-center">Preview Isi Konten</h3>
+                <h3 class="text-lg font-semibold text-center dark:text-white">Preview Isi Konten</h3>
                 <ul class="mt-2 space-y-2 sortable-list" data-url="{{ route('admin.courses.modules.contents.reorder', ['course' => $course->id, 'module' => $module->id]) }}">
                     @foreach ($module->contents->sortBy('position') as $index => $content)
-                        <li class="p-4 bg-gray-100 rounded shadow-md flex items-start content-item" data-id="{{ $content->id }}" data-position="{{ $index + 1 }}">
+                        <li class="p-4 border bg-gray-100 dark:bg-gray-600 dark:border-gray-800 rounded shadow-md flex items-start content-item" data-id="{{ $content->id }}" data-position="{{ $index + 1 }}">
                             <!-- Reposition Buttons (Left Side) -->
                             <div class="flex flex-col items-center gap-2 mr-4">
                                 <span class="cursor-grab drag-handle">
@@ -74,10 +74,10 @@
                             <div class="flex-1" x-data="{ showContent: false }">
                                 <!-- Title & Button in One Line -->
                                 <div class="flex items-center justify-center relative">
-                                    <div class="font-semibold text-center">{{ $content->title }}</div>
+                                    <div class="font-semibold text-center dark:text-gray-300">{{ $content->title }}</div>
                                     <button 
                                         @click="showContent = !showContent" 
-                                        class="text-blue-500 hover:bg-blue-50 p-1 rounded-full"
+                                        class="text-blue-500 hover:text-blue-600 p-1 rounded-full"
                                         aria-label="Toggle content visibility">
                                         <span class="material-symbols-outlined" x-show="!showContent">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#0000F5">
@@ -95,7 +95,7 @@
                                 <!-- Content Toggle -->
                                 <div x-show="showContent" x-cloak class="mt-2">
                                     @if ($content->content_type === "content")
-                                        <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                                        <div class="w-full border border-gray-200 rounded-lg dark:border-gray-600">
                                             <div class="px-4 py-2">
                                                 <div id="preview-container-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
                                                     {!! $content->content !!}
@@ -107,9 +107,9 @@
                                             $exercise = json_decode($content->content, true);
                                         @endphp
                                         <div>
-                                            <strong>Question:</strong>
+                                            <strong class="dark:text-white text-xl">Question:</strong>
                                             <div class="w-full">
-                                                <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
+                                                <div class="px-4 py-2 bg-white rounded-lg dark:bg-gray-700 border dark:border-gray-800 my-2">
                                                     <div id="preview-container-{{ $content->id }}" class="block w-full px-0 text-sm text-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
                                                         {!! $exercise['question'] ?? 'No question provided' !!}
                                                     </div>
@@ -117,7 +117,7 @@
                                             </div>
                                             <ul>
                                                 @foreach ($exercise['answers'] ?? [] as $answer)
-                                                    <li>
+                                                    <li class="dark:text-gray-200 text-xl">
                                                         {{ $answer['text'] ?? 'No answer text provided' }}
                                                         @if (isset($answer['correct']) && $answer['correct'])
                                                             <span class="text-green-600 font-bold">(✔ Correct)</span>
@@ -125,7 +125,7 @@
                                                     </li>
                                                 @endforeach
                                             </ul>
-                                            <div class="text-sm text-gray-600">
+                                            <div class="text-xs mt-3 text-gray-600 dark:text-gray-300">
                                                 <strong>Explanation:</strong> {{ $exercise['explanation'] ?? 'No explanation provided' }}
                                             </div>
                                         </div>
@@ -135,7 +135,7 @@
             
                             <!-- Dropdown Button (Top-Right) -->
                             <div class="relative self-start">
-                                <button data-dropdown-toggle="contentDropdown-{{ $content->id }}" class="bg-transparent p-2 rounded-full hover:bg-gray-200">
+                                <button data-dropdown-toggle="contentDropdown-{{ $content->id }}" class="bg-transparent p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                                         <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a.5.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
                                     </svg>

@@ -18,7 +18,7 @@ export default defineConfig({
                 'resources/js/course/show.js',
                 'resources/js/profile/profile-images.js',
                 'resources/js/profile/added-social-link.js',
-                'resources/js/settings/appearance.js',
+                'resources/js/settings/main.js',
                 'resources/js/layout/main.js',
             ],
             refresh: true,

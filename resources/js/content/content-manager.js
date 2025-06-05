@@ -115,9 +115,9 @@ document.addEventListener('DOMContentLoaded', function () {
         div.classList.add("flex", "items-center", "space-x-2", "mb-2");
 
         div.innerHTML = `
-            <input type="text" name="answers[${answerIndex}][text]" class="w-full border-gray-300 rounded-md shadow-sm">
-            <input type="checkbox" name="answers[${answerIndex}][correct]" value="1">
-            <span class="text-sm">Correct</span>
+            <input type="text" name="answers[${answerIndex}][text]" class="w-full border-gray-300 dark:bg-gray-600 dark:text-white dark:border-gray-800 rounded-md shadow-sm">
+            <input type="checkbox" name="answers[${answerIndex}][correct]" value="1" class="accent-blue-600">
+            <span class="text-sm dark:text-white">Correct</span>
             <button type="button" class="text-red-600 remove-answer">×</button>
         `;
         container.appendChild(div);

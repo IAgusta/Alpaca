@@ -6,7 +6,7 @@
                 <li class="inline-flex items-center">
                     <a href="{{ route('admin.courses.modules.contents.index', ['course' => $course, 'module' => $module]) }}"
                         class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                        <h2 class="font-semibold text-xl text-gray-800 leading-tight hover:text-blue-600">{{ $module->title }}</h2>
+                        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight hover:text-blue-600">{{ $module->title }}</h2>
                     </a>
                 </li>
                 <li>
@@ -22,7 +22,7 @@
     </x-slot>
 
     <div class="py-7 max-w-6xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden sm:rounded-lg p-6">
+        <div class="overflow-hidden sm:rounded-lg p-6">
             <!-- Back Button -->
             <a href="#" onclick="window.history.back();" class="mb-4 inline-block">
                 <x-secondary-button>{{ __('Back') }}</x-secondary-button>
@@ -35,19 +35,19 @@
 
                 <!-- Title field -->
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Judul Konten</label>
-                    <input type="text" name="title" id="title" class="w-full border-gray-300 rounded-md shadow-sm" value="{{ $content->title }}" required>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Judul Konten</label>
+                    <input type="text" name="title" id="title" class="w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-600 dark:text-white" value="{{ $content->title }}" required>
                 </div>
 
                 <!-- Content Type (Display Only) -->
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Content Type</label>
-                    <input type="text" class="w-full border-gray-300 rounded-md shadow-sm bg-gray-100" value="{{ ucfirst($content->content_type) }}" readonly>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Content Type</label>
+                    <input type="text" class="w-full border-gray-300 rounded-md shadow-sm bg-gray-100 dark:bg-gray-600 dark:text-gray-300" value="{{ ucfirst($content->content_type) }}" readonly>
                 </div>
 
                 <!-- Single WYSIWYG Editor Container -->
                 <div class="mb-2">
-                    <label class="flex text-sm font-medium text-gray-700" id="editor-label">
+                    <label class="flex text-sm font-medium text-gray-700 dark:text-gray-300" id="editor-label">
                         {{ $content->content_type === 'exercise' ? 'Pertanyaan:' : 'Isi Konten:' }}
                     </label>
                     <div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
@@ -70,15 +70,15 @@
                     <div id="exercise-fields" class="mt-4">
                         <!-- Answer Choices -->
                         <div id="answers-container" class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilihan Jawaban</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">Pilihan Jawaban</label>
                             @foreach ($exercise['answers'] ?? [] as $index => $answer)
                                 <div class="flex items-center space-x-2 mb-2">
                                     <input type="text" name="answers[{{ $index }}][text]" 
-                                        class="w-full border-gray-300 rounded-md shadow-sm" 
+                                        class="w-full border-gray-300 dark:bg-gray-600 dark:border-gray-800 dark:text-white rounded-md shadow-sm" 
                                         value="{{ $answer['text'] ?? '' }}">
                                     <input type="checkbox" name="answers[{{ $index }}][correct]" 
                                         value="1" {{ isset($answer['correct']) && $answer['correct'] ? 'checked' : '' }}>
-                                    <span class="text-sm">Correct</span>
+                                    <span class="text-sm dark:text-white">Correct</span>
                                     <button type="button" class="text-red-600 remove-answer">×</button>
                                 </div>
                             @endforeach
@@ -87,8 +87,8 @@
 
                         <!-- Explanation -->
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Penjelasan (Jika Salah)</label>
-                            <textarea name="explanation" class="w-full border-gray-300 rounded-md shadow-sm">{{ $exercise['explanation'] ?? '' }}</textarea>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">Penjelasan (Jika Salah)</label>
+                            <textarea name="explanation" class="w-full border-gray-300 dark:bg-gray-600 dark:border-gray-800 dark:text-white rounded-md shadow-sm">{{ $exercise['explanation'] ?? '' }}</textarea>
                         </div>
                     </div>
                 @endif

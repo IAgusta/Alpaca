@@ -32,7 +32,7 @@
             <div class="mt-4">
                 <x-input-label for="description" :value="__('Deskripsi')" />
                 <textarea id="description" name="description" rows="5"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
+                class="mt-1 block w-full border-gray-300 dark:bg-gray-600 dark:text-white dark:border-gray-800 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
                 placeholder="Description is an optional, you can just ignore it if doesn't want to make the description">{{ old('description', $course->description) }}</textarea>
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
             </div>
@@ -74,7 +74,7 @@
                 <!-- New Theme Input -->
                 <div id="new-theme-container-{{ $course->id }}" class="hidden items-center gap-2 mt-2">
                     <input type="text" id="new-theme-input-{{ $course->id }}" 
-                            class="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 w-40" 
+                            class="px-2 py-1 border dark:bg-gray-600 dark:border-800 dark:text-white border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-300 w-40" 
                             placeholder="Enter theme">
                     <x-secondary-button type="button" onclick="addTheme('{{ $course->id }}')">
                         {{ __('Tambah') }}

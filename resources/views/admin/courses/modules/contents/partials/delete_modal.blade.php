@@ -3,11 +3,11 @@
         @csrf
         @method('delete')
 
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ __('Apakah anda yakin menghapus bagian dari konten kelas ini?') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">
             {{ __('Ketika dihapus, bagian dan isinya akan dihapus secara permanen.') }}
         </p>
 

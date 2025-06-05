@@ -44,11 +44,11 @@ export function toggleProgress(moduleId, button) {
 
 function updateContainerClasses(container, isRead) {
     if (isRead) {
-        container.classList.remove("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
+        container.classList.remove("bg-white", "border-blue-500", "text-black", "dark:bg-gray-700", "dark:border-blue-500", "dark:text-white");
         container.classList.add("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
     } else {
         container.classList.remove("bg-gray-200", "border-gray-400", "text-gray-600", "dark:bg-gray-800", "dark:border-gray-600", "dark:text-gray-400");
-        container.classList.add("bg-white", "border-blue-500", "text-black", "dark:bg-gray-900", "dark:border-blue-500", "dark:text-white");
+        container.classList.add("bg-white", "border-blue-500", "text-black", "dark:bg-gray-700", "dark:border-blue-500", "dark:text-white");
     }
 }
 
