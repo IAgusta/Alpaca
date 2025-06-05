@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
         <link rel="stylesheet" href="/resources/css/styles.css">
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/settings/appearance.js'])
+        @vite(['resources/css/app.css', 'resources/js/layout/main.js', 'resources/js/settings/appearance.js'])
     </head>
     <body class="font-sans antialiased pt-16 bg-white dark:bg-gray-900">
         <div class="min-h-screen flex flex-col">
@@ -36,7 +36,7 @@
             @endguest
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white dark:text-white dark:bg-gray-800 shadow">
+                <header class="bg-white dark:text-white dark:bg-gray-800 shadow border-b dark:border-gray-600">
                     <div class="max-w-8xl dark:text-white mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>

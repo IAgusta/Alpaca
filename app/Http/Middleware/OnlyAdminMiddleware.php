@@ -16,7 +16,7 @@ class OnlyAdminMiddleware
             return $next($request);
         }
 
-        // Redirect unauthorized users
-        abort(403, 'Unauthorized access');
+        // Return custom 403 message
+        abort(403, 'Limited Access: This area is restricted to trainers and administrators only.');
     }
 }

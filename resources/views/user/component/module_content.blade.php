@@ -4,7 +4,7 @@
 
 <div class="lg:col-span-2 relative">
     @php
-        $hasAccess = Auth::user()->role === 'admin' || 
+        $hasAccess = in_array(Auth::user()->role, ['admin', 'owner']) || 
                      $course->author === Auth::id() || 
                      (UserCourse::where('user_id', Auth::id())
                         ->where('course_id', $course->id)

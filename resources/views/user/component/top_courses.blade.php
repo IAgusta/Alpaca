@@ -64,7 +64,7 @@
     <!-- Static Title -->
     <div class="absolute lg:px-8 w-full top-3 z-10">
         <div class="max-w-8xl mx-auto px-3">
-            <h1 class="text-xl lg:text-2xl font-bold text-black dark:text-white">Popular New Titles</h1>
+            <h1 class="text-xl lg:text-2xl font-bold text-black">Popular New Titles</h1>
         </div>
     </div>
 
@@ -72,9 +72,9 @@
     <!-- Navigation Outside of Swiper -->
     <div class="absolute lg:px-8 w-full bottom-4 z-10">
         <div class="max-w-8xl mx-auto px-6 flex justify-end items-center gap-4">
-            <span id="slide-number" class="text-lg text-black dark:text-white">No. 1</span>
-            <button id="prevSlide" class="dark:text-white text-black hover:text-gray-300 text-2xl font-bold">&lt;</button>
-            <button id="nextSlide" class="dark:text-white text-black hover:text-gray-300 text-2xl font-bold">&gt;</button>
+            <span id="slide-number" class="text-lg text-black">No. 1</span>
+            <button id="prevSlide" class=" text-black hover:text-gray-300 text-2xl font-bold">&lt;</button>
+            <button id="nextSlide" class=" text-black hover:text-gray-300 text-2xl font-bold">&gt;</button>
         </div>
     </div>
 </div>

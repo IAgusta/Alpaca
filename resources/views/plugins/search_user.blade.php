@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('title', 'Search User - ' . config('app.name'))
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
             {{ __('Search User') }}
         </h2>
     </x-slot>
@@ -16,7 +16,7 @@
                         id="role-filter"
                         x-model="roleFilter" 
                         @change="handleFilters"
-                        class="block w-full p-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        class="block w-full p-3 text-sm text-gray-900 dark:text-white border border-gray-300 rounded-lg bg-white dark:bg-gray-800 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">All Roles</option>
                         <option value="user">User</option>
@@ -34,7 +34,7 @@
                             id="name-sort"
                             x-model="nameSort" 
                             @change="handleFilters"
-                            class="block w-full p-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            class="block w-full p-3 text-sm text-gray-900 dark:text-white border border-gray-300 rounded-lg bg-white dark:bg-gray-800 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                         >
                             <option value="asc">Name (A-Z)</option>
                             <option value="desc">Name (Z-A)</option>
@@ -57,7 +57,7 @@
                                 x-model="query" 
                                 @input.debounce.300ms="searchUser" 
                                 placeholder="Search users by name..." 
-                                class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                class="block w-full p-3 pl-10 text-sm text-gray-900 dark:text-white border border-gray-300 rounded-lg bg-white dark:bg-gray-800 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
                     </div>
@@ -69,11 +69,11 @@
                 <template x-for="user in displayedUsers.data" :key="user.id">
                     <button 
                         @click="goToProfile(user.username)"
-                        class="flex items-center p-4 text-left border rounded-lg hover:bg-gray-50 transition-colors duration-150 ease-in-out"
+                        class="flex items-center p-4 text-left border rounded-lg dark:bg-gray-800 hover:bg-gray-100 transition-colors duration-150 ease-in-out"
                     >
                         <img :src="user.avatar" class="w-12 h-12 rounded-full border-1 border-gray-400 dark:border-gray-800 mr-4" alt="Avatar">
                         <div>
-                            <div class="font-medium" x-text="user.name"></div>
+                            <div class="font-medium dark:text-white" x-text="user.name"></div>
                             <div>
                                 <template x-if="user.role === 'owner'">
                                     <span class="inline-block bg-black text-white px-3 py-1 rounded-full text-xs mt-1 first-letter:uppercase">

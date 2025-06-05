@@ -12,7 +12,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/layout/main.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased" style="background-image: url('{{ asset('img/background.png') }}'); background-size: cover;">
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

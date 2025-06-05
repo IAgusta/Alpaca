@@ -39,8 +39,8 @@
                                         $link = $socialMediaLinks[$platform] ?? null;
                                     @endphp
                                     @if ($link)
-                                        <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="flex items-center">
-                                            <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5 mr-2">
+                                        <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="p-2 flex items-center rounded-full hover:bg-gray-50 dark:hover:bg-gray-500 dark:bg-gray-300">
+                                            <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5">
                                         </a>
                                     @endif
                                 @endforeach

@@ -1,6 +1,6 @@
 <div class="gap-6">
     <div>
-        <h3 class="text-2xl font-bold text-gray-900 text-center">Shortcut</h3>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white text-center">Shortcut</h3>
         <div class="mt-4 flex flex-wrap justify-center gap-7">
             <!-- Robot Control -->
             <a href="{{ route('plugins.robotControl') }}" class="group relative w-28 h-28 rounded-xl shadow-md overflow-hidden bg-gradient-to-br from-blue-100 to-blue-300 hover:from-blue-300 hover:to-blue-500 transition duration-300 transform hover:scale-105">

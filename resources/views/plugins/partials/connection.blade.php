@@ -10,12 +10,12 @@
         document.getElementById('modalBackdrop').classList.remove('hidden');
     }
 }">
-    <h2 class="text-xl font-bold text-center">Connect to Your ESP32</h2>
-    <p class="text-center text-gray-600 mb-3">Choose a connection method below:</p>
+    <h2 class="text-xl font-bold text-center dark:text-white">Connect to Your ESP32</h2>
+    <p class="text-center text-gray-600 dark:text-gray-300 mb-3">Choose a connection method below:</p>
     <div id="connect-options" class="grid-cols-none grid lg:grid-cols-2 gap-4 p-4 mb-7">
         <!-- Wi-Fi Card -->
         <div id="wifi-card" 
-             class="bg-white rounded-xl shadow-lg transition-all duration-300"
+             class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300"
              :class="{ 'col-span-full': activeMode === 'wifi' }"
              x-show="!activeMode || activeMode === 'wifi'"
              x-transition:enter="transition ease-out duration-300"
@@ -30,8 +30,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-lg">Connect Using Wi-Fi</h3>
-                        <p class="text-sm text-gray-500">Connect to your ESP32's IP address</p>
+                        <h3 class="font-semibold text-lg dark:text-white">Connect Using Wi-Fi</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-200">Connect to your ESP32's IP address</p>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                  x-transition:enter="transition-all ease-out duration-300"
                  x-transition:enter-start="opacity-0 transform -translate-y-4"
                  x-transition:enter-end="opacity-100 transform translate-y-0"
-                 class="p-4 border-t">
+                 class="p-4 border-t dark:border-gray-600">
                 <div class="flex gap-3 items-center">
                     <input type="text" id="wifi-ip" placeholder="Enter ESP32 IP" 
                         class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:border-blue-500" 
@@ -75,7 +75,7 @@
     
         <!-- API Card -->
         <div id="api-card" 
-             class="bg-white rounded-xl shadow-lg transition-all duration-300"
+             class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300"
              :class="{ 'col-span-full': activeMode === 'api' }"
              x-show="!activeMode || activeMode === 'api'"
              x-transition:enter="transition ease-out duration-300"
@@ -91,8 +91,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-lg">Connect Using API</h3>
-                        <p class="text-sm text-gray-500">
+                        <h3 class="font-semibold text-lg dark:text-white">Connect Using API</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-200">
                             {{ auth()->check() ? 'Your personal API key for robot control' : 'Login required for API access' }}
                         </p>
                     </div>
@@ -105,7 +105,7 @@
                  x-transition:enter="transition-all ease-out duration-300"
                  x-transition:enter-start="opacity-0 transform -translate-y-4"
                  x-transition:enter-end="opacity-100 transform translate-y-0"
-                 class="p-4 border-t">
+                 class="p-4 border-t dark:border-gray-600">
                 <div class="space-y-3">
                     {{-- Display, Copy, Regenerate, and Connect API key (one line flex) --}}
                     <div class="w-full flex flex-wrap items-center gap-2">
@@ -153,7 +153,7 @@
                             Connect
                         </button>
                     </div>
-                    <span id="next-reset" class="text-sm text-gray-500"></span>
+                    <span id="next-reset" class="text-sm text-gray-500 dark:text-gray-200"></span>
                 </div>
             </div>
             @endauth

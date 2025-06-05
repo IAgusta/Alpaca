@@ -13,7 +13,7 @@
     <!-- Loop through the latest courses -->
     @foreach ($latestCourses as $index => $course)
         <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name), 'courseId' => $course->id]) }}"
-            class="flex items-start gap-4 p-3 rounded-lg bg-white shadow hover:bg-slate-100 group transition duration-200
+            class="flex items-start gap-4 p-3 rounded-lg bg-white dark:bg-gray-800 shadow hover:bg-slate-100 group transition duration-200
                    {{ $index >= 5 ? 'hidden lg:flex' : '' }}">
             
             <!-- Cover Image -->
@@ -25,7 +25,7 @@
             <div class="flex-1">
                 <!-- Course Name with Own Tag -->
                 <div class="flex items-center gap-2">
-                    <h4 class="text-sm font-bold text-gray-800 group-hover:text-blue-600 truncate">
+                    <h4 class="text-sm font-bold text-gray-800 dark:text-white group-hover:text-blue-600 truncate">
                         {{ $course->name }}
                     </h4>
                     @if($userSavedCourses->contains($course->id))

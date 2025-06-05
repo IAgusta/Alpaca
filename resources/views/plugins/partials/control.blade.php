@@ -11,8 +11,8 @@
     }
 }" class="p-4">
     <div class="relative">
-        <h2 class="text-xl font-bold text-center">Select Mode</h2>
-        <p class="text-center text-gray-600 mb-3">Choose the job you want your robot to do:</p>
+        <h2 class="text-xl font-bold text-center dark:text-white">Select Mode</h2>
+        <p class="text-center text-gray-600 mb-3 dark:text-gray-300">Choose the job you want your robot to do:</p>
         <!-- Grid Container -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Line Follower Card -->
@@ -20,15 +20,15 @@
                 :class="{ 
                     'col-span-full': activeMode === 'line'
                 }" 
-                class="bg-white rounded-xl shadow-lg transition-all duration-300">
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300">
                 <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'line' ? null : 'line'">
                     <div class="flex items-center space-x-4">
                         <div class="p-3 rounded-lg bg-green-100">
                             <img src="/icons/car.svg" class="w-8 h-8" alt="Line Follower">
                         </div>
                         <div>
-                            <h3 class="font-semibold text-lg">Line Follower</h3>
-                            <p class="text-sm text-gray-500">Follow the line path automatically</p>
+                            <h3 class="font-semibold text-lg dark:text-white">Line Follower</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-200">Follow the line path automatically</p>
                         </div>
                     </div>
                     <!-- Toggle Switch -->
@@ -45,9 +45,9 @@
                      x-transition:enter="transition-all ease-out duration-300"
                      x-transition:enter-start="opacity-0 transform -translate-y-4"
                      x-transition:enter-end="opacity-100 transform translate-y-0"
-                     class="p-4 border-t">
+                     class="p-4 border-t dark:border-gray-600">
                     <div class="space-y-4">
-                        <div class="grid grid-cols-3 gap-4">
+                        <div class="grid grid-cols-3 gap-4 dark:text-white">
                             <template x-for="sensor in ['Left', 'Center', 'Right']">
                                 <div class="flex flex-col items-center">
                                     <div class="w-4 h-4 rounded-full transition-colors duration-300"
@@ -58,8 +58,8 @@
                         </div>
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
-                                <span class="text-sm font-medium text-gray-600">Speed Control</span>
-                                <span class="text-sm font-medium text-gray-600 w-16 text-right" x-text="globalSpeed + '%'"></span>
+                                <span class="text-sm font-medium text-gray-600 dark:text-gray-200">Speed Control</span>
+                                <span class="text-sm font-medium text-gray-600 dark:text-gray-200 w-16 text-right" x-text="globalSpeed + '%'"></span>
                             </div>
                             <div class="relative">
                                 <div class="flex justify-between text-xs text-gray-400 px-1 mb-1">
@@ -94,15 +94,15 @@
                 :class="{ 
                     'col-span-full': activeMode === 'wall'
                 }" 
-                class="bg-white rounded-xl shadow-lg transition-all duration-300">
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300">
                 <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'wall' ? null : 'wall'">
                     <div class="flex items-center space-x-4">
                         <div class="p-3 rounded-lg bg-blue-100">
                             <img src="/icons/sensor.svg" class="w-8 h-8" alt="Wall Avoider">
                         </div>
                         <div>
-                            <h3 class="font-semibold text-lg">Wall Avoider</h3>
-                            <p class="text-sm text-gray-500">Navigate avoiding obstacles</p>
+                            <h3 class="font-semibold text-lg dark:text-white">Wall Avoider</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-200">Navigate avoiding obstacles</p>
                         </div>
                     </div>
                     <!-- Toggle Switch -->
@@ -119,16 +119,19 @@
                      x-transition:enter="transition-all ease-out duration-300"
                      x-transition:enter-start="opacity-0 transform -translate-y-4"
                      x-transition:enter-end="opacity-100 transform translate-y-0"
-                     class="p-4 border-t">
+                     class="p-4 border-t dark:border-gray-600">
                     <div class="space-y-6">
                         <!-- Radar Display -->
                         <div class="relative">
                             <div class="radar-display w-48 h-48 mx-auto rounded-full border-4 border-blue-200 relative">
-                                <div class="radar-sweep absolute inset-0 origin-center animate-spin duration-2000"></div>
-                                <div class="radar-object absolute w-3 h-3 bg-red-500 rounded-full"
+                                <div class="radar-sweep absolute rounded-full inset-0 origin-center animate-spin duration-2000"></div>
+                                <!-- Centered robot-object -->
+                                <div class="robot-object absolute w-3 h-3 bg-blue-500 rounded-full"
+                                     style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                                <div class="hidden radar-object absolute w-3 h-3 bg-red-500 rounded-full"
                                      style="top: 30%; left: 70%;"></div>
                             </div>
-                            <div class="mt-4 text-center text-sm text-gray-600">
+                            <div class="mt-4 text-center text-sm text-gray-600 dark:text-gray-200">
                                 Distance: <span class="font-medium">45cm</span>
                             </div>
                         </div>
@@ -136,8 +139,8 @@
                         <!-- Speed Control -->
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
-                                <span class="text-sm font-medium text-gray-600">Speed Control</span>
-                                <span class="text-sm font-medium text-gray-600 w-16 text-right" x-text="globalSpeed + '%'"></span>
+                                <span class="text-sm font-medium text-gray-600 dark:text-gray-200">Speed Control</span>
+                                <span class="text-sm font-medium text-gray-600 w-16 text-right dark:text-gray-200" x-text="globalSpeed + '%'"></span>
                             </div>
                             <div class="relative">
                                 <div class="flex justify-between text-xs text-gray-400 px-1 mb-1">
@@ -167,8 +170,8 @@
                         <!-- Distance Control -->
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">
-                                <span class="text-sm font-medium text-gray-600">Avoid Distance</span>
-                                <span class="text-sm font-medium text-gray-600 w-16 text-right" x-text="avoidDistance + 'cm'"></span>
+                                <span class="text-sm font-medium text-gray-600 dark:text-gray-200">Avoid Distance</span>
+                                <span class="text-sm font-medium text-gray-600 w-16 text-right dark:text-gray-200" x-text="avoidDistance + 'cm'"></span>
                             </div>
 
                             <div class="relative">
@@ -211,15 +214,15 @@
                 :class="{ 
                     'col-span-full': activeMode === 'manual'
                 }" 
-                class="bg-white rounded-xl shadow-lg transition-all duration-300">
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300">
                 <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'manual' ? null : 'manual'">
                     <div class="flex items-center space-x-4">
                         <div class="p-3 rounded-lg bg-purple-100">
                             <img src="/icons/control.svg" class="w-8 h-8" alt="Manual Control">
                         </div>
                         <div>
-                            <h3 class="font-semibold text-lg">Manual Control</h3>
-                            <p class="text-sm text-gray-500">Direct control over movement</p>
+                            <h3 class="font-semibold text-lg dark:text-white">Manual Control</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-200">Direct control over movement</p>
                         </div>
                     </div>
                 </div>
@@ -229,12 +232,12 @@
                      x-transition:enter="transition-all ease-out duration-300"
                      x-transition:enter-start="opacity-0 transform -translate-y-4"
                      x-transition:enter-end="opacity-100 transform translate-y-0"
-                     class="p-4 border-t">
+                     class="p-4 border-t dark:border-gray-600">
                     <!-- Speed Control -->
                     <div class="space-y-2 mb-6">
                         <div class="flex justify-between items-center">
-                            <span class="text-sm font-medium text-gray-600">Speed Control</span>
-                            <span class="text-sm font-medium text-gray-600 w-16 text-right" x-text="globalSpeed + '%'"></span>
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-200">Speed Control</span>
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-200 w-16 text-right" x-text="globalSpeed + '%'"></span>
                         </div>
                         <div class="relative">
                             <div class="flex justify-between text-xs text-gray-400 px-1 mb-1">
@@ -262,39 +265,39 @@
                     </div>
 
                     <!-- Direction Controls -->
-                    <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto">
+                    <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto justify-center items-center">
                         <div></div>
                         <button @click="event.stopPropagation(); sendCommand('forward')" 
-                                class="p-4 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
-                            <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="p-4 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
+                            <svg class=" w-8 h-8 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
                             </svg>
                         </button>
                         <div></div>
                         
                         <button @click="event.stopPropagation(); sendCommand('left')" 
-                                class="p-4 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
-                            <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="p-4 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
+                            <svg class=" w-8 h-8 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                             </svg>
                         </button>
                         <button @click="event.stopPropagation(); sendCommand('stop')" 
-                                class="p-4 rounded-lg bg-red-100 hover:bg-red-200 active:bg-red-300 transition-colors duration-150">
-                            <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="p-4 rounded-full hover:bg-red-200 active:bg-red-300 transition-colors duration-150">
+                            <svg class=" w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
                         </button>
                         <button @click="event.stopPropagation(); sendCommand('right')" 
-                                class="p-4 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
-                            <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="p-4 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
+                            <svg class=" w-8 h-8 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                             </svg>
                         </button>
                         
                         <div></div>
                         <button @click="event.stopPropagation(); sendCommand('backward')" 
-                                class="p-4 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
-                            <svg class="w-8 h-8 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="p-4 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
+                            <svg class=" w-8 h-8 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
                             </svg>
                         </button>
@@ -308,15 +311,15 @@
                 :class="{ 
                     'col-span-full': activeMode === 'soon'
                 }" 
-                class="bg-white rounded-xl shadow-lg transition-all duration-300">
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300">
                 <div class="p-4 flex cursor-pointer items-center justify-between" @click="activeMode = activeMode === 'soon' ? null : 'soon'">
                     <div class="flex items-center space-x-4">
                         <div class="p-3 rounded-lg bg-gray-100">
                             <img src="/icons/question.svg" class="w-8 h-8" alt="Coming Soon">
                         </div>
                         <div>
-                            <h3 class="font-semibold text-lg">Coming Soon</h3>
-                            <p class="text-sm text-gray-500">Exciting new features are on the way!</p>
+                            <h3 class="font-semibold text-lg dark:text-white">Coming Soon</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-200">Exciting new features are on the way!</p>
                         </div>
                     </div>
                 </div>
@@ -326,15 +329,15 @@
                      x-transition:enter="transition-all ease-out duration-300"
                      x-transition:enter-start="opacity-0 transform -translate-y-4"
                      x-transition:enter-end="opacity-100 transform translate-y-0"
-                     class="p-4 border-t">
+                     class="p-4 border-t dark:border-gray-600">
                     <div class="p-6 text-center">
                         <svg class="w-24 h-24 mx-auto text-gray-400 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 100-16 8 8 0 000 16z"/>
                             <path d="M13 7h-2v6h2V7zm0 8h-2v2h2v-2z"/>
                         </svg>
-                        <h3 class="mt-4 text-xl font-semibold text-gray-700">New Features Coming Soon!</h3>
-                        <p class="mt-2 text-gray-500">We're working on exciting new features for you.</p>
-                        <p class="mt-4 text-gray-600">
+                        <h3 class="mt-4 text-xl font-semibold text-gray-700 dark:text-gray-400">New Features Coming Soon!</h3>
+                        <p class="mt-2 text-gray-500 dark:text-gray-200">We're working on exciting new features for you.</p>
+                        <p class="mt-4 text-gray-600 dark:text-gray-300">
                             Have suggestions? Contact us at:
                             <a href="mailto:ikraamagusta91@gmail.com" 
                                class="text-blue-500 hover:text-blue-600 underline">
