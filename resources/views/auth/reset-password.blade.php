@@ -1,6 +1,6 @@
 <x-guest-layout>
     @section('title', 'Forgot Your ' . config('app.name') . ' Account?')
-    <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 mt-10 mb-3">Reset Password Akun</h2>
+    <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white mt-10 mb-3">Reset Password Akun</h2>
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 

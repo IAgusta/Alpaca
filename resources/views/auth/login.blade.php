@@ -1,6 +1,6 @@
 <x-guest-layout>
     @section('title', 'Login to ' . config('app.name'))
-    <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 mt-10 mb-3">Masuk ke Akun Anda</h2>
+    <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white mt-10 mb-3">Masuk ke Akun Anda</h2>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -19,7 +19,7 @@
             <div class="text-sm/6 font-medium text-gray-900 flex justify-between mb-3">
                 <x-input-label for="password" :value="__('Password')" />
                 @if (Route::has('password.request'))
-                <a class="underline text-sm text-indigo-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                <a class="underline text-sm text-indigo-600 hover:text-gray-900 dark:hover:text-white" href="{{ route('password.request') }}">
                     {{ __('Lupa Password?') }}
                 </a>
                 @endif
@@ -27,7 +27,7 @@
             <div class="relative">
                 <x-text-input id="password" class="block mt-1 w-full pr-10" type="password" name="password" required autocomplete="current-password" />
                 <span class="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility()">
-                    <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                    <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill text-gray-800 dark:text-white" viewBox="0 0 16 16">
                         <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
                         <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
                     </svg>
@@ -40,15 +40,15 @@
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                <span class="ms-2 text-sm text-gray-600 dark:text-gray-200">{{ __('Remember me') }}</span>
             </label>
         </div>
 
         <div class="flex flex-col space-y-4 mt-4">
-            <div class="text-center text-gray-600 justify-between flex items-center">
+            <div class="text-center text-gray-600 dark:text-gray-200 justify-between flex items-center">
                 <div>
-                    <span class="text-sm text-gray-600">{{ 'Tidak Punya Akun?' }}</span>
-                    <a href="{{ route('register') }}" class="underline text-sm text-indigo-600 hover:text-gray-900">
+                    <span class="text-sm text-gray-600 dark:text-gray-200">{{ 'Tidak Punya Akun?' }}</span>
+                    <a href="{{ route('register') }}" class="underline text-sm text-indigo-600 hover:text-gray-900 dark:hover:text-white">
                         {{ 'Register' }}
                     </a>
                 </div>

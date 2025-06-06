@@ -1,6 +1,6 @@
 <x-guest-layout>
     @section('title', 'Register to ' . config('app.name'))
-    <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 mt-10 mb-3">Buat Akun Barumu</h2>
+    <h2 class="text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white mt-10 mb-3">Buat Akun Barumu</h2>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -213,7 +213,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-indigo-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <a class="underline text-sm text-indigo-600 hover:text-gray-900 dark:hover:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
                 {{ __('Sudah Punya Akun?') }}
             </a>
 

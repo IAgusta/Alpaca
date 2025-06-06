@@ -20,6 +20,7 @@ export default defineConfig({
                 'resources/js/profile/added-social-link.js',
                 'resources/js/settings/main.js',
                 'resources/js/layout/main.js',
+                'resources/js/animations/starfield.js',
             ],
             refresh: true,
         }),

@@ -44,7 +44,10 @@
                  class="p-4 border-t dark:border-gray-600">
                 <div class="flex gap-3 items-center">
                     <input type="text" id="wifi-ip" placeholder="Enter ESP32 IP" 
-                        class="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:outline-none focus:border-blue-500" 
+                        class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg 
+                                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 
+                                    dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                         onclick="event.stopPropagation();">
                     <button onclick="event.stopPropagation(); connectToESP32('wifi')" 
                             class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">

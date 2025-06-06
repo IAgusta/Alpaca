@@ -54,7 +54,7 @@
             <div class="lg:flex">
                 <!-- Tab List -->
                 <div class="flex overflow-x-auto lg:flex-col lg:w-48 lg:shrink-0">
-                    <div class="bg-white dark:bg-gray-600 lg:rounded-l-lg w-full shadow">
+                    <div class="bg-white dark:bg-gray-800 lg:rounded-l-lg w-full shadow">
                         <ul class="flex flex-row lg:flex-col w-full text-sm font-medium text-center" 
                             id="profile-show-tab"
                             data-tabs-toggle="#profile-show-tab-content"

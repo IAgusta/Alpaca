@@ -11,7 +11,7 @@
                             <div class="w-full h-full"
                                 style="background-image: url('{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}');
                                         background-size: cover;
-                                        background-position: center;
+                                        background-position: top center;
                                         filter: blur(3px);">
                             </div>
                         </div>
