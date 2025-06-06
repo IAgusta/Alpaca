@@ -20,6 +20,25 @@ const SettingsManager = (function() {
         document.dispatchEvent(new CustomEvent('settingsChanged', { detail: settings }));
     }
 
+    // Helper: Update theme images (only on about page)
+    function updateThemeImages(isDark) {
+        // Only run if on about page
+        if (!window.location.pathname.match(/about/i)) return;
+        document.querySelectorAll('[data-theme-img]').forEach(img => {
+            const base = img.getAttribute('data-theme-img');
+            // If original src ends with .png, .jpg, etc, keep extension
+            let ext = '.png';
+            const match = img.src.match(/\.(png|jpg|jpeg|webp|gif)$/i);
+            if (match) ext = match[0];
+            // Special case: if original src is .png or .jpg, use that extension
+            // If the base already includes extension, remove it
+            const baseNoExt = base.replace(/\.(png|jpg|jpeg|webp|gif)$/i, '');
+            // If the image is profile_management.png (no -light/-dark), skip
+            if (img.src.includes('profile_management.png')) return;
+            img.src = baseNoExt + (isDark ? '-dark' : '-light') + ext;
+        });
+    }
+
     // Apply settings to the current page
     function applyToPage(settings = null) {
         const currentSettings = settings || getSettings();
@@ -34,6 +53,9 @@ const SettingsManager = (function() {
         // Apply other global settings
         document.documentElement.dataset.imageQuality = currentSettings.image_quality;
         document.documentElement.lang = currentSettings.ui_language;
+
+        // Update theme images
+        updateThemeImages(isDark);
     }
 
     // Initialize settings - should run on every page

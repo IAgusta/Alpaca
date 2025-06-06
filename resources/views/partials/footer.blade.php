@@ -2,7 +2,7 @@
   <div class="mx-auto w-full max-w-screen-xl">
     <div class="grid grid-cols-2 gap-8 px-4 py-6 lg:py-8 md:grid-cols-5">
         <div class="flex items-center justify-center">
-            <img src="img/logo.png" class="max-w-full h-auto invert dark:invert-0" alt="logo-application">
+            <img src="{{ asset('img/logo.png') }}" class="max-w-full h-auto invert dark:invert-0" alt="logo-application">
         </div>
         <div>
             <h2 class="mb-4 text-sm font-semibold text-gray-900 uppercase dark:text-white">Product</h2>
@@ -99,7 +99,7 @@
             <div id="supportDiv" class="hidden mt-3 w-full flex justify-center">
                 <div class="flex flex-col items-center">
                     <a href="https://trakteer.id/eiko_hachiichi" target="_blank" class="transition-transform transform hover:scale-110">
-                        <img src="img/camellya.png" alt="Support via Trakteer" class="w-16 h-16 rounded-full border-4 border-pink-400 shadow-md mx-auto">
+                        <img src="{{ asset('img/camellya.png') }}" alt="Support via Trakteer" class="w-16 h-16 rounded-full border-4 border-pink-400 shadow-md mx-auto">
                         <p class="mt-2 text-pink-600 font-semibold text-center">Mie Ayam ♥</p>
                     </a>
                 </div>

@@ -21,16 +21,6 @@
             @include('layouts.navigation')
             @guest
                 @include('partials.need-login')
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const modal = document.getElementById('accessModal');
-                        const backdrop = document.getElementById('modalBackdrop');
-                        if (modal && backdrop) {
-                            modal.classList.remove('hidden');
-                            backdrop.classList.remove('hidden');
-                        }
-                    });
-                </script>
             @endguest
             <!-- Page Heading -->
             @isset($header)
@@ -61,5 +51,7 @@
         @include('partials.footer')
         @include('layouts.footer')
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.0/flowbite.min.js"></script>
+
     </body>
 </html>

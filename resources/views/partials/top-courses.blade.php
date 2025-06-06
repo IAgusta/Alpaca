@@ -3,13 +3,13 @@
 <div class="py-16 sm:py-16">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl lg:mx-0">
-            <h2 class="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">Our Top Courses</h2>
-            <p class="mt-2 text-lg/8 text-gray-600">Discover our best courses, packed with interactive content, expert guidance, and exciting challenges!</p>
+            <h2 class="text-4xl font-semibold tracking-tight text-pretty text-gray-900 dark:text-white sm:text-5xl">Our Top Courses</h2>
+            <p class="mt-2 text-lg/8 text-gray-600 dark:text-gray-300">Discover our best courses, packed with interactive content, expert guidance, and exciting challenges!</p>
         </div>
         <div class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
             @foreach($favoriteCourses as $course)
             <article class="flex max-w-xl flex-col items-start justify-between h-full">
-                <div class="flex items-center gap-x-4 text-xs"><time datetime="{{ optional($course->updated_at)->format('Y-m-d') }}" class="text-gray-500">
+                <div class="flex items-center gap-x-4 text-xs"><time datetime="{{ optional($course->updated_at)->format('Y-m-d') }}" class="text-gray-500 dark:text-gray-200">
                             {{ optional($course->updated_at)->format('M d, Y') }}
                         </time>
                     @php
@@ -42,7 +42,7 @@
                         @endforeach
                         
                         @if($totalThemes > 2)
-                        <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded-sm">
+                        <span class="bg-gray-100 text-gray-800 dark:text-gray-100 text-xs font-medium px-2.5 py-0.5 rounded-sm">
                             +{{ $totalThemes - 2 }} more
                         </span>
                         @endif
@@ -50,7 +50,7 @@
                     @endif
                 </div>
                 <div class="group relative flex-grow">
-                    <h3 class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
+                    <h3 class="mt-3 text-lg/6 font-semibold text-gray-900 dark:text-white group-hover:text-gray-600 group-hover:dark:text-blue-300">
                         <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}">
                             <span class="absolute inset-0"></span>
                             <div class="flex gap-4 items-center">
@@ -64,16 +64,16 @@
                             </div>
                         </a>
                     </h3>
-                    <p class="mt-5 line-clamp-3 text-sm/6 text-gray-600">{{ $course->description ?? 'This Courses doenst have description yet' }}</p>
+                    <p class="mt-5 line-clamp-3 text-sm/6 text-gray-600 dark:text-gray-300">{{ $course->description ?? 'This Courses doenst have description yet' }}</p>
                 </div>
                 <div class="relative mt-8 flex items-center gap-x-4">
                     <img src="{{ $course->authorUser->image ? asset('storage/' .$course->authorUser->image): asset('storage/profiles/default-profile.png') }}" alt="author-image" class="size-10 rounded-full bg-gray-50">
                     <div class="text-sm/6">
-                        <p class="font-semibold text-gray-900">
+                        <p class="font-semibold text-gray-900 dark:text-white">
                             <span class="absolute inset-0"></span>
                             {{ $course->authorUser->name }}
                         </p>
-                        <p class="text-gray-600">{{ ucfirst($course->authorUser->role) }}</p>
+                        <p class="text-gray-600 dark:text-gray-300">{{ ucfirst($course->authorUser->role) }}</p>
                     </div>
                 </div>
             </article>

@@ -48,7 +48,7 @@
         <div class="px-4 pb-4 mt-auto">
             <div id="supportSidebarDiv" class="hidden mt-3 flex justify-center items-center flex-col">
                 <a href="https://trakteer.id/eiko_hachiichi" target="_blank" class="inline-block transition-transform transform hover:scale-110">
-                    <img src="img/camellya.png" alt="Support via Trakteer" class="w-16 h-16 rounded-full border-4 border-pink-400 shadow-md">
+                    <img src="{{ asset('img/camellya.png') }}" alt="Support via Trakteer" class="w-16 h-16 rounded-full border-4 border-pink-400 shadow-md">
                     <p class="mt-2 text-pink-600 font-semibold text-center text-xs">Mie Ayam ♥</p>
                 </a>
             </div>

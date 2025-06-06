@@ -6,12 +6,12 @@
       </div>
       <div class="mx-auto max-w-4xl text-center">
         <h2 class="text-base/7 font-semibold text-indigo-600">Pilihan Paket</h2>
-        <p class="mt-2 text-5xl font-semibold tracking-tight text-balance text-gray-900 sm:text-6xl">Pilih rencana yang kamu inginkan</p>
+        <p class="mt-2 text-5xl font-semibold tracking-tight text-balance text-gray-900 dark:text-white sm:text-6xl">Pilih rencana yang kamu inginkan</p>
       </div>
-        <p class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 sm:text-xl/8">Kami menawarkan jasa yang menarik untuk mu. Pilih sesuai kebutuhanmu, belajar mandiri berdasarkan keinginanmu atau melakukan tutor secara pribadi dengan team terbaik kami.</p>
+        <p class="mx-auto mt-6 max-w-2xl text-center text-lg font-medium text-pretty text-gray-600 dark:text-gray-300 sm:text-xl/8">Kami menawarkan jasa yang menarik untuk mu. Pilih sesuai kebutuhanmu, belajar mandiri berdasarkan keinginanmu atau melakukan tutor secara pribadi dengan team terbaik kami.</p>
         <div class="mx-auto mt-16 grid max-w-screen-xl grid-cols-1 items-center gap-y-6 sm:mt-20 sm:gap-y-0 lg:grid-cols-3">
           <!-- Free Plan -->
-          <div class=" bg-white/60 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0 rounded-3xl lg:rounded-r-none">
+          <div class=" bg-white/60 dark:bg-white/95 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0 rounded-3xl lg:rounded-r-none">
             <h3 id="tier-hobby" class="text-base/7 font-semibold text-indigo-600">Alpaca Student</h3>
             <p class="mt-4 flex items-baseline gap-x-2">
               <span class="text-5xl font-semibold tracking-tight text-gray-900">Gratis</span>
@@ -47,7 +47,7 @@
           </div>
 
           <!-- Tutor Plan -->
-          <div class="bg-white/60 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0 rounded-3xl">
+          <div class="bg-white/60 dark:bg-white/95 p-8 ring-1 ring-gray-900/10 sm:mx-8 sm:p-10 lg:mx-0 rounded-3xl">
             <h3 id="tier-hobby" class="text-base/7 font-semibold text-indigo-600">Sigma Alpaca</h3>
             <p class="mt-4 flex items-baseline gap-x-2">
               <span class="text-5xl font-semibold tracking-tight text-gray-900">50k</span>
@@ -109,7 +109,7 @@
           </div>
           
           <!-- Hire Us Plan -->
-          <div class="relative bg-gray-900 p-8 ring-1 shadow-2xl ring-gray-900/10 sm:p-10 rounded-3xl lg:rounded-l-none">
+          <div class="relative bg-gray-900 dark:bg-gray-800/50 p-8 ring-1 shadow-2xl ring-gray-900/10 sm:p-10 rounded-3xl lg:rounded-l-none">
             <h3 id="tier-enterprise" class="text-base/7 font-semibold text-indigo-400">Alpaca Tutoring</h3>
             <p class="mt-4 flex items-baseline gap-x-2">
               <span class="text-2xl font-semibold tracking-tight text-white">Bisa dinegosiasikan</span>
