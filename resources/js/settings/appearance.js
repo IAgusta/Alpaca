@@ -2,7 +2,7 @@
 const SettingsManager = (function() {
     const defaults = {
         ui_language: 'en',
-        color_scheme: 'default',
+        color_scheme: 'system', // changed from 'default' to 'system'
         image_quality: 'medium',
         experimental_features: false
     };

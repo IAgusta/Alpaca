@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Module;
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Course extends Model
 {
@@ -37,6 +38,44 @@ class Course extends Model
     public function authorUser()
     {
         return $this->belongsTo(User::class, 'author');
+    }
+
+    /**
+     * Get the display name (without (test), (comics), (novel), or [Alternative])
+     */
+    public function getDisplayNameAttribute()
+    {
+        // Remove (test), (comics), (novel), and [anything] from the name
+        return trim(preg_replace('/\s*(\((test|comics|novel)\))?\s*(\[[^\]]*\])?$/i', '', $this->name));
+    }
+
+    public function getSlugAttribute()
+    {
+        // Slugify the display name
+        return Str::slug($this->display_name);
+    }
+
+
+    /**
+     * Get the title type (test, comics, or novel) without parentheses
+     */
+    public function getTitleTypeAttribute()
+    {
+        if (preg_match('/\((test|comics|novel)\)/i', $this->name, $matches)) {
+            return $matches[1];
+        }
+        return null;
+    }
+
+    /**
+     * Get the alternative name (without brackets)
+     */
+    public function getAltNameAttribute()
+    {
+        if (preg_match('/\[(.*?)\]$/', $this->name, $matches)) {
+            return $matches[1];
+        }
+        return null;
     }
 
     // Automatically soft delete related modules when a course is soft deleted

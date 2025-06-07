@@ -24,7 +24,7 @@
 
     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         @forelse ($createdCourses as $course)
-            <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name), 'courseId' => $course->id]) }}"
+            <a href="{{ route('user.course.detail', ['slug' => Str::slug($course->slug), 'courseId' => $course->id]) }}"
                 class="flex items-start gap-4 p-3 rounded-lg bg-white dark:bg-gray-600 shadow hover:bg-slate-100 group transition duration-200">
                 
                 <!-- Cover Image -->
@@ -35,7 +35,7 @@
                 <!-- Details -->
                 <div class="flex-1">
                     <h4 class="text-sm font-bold text-gray-800 dark:text-white group-hover:text-blue-600 truncate">
-                        {{ $course->name }}
+                        {{ $course->display_name }}
                     </h4>
                     
                     <div class="flex justify-between items-center mt-1">
@@ -58,7 +58,7 @@
                 </div>
             </a>
         @empty
-            <div class="border rounded-lg p-4 bg-gray-50">
+            <div class="p-4">
                 <p class="text-gray-500 text-center">No courses created yet</p>
             </div>
         @endforelse

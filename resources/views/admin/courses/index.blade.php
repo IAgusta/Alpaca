@@ -92,5 +92,6 @@
         </div>
     </div>
 
-    @vite(['resources/js/course-theme.js'])
+    @vite(['resources/js/course-theme.js','resources/js/title-option.js'])
+    <script src="{{ asset('resources/js/focus.js') }}"></script>
 </x-app-layout>

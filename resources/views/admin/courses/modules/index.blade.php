@@ -1,7 +1,7 @@
 <div class="bg-gray-100 dark:bg-gray-600 overflow-hidden shadow-sm rounded-lg p-6">
     <!-- Modal header -->
     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white"> {{ __('Kelas :') }} {{ $course->name }}</h3>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white"> {{ __('Kelas :') }} {{ $course->display_name }}</h3>
         <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" 
             data-modal-hide="crud-modal-module-{{ $course->id }}"
             onclick="document.body.style.overflow = 'auto';">
@@ -57,7 +57,7 @@
                         
                             <!-- Mobile dropdown (visible below lg) -->
                             <div class="lg:hidden" x-data="{ open: false }">
-                                <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100">
+                                <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-800 dark:text-white dark:hover:bg-gray-500 hover:bg-gray-100">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                                     </svg>
@@ -66,22 +66,22 @@
                                 <!-- Dropdown menu -->
                                 <div x-show="open" 
                                      @click.away="open = false"
-                                     class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                                     class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:border dark:border-gray-300 dark:bg-gray-600 ring-1 ring-black ring-opacity-5 z-50">
                                     <div class="py-1">
+                                        <a href="{{ route('admin.courses.modules.contents.index', ['course' => $course->id, 'module' => $module->id]) }}"
+                                           class="block px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100">
+                                            {{ __('Open') }}
+                                        </a>
+
                                         <a data-modal-target="crud-modal-module-edit-{{ $module->id }}" 
                                            data-modal-toggle="crud-modal-module-edit-{{ $module->id }}"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
-                                            {{ __('Ubah') }}
-                                        </a>
-                        
-                                        <a href="{{ route('admin.courses.modules.contents.index', ['course' => $course->id, 'module' => $module->id]) }}"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                            {{ __('Atur') }}
+                                           class="block px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-gray-100 cursor-pointer">
+                                            {{ __('Edit') }}
                                         </a>
                         
                                         <button @click="$dispatch('open-modal', 'confirm-module-deletion-{{ $module->id }}')"
                                                 class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
-                                            {{ __('Hapus') }}
+                                            {{ __('Delete') }}
                                         </button>
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                     </div>
                 </li>
             @empty
-                <li class="text-center py-4 text-gray-500">
+                <li class="text-center py-4 text-gray-500 dark:text-gray-200">
                     {{ __('Tidak ada bagian yang telah dibuat. "Buat Bagian Baru" dengan mengisi isian dibawah!') }}
                 </li>
             @endforelse

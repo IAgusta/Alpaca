@@ -34,6 +34,7 @@ window.addEventListener('load', function() {
 
     // Get the initial content
     const initialContent = document.getElementById('content-hidden').value;
+    const isExercise = document.querySelector('input[name="question"]') !== null;
 
     // Initialize single editor instance
     const editor = new Editor({
@@ -239,21 +240,55 @@ window.addEventListener('load', function() {
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            const contentType = document.getElementById('content_type')?.value || document.querySelector('input[readonly]').value.toLowerCase();
             const editorContent = editor.getHTML();
-
-            // Always set the editor content to the content field
             document.getElementById('content-hidden').value = editorContent;
 
-            // For exercise type, no need to create JSON here since backend will handle it
-            // Just let the form submit naturally with:
-            // - content (question from editor)
-            // - answers array (from form fields)
-            // - explanation (from textarea)
+            // Submit the form
             form.submit();
         });
     }
 
+}
+
+// --- Dynamic Text Color Swap for Preview Containers ---
+const lightBg = ["#D1D5DB", "#F3F4F6", "#F9FAFB", "#EBF5FF", "#FCD9BD", "#CABFFD", "#F8B4D9", "#F6C196", "#A4CAFE", "#BCF0DA", "#FCE96A"];
+const darkBg = ["#111928", "#1E429F", "#5145CD", "#771D1D", "#99154B", "#03543F", "#4B5563", "#6B7280", "#0E9F6E", "#0694A2"];
+
+function updatePreviewTextColor() {
+    const isDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
+    document.querySelectorAll('[id^="preview-container-"]').forEach((container) => {
+        container.querySelectorAll('[style*="color"]').forEach(el => {
+            const color = el.style.color.replace(/\s/g, '').toUpperCase();
+            let hexColor = color;
+            if (color.startsWith('RGB')) {
+                const rgb = color.match(/\d+/g);
+                if (rgb && rgb.length >= 3) {
+                    hexColor = "#" + rgb.slice(0, 3).map(x => (+x).toString(16).padStart(2, '0')).join('').toUpperCase();
+                }
+            }
+            if (isDark && darkBg.includes(hexColor)) {
+                el.style.color = "#e5e7eb";
+            } else if (!isDark && lightBg.includes(hexColor)) {
+                el.style.color = "#1f2937";
+            }
+        });
+        // Also handle <strong>, <b>, and bold font-weight elements without explicit color
+        container.querySelectorAll('strong, b, [style*="font-weight"]').forEach(el => {
+            const computed = window.getComputedStyle(el);
+            if (!el.style.color || ['initial', 'inherit', 'unset', '', 'auto', 'rgb(0,0,0)', 'rgb(255,255,255)'].includes(computed.color)) {
+                if (isDark) {
+                    el.style.color = "#e5e7eb";
+                } else {
+                    el.style.color = "#1f2937";
+                }
+            }
+        });
+        if (isDark) {
+            container.style.color = "#e5e7eb";
+        } else {
+            container.style.color = "#1f2937";
+        }
+    });
 }
 
 // Initialize TipTap editor for preview containers
@@ -356,4 +391,83 @@ if (document.getElementById("question-wysiwyg-container")) {
         document.getElementById('question-hidden').value = content;
     });
 }
+
+// Initial color update
+updatePreviewTextColor();
+
+// Observe for dark mode changes
+const observer = new MutationObserver(updatePreviewTextColor);
+observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+});
+
+// --- Exercise Answer Handling for Edit Form ---
+document.addEventListener('DOMContentLoaded', function () {
+    // Only run if answers-container exists (i.e., on edit form for exercises)
+    const answersContainer = document.getElementById("answers-container");
+    if (!answersContainer) return;
+
+    // Add Answer Button
+    const addAnswerBtn = document.getElementById("add-answer");
+    if (addAnswerBtn) {
+        addAnswerBtn.addEventListener("click", function () {
+            // Find the next available index (max index + 1)
+            let maxIndex = -1;
+            answersContainer.querySelectorAll('input[name^="answers["][name$="[text]"]').forEach(input => {
+                const match = input.name.match(/^answers\[(\d+)\]\[text\]$/);
+                if (match) {
+                    const idx = parseInt(match[1], 10);
+                    if (idx > maxIndex) maxIndex = idx;
+                }
+            });
+            const nextIndex = maxIndex + 1;
+
+            // Create new answer row
+            const div = document.createElement("div");
+            div.className = "flex items-center space-x-2 mb-2";
+            div.innerHTML = `
+                <input type="text" name="answers[${nextIndex}][text]" class="w-full border-gray-300 dark:bg-gray-600 dark:border-gray-800 dark:text-white rounded-md shadow-sm">
+                <input type="checkbox" name="answers[${nextIndex}][correct]" value="1" class="accent-blue-600">
+                <span class="text-sm dark:text-white">Correct</span>
+                <button type="button" class="text-red-600 remove-answer">×</button>
+            `;
+            answersContainer.appendChild(div);
+        });
+    }
+
+    // Remove Answer (event delegation)
+    answersContainer.addEventListener("click", function (e) {
+        if (e.target && e.target.classList.contains("remove-answer")) {
+            e.preventDefault();
+            // Remove the closest .flex.items-center parent
+            let answerDiv = e.target.closest(".flex.items-center");
+            if (!answerDiv) answerDiv = e.target.parentElement;
+            if (answerDiv) answerDiv.remove();
+        }
+    });
+
+    // On form submit, ensure unchecked checkboxes submit "0"
+    const form = answersContainer.closest('form');
+    if (form) {
+        form.addEventListener('submit', function () {
+            answersContainer.querySelectorAll('.flex.items-center').forEach(row => {
+                const checkbox = row.querySelector('input[type="checkbox"][name^="answers"]');
+                if (checkbox && !checkbox.checked) {
+                    // Add hidden input for unchecked
+                    let hidden = row.querySelector('input[type="hidden"][name="' + checkbox.name + '"]');
+                    if (!hidden) {
+                        hidden = document.createElement('input');
+                        hidden.type = 'hidden';
+                        hidden.name = checkbox.name;
+                        row.appendChild(hidden);
+                    }
+                    hidden.value = "0";
+                } else if (checkbox && checkbox.checked) {
+                    // Remove hidden if checked
+                    let hidden = row.querySelector('input[type="hidden"][name="' + checkbox.name + '"]');
+                    if (hidden) hidden.remove();
+                }
+            });
+        });
+    }
 });

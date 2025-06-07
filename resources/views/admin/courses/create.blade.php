@@ -17,19 +17,49 @@
     @endif
 
     <div class="relative p-4 md:p-5">
-        <form action="{{ route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="course-create-form" action="{{ route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <!-- Course Name -->
             <div>
                 <x-input-label class="mb-3" for="name" :value="__('Nama Kelas')" />
-                <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <x-text-input id="main-name" class="block mt-1 w-full" type="text" name="main_name" :value="old('main_name', old('name'))" required autofocus autocomplete="name" />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
 
+            <!-- Alternative Title -->
+            <div class="mt-4">
+                <x-input-label for="alt-title" :value="__('Nama Alternative')" />
+                <x-text-input id="alt-title" class="block mt-1 w-full" type="text" name="alt_title" :value="old('alt_title')" autocomplete="off" />
+            </div>
+
+            <!-- Checkboxes for Testing and Manga -->
+            <div class="mt-4 flex gap-4 dark:text-white items-center">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="is-testing" class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <span class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Testing</span>
+                </label>
+                <span id="show-others" class="text-blue-600 cursor-pointer hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400 text-sm font-medium">
+                    Other +
+                </span>
+                <div id="other-options" class="hidden flex gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="is-manga" class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                        <span class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Comics</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="is-novel" class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                        <span class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Novels</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Hidden actual name input -->
+            <input type="hidden" id="name" name="name" value="{{ old('name') }}" />
+
             <!-- Description -->
             <div class="mt-4">
-                <x-input-label for="description" :value="__('Deskripsi Kelas')" />
+                <x-input-label for="description" :value="__('Deskripsi')" />
                     <textarea id="description" name="description" rows="5"
                     class="mt-1 block w-full border border-gray-300 dark:bg-gray-600 dark:text-white dark:border-gray-800 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
                     placeholder="Description is an optional, you can just ignore it if doesn't want to make the description">{{ old('description') }}</textarea>
@@ -38,7 +68,7 @@
 
             <!-- Course Theme Selection -->
             <div class="my-4">
-                <x-input-label for="theme-create" :value="__('Tema Kelas')" />
+                <x-input-label for="theme-create" :value="__('Tema')" />
 
                 <!-- Selected Themes + New Button -->
                 <div id="selected-themes-create" class="flex flex-wrap items-center gap-2">

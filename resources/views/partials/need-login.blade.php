@@ -10,6 +10,7 @@
           document.getElementById('modalBackdrop').classList.add('hidden');
           document.getElementById('miniGuestModal').classList.remove('hidden');
           localStorage.setItem('guestModalClosed', '1');
+          localStorage.setItem('guestModalClosedAt', Date.now().toString());
         ">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -46,6 +47,7 @@
       document.getElementById('modalBackdrop').classList.remove('hidden');
       document.getElementById('miniGuestModal').classList.add('hidden');
       localStorage.removeItem('guestModalClosed');
+      localStorage.removeItem('guestModalClosedAt');
     "
     class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 cursor-pointer"
     style="min-width: 220px;"
@@ -58,8 +60,20 @@
 </div>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Show mini modal if user previously closed the modal
-    if (localStorage.getItem('guestModalClosed') === '1') {
+    // Check expiry for guestModalClosed (30 minutes)
+    const closed = localStorage.getItem('guestModalClosed');
+    const closedAt = localStorage.getItem('guestModalClosedAt');
+    let expired = false;
+    if (closed && closedAt) {
+      const now = Date.now();
+      const thirtyMinutes = 30 * 60 * 1000;
+      if (now - parseInt(closedAt, 10) > thirtyMinutes) {
+        localStorage.removeItem('guestModalClosed');
+        localStorage.removeItem('guestModalClosedAt');
+        expired = true;
+      }
+    }
+    if (closed === '1' && !expired) {
       document.getElementById('accessModal').classList.add('hidden');
       document.getElementById('modalBackdrop').classList.add('hidden');
       document.getElementById('miniGuestModal').classList.remove('hidden');

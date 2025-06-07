@@ -73,7 +73,7 @@
 
     @if($nextModule)
     <a href="{{ route('course.module.open', [
-        'name' => Str::slug($course->name),
+        'slug' => Str::slug($course->display_name),
         'courseId' => $course->id,
         'moduleTitle' => Str::slug($nextModule->title),
         'moduleId' => $nextModule->id

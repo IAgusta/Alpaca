@@ -12,7 +12,7 @@
 <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <!-- Loop through the latest courses -->
     @foreach ($latestCourses as $index => $course)
-        <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name), 'courseId' => $course->id]) }}"
+        <a href="{{ route('user.course.detail', ['slug' => Str::slug($course->slug), 'courseId' => $course->id]) }}"
             class="flex items-start gap-4 p-3 rounded-lg bg-white dark:bg-gray-800 shadow hover:bg-slate-100 group transition duration-200
                    {{ $index >= 5 ? 'hidden lg:flex' : '' }}">
             
@@ -26,7 +26,7 @@
                 <!-- Course Name with Own Tag -->
                 <div class="flex items-center gap-2">
                     <h4 class="text-sm font-bold text-gray-800 dark:text-white group-hover:text-blue-600 truncate">
-                        {{ $course->name }}
+                        {{ $course->display_name }}
                     </h4>
                     @if($userSavedCourses->contains($course->id))
                         <span class="px-2 py-1 text-[10px] bg-blue-100 text-blue-800 rounded-full">Own</span>

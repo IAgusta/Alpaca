@@ -1,13 +1,13 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ __('Profile Pictures') }}
             @if (session('status') === 'profile-images-updated')
             <x-input-success :messages="__('Profile Pictures Updated.')"/>
             @endif
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             {{ __("Update your account's profile avatar and banner. Max Size for Images are 5MB, if your file larger than 5MB Please compress it before uploading.") }}
         </p>
     </header>
@@ -18,7 +18,7 @@
         <div class="flex flex-col gap-3">
             <!-- Banner Section -->
             <div class="relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                <h3 class="font-medium mb-3">Banner Previews</h3>
+                <h3 class="font-medium mb-3 dark:text-white">Banner Previews</h3>
                 <x-input-error class="mt-2" :messages="$errors->get('banner_image')" />
                 <div class="relative w-full h-48 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                     <img id="banner-preview" 
@@ -31,7 +31,7 @@
                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                         </svg>
-                        <span class="text-sm">Change Banner</span>
+                        <span class="text-sm dark:text-white">Change Banner</span>
                     </label>
                     <input type="file" id="banner_image" name="banner_image" class="hidden" accept="image/*">
                 </div>
@@ -39,13 +39,13 @@
 
             <!-- Avatar Preview Section -->
             <div class="relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
-                <h3 class="font-medium mb-3">Avatar Previews</h3>
+                <h3 class="font-medium mb-3 dark:text-white">Avatar Previews</h3>
                 <label for="profile_image" class="absolute top-4 right-4 bg-white dark:bg-gray-700 p-2 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-5 h-5 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100" viewBox="0 0 16 16">
                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                     </svg>
-                    <span class="text-sm">Change Avatar</span>
+                    <span class="text-sm dark:text-white">Change Avatar</span>
                 </label>
                 <x-input-error class="mt-2" :messages="$errors->get('profile_image')" />
                 <input type="file" id="profile_image" name="profile_image" class="hidden" accept="image/*">
@@ -56,21 +56,21 @@
                              src="{{ $user->details->image ? asset('storage/' . json_decode($user->details->image, true)['profile'] ?? 'profiles/default-profile.png') : asset('storage/profiles/default-profile.png') }}" 
                              class="w-32 h-32 rounded-full border-2 border-gray-500 dark:border-gray-800 object-cover shadow-md"
                              alt="Large Preview">
-                        <p class="text-sm mb-2">184px</p>
+                        <p class="text-sm mb-2 dark:text-gray-200">184px</p>
                     </div>
                     <div class="text-center">
                         <img id="profile-preview-medium" 
                             src="{{ $user->details->image ? asset('storage/' . json_decode($user->details->image, true)['profile'] ?? 'profiles/default-profile.png') : asset('storage/profiles/default-profile.png') }}"
                              class="w-16 h-16 rounded-full border-1 border-gray-400 dark:border-gray-800 object-cover"
                              alt="Medium Preview">
-                        <p class="text-sm mb-2">64px</p>
+                        <p class="text-sm mb-2 dark:text-gray-200">64px</p>
                     </div>
                     <div class="text-center">
                         <img id="profile-preview-small" 
                             src="{{ $user->details->image ? asset('storage/' . json_decode($user->details->image, true)['profile'] ?? 'profiles/default-profile.png') : asset('storage/profiles/default-profile.png') }}"
                              class="w-8 h-8 rounded-full border border-gray-300 dark:border-gray-800 object-cover"
                              alt="Small Preview">
-                        <p class="text-sm mb-2">32px</p>
+                        <p class="text-sm mb-2 dark:text-gray-200">32px</p>
                     </div>
                 </div>
             </div>

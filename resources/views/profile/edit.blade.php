@@ -1,8 +1,9 @@
 <x-app-layout>
     @section('title', 'Setting Profile - '. config('app.name') )
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <a href="{{ route('profile.index') }}">{{ __('Profile Management') }}</a>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
+            {{ __('Profile') }}
+            <a href="{{ route('profile.index') }}">{{ __($user->name) }}</a>
         </h2>
     </x-slot>
 
@@ -13,7 +14,7 @@
                 <!-- Mobile Dropdown Menu -->
                 <div class="lg:hidden w-full">
                     <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" 
-                        class="w-full bg-white justify-between text-gray-700 font-medium rounded-lg text-sm px-5 py-4 text-center inline-flex items-center shadow" 
+                        class="w-full bg-white dark:bg-gray-800 dark:text-white justify-between text-gray-700 font-medium rounded-lg text-sm px-5 py-4 text-center inline-flex items-center shadow" 
                         type="button">
                         <span id="selectedTabText">Update Profile</span>
                         <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -21,23 +22,23 @@
                         </svg>
                     </button>
                     <!-- Dropdown menu -->
-                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-full">
+                    <div id="dropdown" class="z-10 hidden bg-white dark:bg-gray-800 dark:divide-slate-300 divide-y divide-gray-100 rounded-lg shadow w-full">
                         <ul class="text-sm text-gray-700" aria-labelledby="dropdownDefaultButton">
                             <li>
-                                <button data-tabs-target="#update-profile" class="w-full px-4 py-2 hover:bg-gray-100 text-start">Update Profile</button>
+                                <button data-tabs-target="#update-profile" class="w-full px-4 py-2 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-start">Update Profile</button>
                             </li>
                             <li>
-                                <button data-tabs-target="#update-profile-pictures" class="w-full px-4 py-2 hover:bg-gray-100 text-start">Change Pictures</button>
+                                <button data-tabs-target="#update-profile-pictures" class="w-full px-4 py-2 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-start">Change Pictures</button>
                             </li>
                             <li>
-                                <button data-tabs-target="#update-link-account" class="w-full px-4 py-2 hover:bg-gray-100 text-start">Social Media</button>
+                                <button data-tabs-target="#update-link-account" class="w-full px-4 py-2 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-start">Social Media</button>
                             </li>
                             <li>
-                                <button data-tabs-target="#update-password" class="w-full px-4 py-2 hover:bg-gray-100 text-start">Change Password</button>
+                                <button data-tabs-target="#update-password" class="w-full px-4 py-2 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-start">Change Password</button>
                             </li>
                             @unless(auth()->user()->role === 'owner')
                                 <li>
-                                    <button data-tabs-target="#delete-account" class="w-full px-4 py-2 hover:bg-gray-100 text-start">Delete Account</button>
+                                    <button data-tabs-target="#delete-account" class="w-full px-4 py-2 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-start">Delete Account</button>
                                 </li>
                             @endunless
                         </ul>
@@ -46,32 +47,32 @@
 
                 <!-- Desktop Vertical Tabs -->
                 <div class="hidden lg:block w-52 shrink-0">
-                    <div class="bg-white dark:bg-gray-600 rounded-l-lg w-full shadow">
+                    <div class="bg-white dark:bg-gray-800 rounded-l-lg w-full shadow">
                         <ul class="flex flex-col w-full text-sm font-medium text-center" role="tablist">
                             <li class="me-2 lg:ml-2 lg:me-0 lg:my-2" role="presentation">
                                 <button data-tabs-target="#update-profile" 
-                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors dark:text-white"
                                     role="tab">Update Profile</button>
                             </li>
                             <li class="me-2 lg:ml-2 lg:me-0 lg:mb-2" role="presentation">
                                 <button data-tabs-target="#update-profile-pictures"
-                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors dark:text-white"
                                     role="tab">Change Pictures</button>
                             </li>
                             <li class="me-2 lg:ml-2 lg:me-0 lg:mb-2" role="presentation">
                                 <button data-tabs-target="#update-link-account"
-                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors dark:text-white"
                                     role="tab">Social Media Links</button>
                             </li>
                             <li class="me-2 lg:ml-2 lg:me-0 lg:mb-2" role="presentation">
                                 <button data-tabs-target="#update-password"
-                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                    class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors dark:text-white"
                                     role="tab">Change Password</button>
                             </li>
                             @unless(auth()->user()->role === 'owner')
                                 <li class="me-2 mb-2 lg:ml-2 lg:me-0" role="presentation">
                                     <button data-tabs-target="#delete-account"
-                                        class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                        class="w-full p-3 text-start rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-red-500"
                                         role="tab">Delete Account</button>
                                 </li>
                             @endunless
@@ -138,8 +139,9 @@
                     const isActive = tab.getAttribute('data-tabs-target') === savedTabId;
                     tab.setAttribute('aria-selected', isActive);
                     tab.classList.toggle('bg-gray-50', isActive);
+                    tab.classList.toggle('dark:bg-gray-700', isActive);
                     tab.classList.toggle('text-purple-600', isActive);
-                    
+
                     if (isActive) {
                         selectedTabText.textContent = tab.textContent;
                     }

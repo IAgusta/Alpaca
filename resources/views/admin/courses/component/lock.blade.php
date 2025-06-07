@@ -15,8 +15,8 @@
             <form action="{{ route('course.lockCourse', $course->id) }}" method="POST">
                 @csrf
                 <div>
-                    <x-input-label for="lock_password" :value="__('Masukan Kode Password Kelasmu (optional)')" />
-                    <x-text-input id="lock_password" class="block mt-1 w-full" type="text" name="lock_password" />
+                    <x-input-label for="lock_password-{{ $course->id }}" :value="__('Masukan Kode Password Kelasmu (optional)')" />
+                    <x-text-input id="lock_password-{{ $course->id }}" class="block mt-1 w-full" type="text" name="lock_password" />
                     <x-input-error :messages="$errors->get('lock_password')" class="mt-2" />
                 </div>
                 <div class="mt-4">

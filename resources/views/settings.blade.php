@@ -23,11 +23,11 @@
                 <div class="bg-white dark:text-white dark:bg-gray-800 shadow rounded-lg p-6">
                     <h3 class="text-lg font-medium mb-4">Color Scheme</h3>
                     <div class="grid grid-cols-3 gap-4">
-                        @foreach(['default', 'dark', 'system'] as $theme)
+                        @foreach(['system', 'white', 'dark'] as $theme)
                             <label class="relative flex flex-col items-center gap-2 cursor-pointer">
-                                <input type="radio" name="color_scheme" value="{{ $theme }}" class="sr-only peer">
+                                <input type="radio" name="color_scheme" value="{{ $theme }}" class="sr-only peer" {{ $theme === 'system' ? 'checked' : '' }}>
                                 <div class="w-full aspect-video rounded-lg border-2 peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-500
-                                    {{ $theme == 'default' ? 'bg-white' : ($theme == 'dark' ? 'bg-gray-900' : 'bg-gradient-to-r from-gray-100 to-gray-900') }}">
+                                    {{ $theme == 'white' ? 'bg-white' : ($theme == 'dark' ? 'bg-gray-900' : 'bg-gradient-to-r from-gray-100 to-gray-900') }}">
                                 </div>
                                 <span class="text-sm font-medium peer-checked:text-blue-500">
                                     {{ ucfirst($theme) }}

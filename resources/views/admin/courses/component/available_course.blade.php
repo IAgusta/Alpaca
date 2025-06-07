@@ -41,7 +41,13 @@
             </div>
 
             <!-- Edit modal -->
-            <div id="crud-modal-update-{{ $course->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div id="crud-modal-update-{{ $course->id }}"
+                 class="hidden modal overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+                 data-modal-backdrop="static"
+                 tabindex="-1"
+                 aria-hidden="true"
+                 aria-modal="true"
+                 role="dialog">
                 <div class="relative p-4 w-full max-w-md max-h-full">
                     @php
                         $plainPassword = $course->lock_password ? \Illuminate\Support\Facades\Crypt::decryptString($course->lock_password) : null;
@@ -51,12 +57,22 @@
             </div>
 
             <!-- Lock modal -->
-            <div id="crud-modal-lock-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div id="crud-modal-lock-{{ $course->id }}"
+                 class="hidden modal overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+                 tabindex="-1"
+                 aria-hidden="true"
+                 aria-modal="true"
+                 role="dialog">
                 @include('admin.courses.component.lock')
             </div>
 
             <!-- Unlock modal -->
-            <div id="crud-modal-unlock-{{ $course->id }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div id="crud-modal-unlock-{{ $course->id }}"
+                 class="hidden modal overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+                 tabindex="-1"
+                 aria-hidden="true"
+                 aria-modal="true"
+                 role="dialog">
                 @include('admin.courses.component.unlock')
             </div>
         </div>
@@ -74,7 +90,7 @@
                                         <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/>
                                     </svg>
                                 @endif
-                                {{ $course->name }}</p>
+                                {{ $course->display_name }}</p>
                             <button data-popover-target="popover-{{ $course->id }}" data-popover-placement="bottom" type="button">
                                 <svg class="w-3 h-3 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" 
                                     viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -90,7 +106,7 @@
                             bg-white border border-gray-200 rounded-lg shadow-md opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 
                             dark:text-gray-400">
                             <div class="p-3">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">{{ ($course->name) }}</h3>
+                                <h3 class="font-semibold text-gray-900 dark:text-white">{{ ($course->display_name) }}</h3>
                                 <p>
                                     {{ $course->description ? $course->description : 'This Course doesn`t have any description.' }}
                                 </p>
@@ -166,7 +182,13 @@
     </div>
 
     <!-- Main modal for modules -->
-    <div id="crud-modal-module-{{ $course->id }}" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div id="crud-modal-module-{{ $course->id }}"
+         class="hidden modal overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+         data-modal-backdrop="static"
+         tabindex="-1"
+         aria-hidden="true"
+         aria-modal="true"
+         role="dialog">
         <div class="relative p-4 w-full max-w-7xl max-h-screen md:max-w-6xl">
             @include('admin.courses.modules.index', ['course' => $course, 'modules' => $course->modules])
         </div>

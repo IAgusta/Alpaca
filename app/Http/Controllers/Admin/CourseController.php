@@ -149,18 +149,18 @@ class CourseController extends Controller
         if (Auth::user()->role !== 'admin' && intval($course->author) !== Auth::id()) {
             abort(403, 'Unauthorized');
         }
-    
-        // Validate the course name
+
+        // Validate using display_name instead of full name
         $request->validate([
-            'course_name' => ['required', 'string', 'in:' . $course->name],
+            'course_name' => ['required', 'string', 'in:' . $course->display_name],
         ]);
-    
+
         // Soft delete the course
         $course->delete();
 
         // Clear relevant caches
         Cache::tags(['courses'])->flush();
-    
+
         // Redirect with a success message
         return redirect()->route('admin.courses.index')->with('success', 'Course moved to Trash Bin.');
     }

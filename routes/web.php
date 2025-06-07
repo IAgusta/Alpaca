@@ -52,4 +52,4 @@ Route::get('/api/all-users', [ProfileController::class, 'getAllUsers'])->name('a
 // Profile route - should be last as it's a catch-all route
 Route::get('/{username}', [ProfileController::class, 'show'])
     ->name('profile.show')
-    ->where('username', '^(?!.*[0-9]+$)(?!dashboard$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$).*$');
+    ->where('username', '^(?!.*[0-9]+$)(?!dashboard$|slug$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$).*$');

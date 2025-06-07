@@ -126,7 +126,7 @@ class UserCourseController extends Controller
         return view('user.user_course_feed', compact('userCourses', 'search', 'sort', 'direction'));
     }
 
-    public function detail($name, $courseId) 
+    public function detail($slug, $courseId) 
     {
         $userId = Auth::id();
         $course = Course::with(['modules' => function($query) {
@@ -134,11 +134,11 @@ class UserCourseController extends Controller
         }])->findOrFail($courseId);
         
         // If you want to ensure URL consistency (recommended)
-        $expectedSlug = Str::slug($course->name);
-        if ($expectedSlug !== $name) {
+        $expectedSlug = Str::slug($course->slug);
+        if ($expectedSlug !== $slug) {
             // Redirect to correct URL if name doesn't match
             return redirect()->route('user.course.detail', [
-                'name' => $expectedSlug,
+                'slug' => $expectedSlug,
                 'courseId' => $courseId
             ]);
         }
@@ -226,15 +226,15 @@ class UserCourseController extends Controller
         return back()->with('success', 'Course added to Bookmark.');
     }
 
-    public function open($name, $courseId, $moduleTitle, $moduleId)
+    public function open($slug, $courseId, $moduleTitle, $moduleId)
     {
         $userId = Auth::id();
 
         // Fetch the course
         $course = Course::findOrFail($courseId);
-        if (Str::slug($course->name) !== $name) {
+        if (Str::slug($course->slug) !== $slug) {
             return redirect()->route('course.module.open', [
-                'name' => Str::slug($course->name),
+                'slug' => Str::slug($course->slug),
                 'courseId' => $courseId,
                 'moduleTitle' => $moduleTitle,
                 'moduleId' => $moduleId
@@ -254,7 +254,7 @@ class UserCourseController extends Controller
         // Verify module title matches URL
         if (Str::slug($module->title) !== $moduleTitle) {
             return redirect()->route('course.module.open', [
-                'name' => $name,
+                'slug' => $slug,
                 'courseId' => $courseId,
                 'moduleTitle' => Str::slug($module->title),
                 'moduleId' => $moduleId

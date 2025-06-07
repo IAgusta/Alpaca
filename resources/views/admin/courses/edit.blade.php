@@ -17,21 +17,55 @@
     @endif
 
     <div class="relative p-4 md:p-5">
-        <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
+        <form id="course-edit-form-{{ $course->id }}" action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
             <!-- Course Name -->
             <div>
-                <x-input-label class="mb-3" for="name" :value="__('Nama Kelas')" />
-                <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name', $course->name)" required autofocus autocomplete="name" />
+                <x-input-label class="mb-3" for="main-name-{{ $course->id }}" :value="__('Nama Kelas')" />
+                <x-text-input id="main-name-{{ $course->id }}" class="block mt-1 w-full" type="text" name="main_name" :value="old('main_name', explode(' [', preg_replace('/ \((test|manga)\)/', '', $course->name))[0])" required autofocus autocomplete="name" />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
 
+            <!-- Alternative Title -->
+            <div class="mt-4">
+                <x-input-label for="alt-title-{{ $course->id }}" :value="__('Nama Alternative')" />
+                <x-text-input id="alt-title-{{ $course->id }}" class="block mt-1 w-full" type="text" name="alt_title"
+                    :value="old('alt_title', (preg_match('/\[(.*?)\]$/', $course->name, $m) ? $m[1] : ''))" autocomplete="off" />
+            </div>
+
+            <!-- Checkboxes for Testing and Manga -->
+            <div class="mt-4 flex gap-4 dark:text-white items-center">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="is-testing-{{ $course->id }}" class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        @if(strpos($course->name, '(test)') !== false) checked @endif />
+                    <span class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Testing</span>
+                </label>
+                <span id="show-others-{{ $course->id }}" class="text-blue-600 cursor-pointer hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400 text-sm font-medium">
+                    Other +
+                </span>
+                <div id="other-options-{{ $course->id }}" class="hidden flex gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="is-manga-{{ $course->id }}" class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            @if(strpos($course->name, '(manga)') !== false) checked @endif />
+                        <span class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Manga</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="is-novel-{{ $course->id }}" class="form-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            @if(strpos($course->name, '(novel)') !== false) checked @endif />
+                        <span class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Novel</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Hidden actual name input -->
+            <input type="hidden" id="name-actual-{{ $course->id }}" name="name" value="{{ old('name', $course->name) }}" />
+
             <!-- Description -->
             <div class="mt-4">
-                <x-input-label for="description" :value="__('Deskripsi')" />
-                <textarea id="description" name="description" rows="5"
+                <x-input-label for="description-{{ $course->id }}" :value="__('Deskripsi')" />
+                <textarea id="description-{{ $course->id }}" name="description" rows="5"
                 class="mt-1 block w-full border-gray-300 dark:bg-gray-600 dark:text-white dark:border-gray-800 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
                 placeholder="Description is an optional, you can just ignore it if doesn't want to make the description">{{ old('description', $course->description) }}</textarea>
                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
@@ -97,9 +131,9 @@
 
             <!-- Courses Image -->
             <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input-{{ $course->id }}">Upload file</label>
                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                        id="file_input" 
+                        id="file_input-{{ $course->id }}"
                         type="file" 
                         name="image">
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">JPEG, PNG, GIF, BMP, SVG, TIFF, or WEBP (Max 2MB).</p>

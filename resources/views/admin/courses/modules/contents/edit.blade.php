@@ -54,30 +54,33 @@
                         @include('admin.courses.modules.contents.partials.text-editor')
                         <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
                             <div id="wysiwyg-container" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"></div>
+                            @if ($content->content_type === 'exercise')
+                                <input type="hidden" name="question" id="content-hidden" value="{{ json_decode($content->content, true)['question'] ?? '' }}">
+                            @else
+                                <input type="hidden" name="content" id="content-hidden" value="{{ $content->content }}">
+                            @endif
                         </div>
                     </div>
                 </div>
-
-                <!-- Hidden input for content -->
-                <input type="hidden" name="content" id="content-hidden" value="{{ $content->content_type === 'exercise' ? (json_decode($content->content, true)['question'] ?? '') : $content->content }}">
 
                 <!-- Exercise Additional Fields -->
                 @if ($content->content_type === 'exercise')
                     @php
                         $exercise = json_decode($content->content, true);
+                        $answers = isset($exercise['answers']) ? $exercise['answers'] : [];
                     @endphp
                     
                     <div id="exercise-fields" class="mt-4">
                         <!-- Answer Choices -->
                         <div id="answers-container" class="mb-4">
                             <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">Pilihan Jawaban</label>
-                            @foreach ($exercise['answers'] ?? [] as $index => $answer)
+                            @foreach ($answers as $index => $answer)
                                 <div class="flex items-center space-x-2 mb-2">
                                     <input type="text" name="answers[{{ $index }}][text]" 
                                         class="w-full border-gray-300 dark:bg-gray-600 dark:border-gray-800 dark:text-white rounded-md shadow-sm" 
-                                        value="{{ $answer['text'] ?? '' }}">
+                                        value="{{ $answer['text'] }}">
                                     <input type="checkbox" name="answers[{{ $index }}][correct]" 
-                                        value="1" {{ isset($answer['correct']) && $answer['correct'] ? 'checked' : '' }}>
+                                        class="accent-blue-600" value="1" {{ $answer['correct'] ? 'checked' : '' }}>
                                     <span class="text-sm dark:text-white">Correct</span>
                                     <button type="button" class="text-red-600 remove-answer">×</button>
                                 </div>

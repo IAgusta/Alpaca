@@ -3,7 +3,7 @@
     (function() {
         const savedSettings = localStorage.getItem('userPreferences');
         const settings = savedSettings ? JSON.parse(savedSettings) : {
-            color_scheme: 'default',
+            color_scheme: 'system', // changed from 'default' to 'system'
             ui_language: 'en',
             image_quality: 'medium',
             experimental_features: false

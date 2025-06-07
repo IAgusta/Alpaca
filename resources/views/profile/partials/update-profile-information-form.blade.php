@@ -1,6 +1,6 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ __('Profile Information') }}
             @if (session('status') === 'profile-updated')
             <x-input-success
@@ -8,7 +8,7 @@
             @endif
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
@@ -43,7 +43,10 @@
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
                         <!-- Name and Role -->
                         <div class="mb-2 sm:mb-0">
-                            <h1 class="text-2xl font-bold">{{ $user->name }}</h1>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-3xl font-bold dark:text-white">{{ $user->name }}</h1>
+                                <span class="text-gray-500 dark:text-gray-300 text-xl font-mono ml-3">{{ '@' . $user->username }}</span>
+                            </div>
                             @include('profile.partials.all.role-badge')
                         </div>
 
@@ -161,7 +164,7 @@
                 <div class="mt-4">
                     <x-input-label for="about" :value="__('Bio')" />
                     <textarea id="about" name="about" rows="4"
-                              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
+                              class="mt-1 block w-full border-gray-300 dark:bg-gray-600 dark:text-white dark:border-gray-800 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
                               placeholder="This user doesn't have any bio">{{ old('about', $user->details->about) }}</textarea>
                     <x-input-error class="mt-2" :messages="$errors->get('about')" />
                 </div>

@@ -13,6 +13,62 @@ import ImageResize from 'tiptap-extension-resize-image';
 import Bold from '@tiptap/extension-bold';
 
 document.addEventListener("DOMContentLoaded", function () {
+    // Palette from your color buttons
+    const palette = [
+        "#1A56DB", "#0E9F6E", "#FACA15", "#F05252", "#FF8A4C", "#0694A2",
+        "#B4C6FC", "#8DA2FB", "#5145CD", "#771D1D", "#FCD9BD", "#99154B",
+        "#7E3AF2", "#CABFFD", "#D61F69", "#F8B4D9", "#F6C196", "#A4CAFE",
+        "#5145CD", "#B43403", "#FCE96A", "#1E429F", "#768FFD", "#BCF0DA",
+        "#EBF5FF", "#16BDCA", "#E74694", "#83B0ED", "#03543F", "#111928",
+        "#4B5563", "#6B7280", "#D1D5DB", "#F3F4F6", "#F3F4F6", "#F9FAFB"
+    ];
+    // Colors that are too light for light mode or too dark for dark mode
+    const lightBg = ["#D1D5DB", "#F3F4F6", "#F9FAFB", "#EBF5FF", "#FCD9BD", "#CABFFD", "#F8B4D9", "#F6C196", "#A4CAFE", "#BCF0DA", "#FCE96A"];
+    const darkBg = ["#111928", "#1E429F", "#5145CD", "#771D1D", "#99154B", "#03543F", "#4B5563", "#6B7280", "#0E9F6E", "#0694A2"];
+
+    // Helper to update text color for preview containers
+    function updatePreviewTextColor() {
+        const isDark = document.documentElement.classList.contains('dark') || document.body.classList.contains('dark');
+        document.querySelectorAll('[id^="wysiwyg-preview-"]').forEach((container) => {
+            // Check for inline color style on children and adjust if needed
+            container.querySelectorAll('[style*="color"]').forEach(el => {
+                const color = el.style.color.replace(/\s/g, '').toUpperCase();
+                // Convert rgb/rgba to hex if needed
+                let hexColor = color;
+                if (color.startsWith('RGB')) {
+                    const rgb = color.match(/\d+/g);
+                    if (rgb && rgb.length >= 3) {
+                        hexColor = "#" + rgb.slice(0, 3).map(x => (+x).toString(16).padStart(2, '0')).join('').toUpperCase();
+                    }
+                }
+                // If color is in the palette and would collide, adjust
+                if (isDark && darkBg.includes(hexColor)) {
+                    el.style.color = "#e5e7eb"; // Tailwind gray-200
+                } else if (!isDark && lightBg.includes(hexColor)) {
+                    el.style.color = "#1f2937"; // Tailwind gray-800
+                }
+            });
+            // Also handle <strong>, <b>, and bold font-weight elements without explicit color
+            container.querySelectorAll('strong, b, [style*="font-weight"]').forEach(el => {
+                // Only override if color is not set or is default/auto/inherit
+                const computed = window.getComputedStyle(el);
+                if (!el.style.color || ['initial', 'inherit', 'unset', '', 'auto', 'rgb(0,0,0)', 'rgb(255,255,255)'].includes(computed.color)) {
+                    if (isDark) {
+                        el.style.color = "#e5e7eb";
+                    } else {
+                        el.style.color = "#1f2937";
+                    }
+                }
+            });
+            // Fallback for container itself
+            if (isDark) {
+                container.style.color = "#e5e7eb";
+            } else {
+                container.style.color = "#1f2937";
+            }
+        });
+    }
+
     // Initialize TipTap editor for preview containers
     document.querySelectorAll('[id^="wysiwyg-preview-"]').forEach((container) => {
         const content = container.innerHTML; // Get the content from the container
@@ -58,6 +114,14 @@ document.addEventListener("DOMContentLoaded", function () {
             },
         });
     });
+
+    // Initial color update
+    updatePreviewTextColor();
+
+    // Observe for dark mode changes
+    const observer = new MutationObserver(updatePreviewTextColor);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
     // Render code blocks with a "Copy" button
     document.querySelectorAll('[id^="wysiwyg-preview-"] code').forEach((codeBlock) => {

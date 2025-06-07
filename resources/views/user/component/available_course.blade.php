@@ -2,12 +2,12 @@
     @foreach ($availableCourses as $course)
         <div class="relative bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 transition flex flex-col" style="width: 208px; height: 350px;">
                 {{-- Course Image --}}
-                <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}" class="relative">
+                <a href="{{ route('user.course.detail', ['slug' => Str::slug($course->slug),'courseId' => $course->id]) }}" class="relative">
                     <img class="w-full h-35 object-cover rounded-t-lg" loading="lazy" src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" alt="Course Image" style="width: 206px; height: 154px; object-fit: cover;"/>
                 </a>
                 <!-- Course Details -->
                 <div class="flex flex-col h-full"> <!-- Added container for consistent layout -->
-                    <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}" class="cursor-pointer flex-grow">
+                    <a href="{{ route('user.course.detail', ['slug' => Str::slug($course->slug),'courseId' => $course->id]) }}" class="cursor-pointer flex-grow">
                         <div class="p-3 text-center h-full flex flex-col"> <!-- Added flex-col and h-full -->
                             <div class="relative flex flex-col items-center">
                                 <!-- Course Title with Popover Button -->
@@ -18,7 +18,7 @@
                                                 <path d="M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h40v-80q0-83 58.5-141.5T480-920q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM360-640h240v-80q0-50-35-85t-85-35q-50 0-85 35t-35 85v80ZM240-160v-400 400Z"/>
                                             </svg>
                                         @endif
-                                        {{ $course->name }}</p>
+                                        {{ $course->display_name }}</p>
                                     <button data-popover-target="popover-{{ $course->id }}" data-popover-placement="bottom" type="button" onclick="event.stopPropagation()">
                                         <svg class="w-3 h-3 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" 
                                             viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +34,7 @@
                                     bg-white border border-gray-200 rounded-lg shadow-md opacity-0 w-72 dark:bg-gray-800 dark:border-gray-600 
                                     dark:text-gray-400">
                                     <div class="p-3">
-                                        <h3 class="font-semibold text-gray-900 dark:text-white">{{ ($course->name) }}</h3>
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">{{ ($course->display_name) }}</h3>
                                         <p>
                                             {{ $course->description ? $course->description : 'This Course doesn`t have any description.' }}
                                         </p>

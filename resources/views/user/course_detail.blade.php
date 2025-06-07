@@ -1,5 +1,5 @@
 <x-app-layout>
-    @section('title', e($course->name) . ' - '. config('app.name'))
+    @section('title', e($course->display_name) . ' - '. config('app.name'))
 
     <div class="py-6">
         <!-- Background Image -->
@@ -46,14 +46,14 @@
                             <!-- Right content: always fixed height on lg, normal flow on mobile -->
                             <div class="flex-1 flex flex-col justify-between h-auto lg:h-full min-h-0 lg:min-h-[180px] lg:max-h-[288px]">
                                 <div>
-                                    <h1 class="text-4xl font-extrabold lg:mb-3 mb-2 text-black dark:text-white">{{ $course->name }}</h1>
+                                    <h1 class="text-4xl font-extrabold lg:mb-3 mb-2 text-black dark:text-white">{{ $course->display_name }}</h1>
                                     {{-- Need to enable cURL SSL --}}
                                     {{-- @php
                                         $tr = new \Stichoza\GoogleTranslate\GoogleTranslate('en');
-                                        $translatedName = $tr->translate($course->name);
+                                        $translatedName = $tr->translate($course->display_name);
                                     @endphp --}}
 
-                                    <h2 class="text-2xl font-bold mb-6 lg:mb-11 text-black dark:text-white">{{-- $translatedName --}} {{ $course->name }}</h2>
+                                    <h2 class="text-2xl font-bold mb-6 lg:mb-11 text-black dark:text-white">{{-- $translatedName --}} {{ $course->alt_name }}</h2>
                                     <p class="text-gray-800 dark:text-gray-300 my-4">{{ $course->authorUser->name ?? 'Unknown' }}</p>
                                     @include('user.component.course_detail_component')
                                 </div>

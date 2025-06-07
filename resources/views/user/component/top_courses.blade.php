@@ -5,7 +5,7 @@
         <div class="swiper-wrapper">
             @foreach($topCourses as $course)
                 <div class="swiper-slide relative overflow-hidden">
-                    <a href="{{ route('user.course.detail', ['name' => Str::slug($course->name),'courseId' => $course->id]) }}">
+                    <a href="{{ route('user.course.detail', ['slug' => Str::slug($course->slug),'courseId' => $course->id]) }}">
                         <!-- Background Image -->
                         <div class="absolute inset-0 w-full h-[400px] z-0">
                             <div class="w-full h-full"
@@ -32,7 +32,7 @@
                             <div class="flex-1 dark:text-white text-black flex flex-col h-full">
                                 <!-- Title -->
                                 <h2 class="font-bold text-xl line-clamp-5 sm:line-clamp-2 lg:text-2xl overflow-hidden">
-                                    {{ $course->name }}
+                                    {{ $course->display_name }}
                                 </h2>
 
                                 <!-- Tags -->

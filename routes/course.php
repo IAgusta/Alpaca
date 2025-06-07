@@ -12,12 +12,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/courses/library', [UserCourseController::class, 'userFeed'])->name('user.course.library');
     Route::post('/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
     
-    Route::get('/{name}/{courseId}', [UserCourseController::class, 'detail'])
+    Route::get('/{slug}/{courseId}', [UserCourseController::class, 'detail'])
         ->name('user.course.detail')
-        ->where(['courseId' => '[0-9]+', 'name' => '[a-zA-Z0-9-]+']);
-    Route::get('/{name}/{courseId}/chapter/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])
+        ->where(['courseId' => '[0-9]+', 'slug' => '[a-zA-Z0-9-]+']);
+    Route::get('/{slug}/{courseId}/chapter/{moduleTitle}/{moduleId}', [UserCourseController::class, 'open'])
         ->name('course.module.open')
-        ->where(['courseId' => '[0-9]+', 'moduleId' => '[0-9]+', 'name' => '[a-zA-Z0-9-]+']);
+        ->where(['courseId' => '[0-9]+', 'moduleId' => '[0-9]+', 'slug' => '[a-zA-Z0-9-]+']);
 
     Route::post('/module-progress/{moduleId}/toggle', [UserCourseController::class, 'toggle'])->name('module.progress.toggle');
     Route::post('/courses/{courseId}/toggle-all', [UserCourseController::class, 'toggleAllModules'])->name('user.course.toggleAll');

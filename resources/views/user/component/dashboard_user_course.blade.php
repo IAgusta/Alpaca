@@ -11,7 +11,7 @@
 </div>
 <div class="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-4">
     @foreach ($userCourses as $userCourse)
-        <a href="{{ route('user.course.detail', ['name' => Str::slug($userCourse->course->name),'courseId' => $userCourse->course->id])  }}" class="block">
+        <a href="{{ route('user.course.detail', ['slug' => Str::slug($userCourse->course->slug),'courseId' => $userCourse->course->id])  }}" class="block">
             <div class="border p-3 rounded-lg shadow-md bg-white dark:bg-gray-800 dark:border-gray-900 flex flex-col group hover:bg-slate-500">
                 <!-- Course Image -->
                 <div class="relative h-20 w-full rounded-md bg-cover bg-center" 
@@ -22,7 +22,7 @@
                 <!-- Course Details -->
                 <div class="mt-2">
                     <h4 class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-amber-100 line-clamp-1">
-                        {{ $userCourse->course->name }}
+                        {{ $userCourse->course->display_name }}
                     </h4>
                     <p class="text-xs text-gray-500 dark:text-gray-200 group-hover:text-gray-200">
                         @php

@@ -1,14 +1,14 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ __('Social Media Profile Information') }}
             @if (session('status') === 'social-media-updated')
             <x-input-success
                 :messages="__('Profile Account Link Changed.')"/>
             @endif
         </h2>
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your other platform account links.") }}
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            {{ __("Update your social media profile information to keep your connections informed.") }}
         </p>
     </header>
 
@@ -46,7 +46,7 @@
                 }" 
                 @mouseenter="if(!link) showInput = true" 
                 @mouseleave="setTimeout(() => { if(!link) showInput = false }, 200)"
-                class="group flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                class="group flex items-center gap-4 p-3 rounded-lg dark:hover:bg-gray-700 hover:bg-gray-50 transition-colors">
                     
                     <!-- Platform icon -->
                     <div class="relative w-8 h-8 flex items-center justify-center">
@@ -61,13 +61,20 @@
                     </div>
                     
                     <!-- Platform name (always visible) -->
-                    <span class="font-medium text-gray-700 min-w-[80px]">{{ $platformName }}</span>
+                    <span class="font-medium text-gray-700 dark:text-gray-200 min-w-[80px]">{{ $platformName }}</span>
                     
                     <!-- Input field (shown on hover when empty or always when has link) -->
                     <div x-show="showInput || link" x-transition class="flex-1 flex items-center gap-2">
-                        <input type="url" name="social[{{ $platformKey }}]" x-model="link" 
-                               placeholder="https://{{ $platformKey }}.com/username"
-                               class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full px-3 py-1.5 text-sm">
+                        <div class="flex-1 flex items-center">
+                            <span class="text-gray-500 dark:text-gray-400 text-sm px-3 py-1.5 border border-r-0 border-gray-300 dark:border-slate-500 rounded-l-md bg-gray-50 dark:bg-gray-700">
+                                https://{{ $platformKey }}.com/
+                            </span>
+                            <input type="text" name="social[{{ $platformKey }}]" 
+                                   x-model="link"
+                                   placeholder="your-username"
+                                   @input="link = $event.target.value.startsWith('https://{{ $platformKey }}.com/') ? $event.target.value : 'https://{{ $platformKey }}.com/' + $event.target.value"
+                                   class="border-gray-300 dark:bg-gray-600 dark:border-slate-500 dark:placeholder:text-gray-400 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 rounded-r-md shadow-sm flex-1 px-3 py-1.5 text-sm">
+                        </div>
                         
                         <!-- Save indicator (shown when input is focused or has value) -->
                         <button type="button" @click="saveLink(); console.log('Temporary storage:', JSON.parse(document.getElementById('social-media-input').value));" 
@@ -81,7 +88,7 @@
                     <div x-show="!link && !showInput" class="flex-1">
                         <span class="text-sm text-gray-400">Not connected</span>
                         <span class="material-symbols-outlined text-sm text-gray-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="12px" viewBox="0 -960 960 960" width="12px" class="dark:text-white" fillcolor="currentColor">
                                 <path d="m770-302-60-62q40-11 65-42.5t25-73.5q0-50-35-85t-85-35H520v-80h160q83 0 141.5 58.5T880-480q0 57-29.5 105T770-302ZM634-440l-80-80h86v80h-6ZM792-56 56-792l56-56 736 736-56 56ZM440-280H280q-83 0-141.5-58.5T80-480q0-69 42-123t108-71l74 74h-24q-50 0-85 35t-35 85q0 50 35 85t85 35h160v80ZM320-440v-80h65l79 80H320Z"/>
                             </svg>
                         </span>
