@@ -2,10 +2,6 @@
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ __('Profile Information') }}
-            @if (session('status') === 'profile-updated')
-            <x-input-success
-                :messages="__('Profile Information Changed.')"/>
-            @endif
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
@@ -49,17 +45,16 @@
                             </div>
                             @include('profile.partials.all.role-badge')
                         </div>
-
-                        <!-- Social Media Links -->
-                        <div class="flex space-x-3">
+                        
+                        <div class="flex flex-wrap gap-3">
                             @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'github'] as $platform)
                                 @php
                                     $socialMediaLinks = $user->details->social_media ?? [];
                                     $link = $socialMediaLinks[$platform] ?? null;
                                 @endphp
                                 @if ($link)
-                                    <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="flex items-center">
-                                        <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5 mr-2">
+                                    <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="p-2 flex items-center rounded-full hover:bg-gray-50 dark:hover:bg-gray-500 dark:bg-gray-300">
+                                        <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5">
                                     </a>
                                 @endif
                             @endforeach

@@ -57,7 +57,7 @@ class ProfileController extends Controller
         $this->updateProfileInfo($user, $data);
     
         // Redirect back to the profile page with the active tab
-        return Redirect::route('profile.edit', ['tab' => 'update-profile'])->with('status', 'profile-updated');
+        return Redirect::route('profile.edit', ['tab' => 'update-profile'])->with('status', 'User Information Updated Successfully');
     }
 
     /**
@@ -100,18 +100,44 @@ class ProfileController extends Controller
         // Decode the JSON input
         $socialMedia = json_decode($request->social_media, true);
         
-        // Filter out empty values
-        $filteredSocialMedia = Arr::where($socialMedia, fn($value) => !empty($value));
-        
+        // Build full URLs from usernames
+        $prefixes = [
+            'facebook' => 'https://facebook.com/',
+            'instagram' => 'https://instagram.com/',
+            'x' => 'https://x.com/',
+            'linkedin' => 'https://linkedin.com/in/',
+            'youtube' => 'https://youtube.com/',
+            'github' => 'https://github.com/',
+        ];
+
+        $finalUrls = [];
+        foreach ($socialMedia as $platform => $value) {
+            $value = trim($value);
+            if ($value === '') continue;
+
+            if ($platform === 'youtube') {
+                if (strpos($value, '@') !== 0) $value = '@' . ltrim($value, '@');
+                $finalUrls[$platform] = $prefixes[$platform] . $value;
+            } elseif ($platform === 'facebook' && (str_starts_with($value, 'profile.php?id=') || str_starts_with($value, 'pages/'))) {
+                $finalUrls[$platform] = $prefixes[$platform] . $value;
+            } elseif ($platform === 'linkedin') {
+                $value = preg_replace('~^(https?://)?(www\.)?linkedin\.com/in/~', '', $value);
+                $finalUrls[$platform] = $prefixes[$platform] . $value;
+            } else {
+                $value = ltrim($value, '@');
+                $finalUrls[$platform] = $prefixes[$platform] . $value;
+            }
+        }
+
         // Log the final data to be stored
-        Log::info('Final social media links to be stored:', $filteredSocialMedia);
-        
+        Log::info('Final social media links to be stored:', $finalUrls);
+
         // Update the social media data
-        $details->social_media = $filteredSocialMedia;
+        $details->social_media = $finalUrls;
         $details->save();
         
         // Redirect back to the profile page with the active tab
-        return Redirect::route('profile.edit', ['tab' => 'update-link-account'])->with('status', 'social-media-updated');
+        return Redirect::route('profile.edit', ['tab' => 'update-link-account'])->with('status', 'Social media links updated successfully.');
     }
 
     public function updateProfileImage(Request $request): RedirectResponse
@@ -168,7 +194,7 @@ class ProfileController extends Controller
         $details->image = json_encode($images);
         $details->save();
     
-        return Redirect::route('profile.edit')->with('status', 'profile-images-updated');
+        return Redirect::route('profile.edit')->with('status', 'User profiles images updated successfully.');
     }
 
     /**

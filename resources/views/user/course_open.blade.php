@@ -7,7 +7,7 @@
                     <div class="flex items-center">
                         <a class="flex gap-2 justify-center items-center" href="{{ route('user.course.detail', ['slug' => Str::slug($course->slug),'courseId' => $course->id]) }}">
                             <img src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" alt="thumbnail" class="w-8 h-8 rounded-sm object-cover">
-                            <h2 class="cursor-pointer truncate font-semibold text-sm text-gray-800 dark:text-white leading-tight hover:text-blue-600">{{ Str::limit($course->display_name, 18, '...')  }}</h2>
+                            <h2 class="cursor-pointer truncate font-semibold text-sm text-gray-800 dark:text-white leading-tight hover:text-blue-600">{{ Str::limit($course->display_name, 32, '...')  }}</h2>
                         </a>
                     </div>
                 </li>

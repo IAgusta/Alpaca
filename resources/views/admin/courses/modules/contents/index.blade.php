@@ -4,17 +4,10 @@
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li class="inline-flex items-center">
-                    <a href="{{ route('admin.courses.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight hover:text-blue-600">{{ __('Course') }}</h2>
-                    </a>
-                </li>
-                <li class="inline-flex items-center">
                     <div class="flex items-center">
-                        <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                        </svg>
-                        <a data-modal-target="crud-modal-module-{{ $course->id }}" data-modal-toggle="crud-modal-module-{{ $course->id }}">
-                            <h2 class="truncate cursor-pointer font-semibold text-xl text-gray-800 dark:text-gray-300 leading-tight hover:text-blue-600">{{ Str::limit($course->name, 18, '...')  }}</h2>
+                        <a class="flex gap-2 justify-center items-center" data-modal-target="crud-modal-module-{{ $course->id }}" data-modal-toggle="crud-modal-module-{{ $course->id }}">
+                            <img src="{{ $course->image ? asset('storage/'.$course->image) : asset('storage/courses/default-course.png') }}" alt="thumbnail" class="w-8 h-8 rounded-sm object-cover">
+                            <h2 class="cursor-pointer truncate font-semibold text-sm text-gray-800 dark:text-white leading-tight hover:text-blue-600">{{ Str::limit($course->display_name, 32, '...')  }}</h2>
                         </a>
                     </div>
                 </li>

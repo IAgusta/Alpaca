@@ -39,6 +39,9 @@
                 @if(session('error'))
                     <x-input-error :messages="[session('error')]" class="mb-4" />
                 @endif
+                @if (session('status'))
+                    <x-input-success :messages="[session('status')]" class="mb-4" />
+                @endif
             </div>
 
             <!-- Page Content -->

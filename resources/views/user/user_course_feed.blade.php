@@ -2,14 +2,14 @@
     @section('title', 'Library - ' . config('app.name'))
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">
                 {{ __('Your Courses') }} 
             </h2>
         </div>
     </x-slot>
     <div class="py-6">
         <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
-            <div class="mx-auto p-7 bg-white overflow-hidden sm:rounded-lg">
+            <div class="mx-auto p-7 overflow-hidden sm:rounded-lg">
                 <div class="flex items-center justify-end mb-7">
                     <!-- Combined Sort + Search Box -->
                     <div class="flex items-center bg-white border border-gray-300 rounded-lg overflow-hidden">
