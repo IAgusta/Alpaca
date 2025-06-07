@@ -27,7 +27,10 @@
                         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
                             <!-- Name and Role -->
                             <div class="mb-2 sm:mb-0">
-                                <h1 class="text-3xl font-bold dark:text-white">{{ $user->name }}</h1>
+                                <div class="flex items-center gap-2">
+                                    <h1 class="text-3xl font-bold dark:text-white">{{ $user->name }}</h1>
+                                    <span class="text-gray-500 dark:text-gray-300 text-xl font-mono ml-3">{{ '@' . $user->username }}</span>
+                                </div>
                                 @include('profile.partials.all.role-badge')
                             </div>
 

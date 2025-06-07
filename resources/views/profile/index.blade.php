@@ -23,26 +23,27 @@
                 </div>
             </div>
 
-            <!-- Profile Info Section -->
-            <div class="relative px-4 sm:px-8 pb-6 rounded-b-xl">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-4 -mt-16">
-                    <!-- Profile Image -->
-                    <div class="w-32 h-32 rounded-full overflow-hidden border-2 border-gray-500 dark:border-gray-900 shadow-lg shrink-0">
+            <!-- Profile Info Section (Overlay) -->
+            <div class="relative px-4 sm:px-8">
+                <div class="flex flex-col sm:flex-row items-start sm:items-end -mt-20 sm:-mt-16">
+                    <!-- Avatar - overlaps banner -->
+                    <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-white dark:border-gray-900 shadow-lg bg-white">
                         <img 
                             src="{{ $user->details->image ? asset('storage/' . (json_decode($user->details->image, true)['profile'] ?? '')) : asset('storage/profiles/default-profile.png') }}" 
                             class="w-full h-full object-cover" 
                             alt="Profile Image">
                     </div>
 
-                    <!-- Name and Role + Socials -->
-                    <div class="pt-4 sm:pt-6 w-full">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
-                            <!-- Name and Role -->
-                            <div class="mb-2 sm:mb-0">
-                                <h1 class="text-2xl font-bold">{{ $user->name }}</h1>
+                    <!-- Name/Role/Socials -->
+                    <div class="mt-2 sm:mt-0 sm:ml-6 flex-1">
+                        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <h1 class="text-3xl font-bold text-gray-800 dark:text-white">{{ $user->name }}</h1>
+                                    <span class="text-gray-500 dark:text-gray-300 text-xl font-mono ml-3">{{ '@' . $user->username }}</span>
+                                </div>
                                 @include('profile.partials.all.role-badge')
                             </div>
-
                             <!-- Social Media Links with Usernames -->
                             <div class="flex flex-wrap gap-3">
                                 @foreach (['facebook', 'instagram', 'x', 'linkedin', 'youtube', 'github'] as $platform)
@@ -51,8 +52,8 @@
                                         $link = $socialMediaLinks[$platform] ?? null;
                                     @endphp
                                     @if ($link)
-                                        <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="flex items-center">
-                                            <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5 mr-2">
+                                        <a href="{{ $link }}" target="_blank" rel="noopener noreferrer" class="p-2 flex items-center rounded-full hover:bg-gray-50 dark:hover:bg-gray-500 dark:bg-gray-300">
+                                            <img src="{{ asset('icons/' . $platform . '.svg') }}" alt="{{ $platform }} icon" class="w-5 h-5">
                                         </a>
                                     @endif
                                 @endforeach
@@ -62,61 +63,68 @@
                 </div>
             </div>
 
-            <!-- User Details Display -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 dark:bg-gray-500 shadow p-4 rounded-lg">
-                <div class="space-y-4">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Username') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $user->username }}</p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Role') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ Str::ucfirst($user->role) }}</p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('About me') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">
-                            {{ $user->details->about ?? __("This user hasn't written a bio yet.") }}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="space-y-4">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Email') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $user->email }}</p>
-                        @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                            <p class="text-sm mt-2 text-yellow-600">
-                                {{ __('Your email address is unverified.') }}
+            <!-- Blended Profile Details Section -->
+            <div class="mt-8 rounded-xl bg-white dark:bg-gray-800 shadow p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <!-- About Me -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 12c2.28 0 4.19-1.92 4.19-4.28C16.19 5.01 14.28 3 12 3S7.81 5.01 7.81 7.72C7.81 10.08 9.72 12 12 12zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ __('About me') }}</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400 text-base leading-relaxed">
+                                {{ $user->details->about ?? __("This user hasn't written a bio yet.") }}
                             </p>
-                        @endif
+                        </div>
+                        <!-- Account Age -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 8v4l3 3"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ __('Account Age') }}</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400">{{ $accountage }}</p>
+                        </div>
                     </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Account Age') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $accountage }}</p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Birth Date') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">
-                            @if($user->details->birth_date)
-                                {{ \Carbon\Carbon::parse($user->details->birth_date)->format('F j, Y') }}
-                            @else
-                                {{ __('Not provided') }}
+                    <div class="space-y-6">
+                        <!-- Email -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v16H4z" stroke="none"/><path d="M22 6l-10 7L2 6"/></svg>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ __('Email') }}</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400">{{ $user->email }}</p>
+                            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+                                <p class="text-xs mt-2 text-yellow-600 dark:text-yellow-400">
+                                    {{ __('Your email address is unverified.') }}
+                                </p>
                             @endif
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">{{ __('Phone Number') }}</h3>
-                        <p class="mt-1 text-sm text-gray-900">{{ $user->details->phone ?? __('Not provided') }}</p>
+                        </div>
+                        <!-- Birth Date -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 7V3M16 7V3M3 11h18M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"></path></svg>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ __('Birth Date') }}</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                @if($user->details->birth_date)
+                                    {{ \Carbon\Carbon::parse($user->details->birth_date)->format('F j, Y') }}
+                                @else
+                                    {{ __('Not provided') }}
+                                @endif
+                            </p>
+                        </div>
+                        <!-- Phone -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92V19a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 8.63 19.86 19.86 0 0 1 0 3.18 2 2 0 0 1 2 1.82h2.09A2 2 0 0 1 6 3.22c.18.56.4 1.12.65 1.67a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 7.17 7.17l1.27-1.27a2 2 0 0 1 2.11-.45c.55.25 1.11.47 1.67.65a2 2 0 0 1 1.4 1.92z"/></svg>
+                                <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ __('Phone Number') }}</h3>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-400">{{ $user->details->phone ?? __('Not provided') }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </x-app-layout>

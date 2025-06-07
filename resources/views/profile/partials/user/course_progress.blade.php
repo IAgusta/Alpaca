@@ -1,5 +1,5 @@
 <div x-data="{ showMore: false }">
-    <h3 class="text-lg font-semibold mb-4">Enrolled Courses</h3>
+    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Enrolled Courses</h3>
     @php
         $enrolledCourses = \App\Models\UserCourse::where('user_id', $user->id)
             ->with('course')
@@ -14,10 +14,10 @@
             <p class="text-gray-500 text-center">No enrolled courses</p>
         </div>
     @else
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($initialCourses as $userCourse)
                 <a href="{{ route('user.course.detail', ['name' => Str::slug($userCourse->course->name),'courseId' => $userCourse->course->id]) }}" class="block">
-                    <div class="border p-3 rounded-lg shadow-md bg-white flex flex-col group hover:bg-slate-500">
+                    <div class="border p-3 rounded-lg shadow-md bg-white dark:bg-gray-800 dark:border-gray-600 flex flex-col group hover:bg-slate-500">
                         <!-- Course Image -->
                         <div class="relative h-20 w-full rounded-md bg-cover bg-center" 
                             style="background-image: url('{{ $userCourse->course->image ? asset('storage/'.$userCourse->course->image) : asset('storage/courses/default-course.png') }}');">
@@ -26,10 +26,10 @@
 
                         <!-- Course Details -->
                         <div class="mt-2">
-                            <h4 class="text-sm font-semibold text-gray-900 group-hover:text-amber-100 line-clamp-1">
+                            <h4 class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-amber-100 line-clamp-1">
                                 {{ $userCourse->course->name }}
                             </h4>
-                            <p class="text-xs text-gray-500 group-hover:text-gray-200">
+                            <p class="text-xs text-gray-500 dark:text-gray-200 group-hover:text-gray-200">
                                 @php
                                     $totalModules = $userCourse->course->modules->count();
                                     $progressPercentage = $totalModules > 0 ? ($userCourse->completed_modules / $totalModules) * 100 : 0;
@@ -40,7 +40,7 @@
                                     Last opened {{ $userCourse->last_opened?->diffForHumans() ?? 'Never' }}
                                 @endif
                             </p>
-                            <p class="text-xs text-gray-500 group-hover:text-gray-200 mt-1">Progress:</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-300 group-hover:text-gray-200 mt-1">Progress:</p>
                             <div class="w-full bg-gray-300 rounded-full h-2">
                                 <div class="bg-green-500 h-2 rounded-full" style="width: {{ $progressPercentage }}%;"></div>
                             </div>

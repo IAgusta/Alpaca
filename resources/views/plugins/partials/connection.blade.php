@@ -179,8 +179,6 @@
     </div>
 </div>
 
-@include('partials.need-login')
-
 <style>
     .connection-card.disabled {
         pointer-events: none;

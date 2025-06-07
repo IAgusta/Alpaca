@@ -131,7 +131,7 @@
               <p class="mt-2 text-sm text-gray-600 dark:text-gray-300 text-center">Personalize your profile the way you like.</p>
             </div>
             <div class="overflow-hidden">
-              <img data-theme-img="img/profile_management" src="img/profile_management.png" alt="profile-image" class="transition-transform duration-300 group-hover:scale-110 w-full object-cover rounded-b-2xl">
+              <img data-theme-img="img/customized" src="img/customized-light.png" alt="profile-image" class="transition-transform duration-300 group-hover:scale-110 w-full object-cover rounded-b-2xl">
             </div>
           </div>
         </div>
