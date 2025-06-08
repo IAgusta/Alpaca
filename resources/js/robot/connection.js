@@ -142,20 +142,23 @@ async function loadApiKey() {
     try {
         const response = await fetch('/api/robot/key');
         const data = await response.json();
-        
-        document.getElementById('api-key').value = data.api_key || 'No API key generated';
-        
+        const apiKeyInput = document.getElementById('api-key');
+        if (apiKeyInput) {
+            apiKeyInput.value = data.api_key || 'No API key generated';
+        }
         const regenerateBtn = document.getElementById('regenerate-api');
         const nextResetSpan = document.getElementById('next-reset');
-        
-        if (!data.can_reset) {
-            regenerateBtn.disabled = true;
-            regenerateBtn.classList.add('opacity-50');
-            nextResetSpan.textContent = `Next reset available: ${new Date(data.next_reset).toLocaleDateString()}`;
-        } else {
-            regenerateBtn.disabled = false;
-            regenerateBtn.classList.remove('opacity-50');
-            nextResetSpan.textContent = '';
+        if (regenerateBtn) {
+            if (!data.can_reset) {
+                regenerateBtn.disabled = true;
+                regenerateBtn.classList.add('opacity-50');
+            } else {
+                regenerateBtn.disabled = false;
+                regenerateBtn.classList.remove('opacity-50');
+            }
+        }
+        if (nextResetSpan) {
+            nextResetSpan.textContent = data.next_reset ? `Next reset available: ${new Date(data.next_reset).toLocaleDateString()}` : '';
         }
     } catch (error) {
         console.error('Failed to load API key:', error);
@@ -187,16 +190,16 @@ window.regenerateApiKey = async function() {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             }
         });
-        
         const data = await response.json();
         if (data.error) {
             alert(data.error);
             return;
         }
-        
         // Update API key display
-        document.getElementById('api-key').value = data.api_key;
-        
+        const apiKeyInput = document.getElementById('api-key');
+        if (apiKeyInput) {
+            apiKeyInput.value = data.api_key;
+        }
         // Show success state
         const nextResetSpan = document.getElementById('next-reset');
         if (nextResetSpan && data.next_reset) {

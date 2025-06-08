@@ -143,9 +143,9 @@
                         </div>
                         <!-- Regenerate Button -->
                         <button type="button"
-                                @click.stop="regenerateApiKey()"
                                 id="regenerate-api"
-                                class="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 
+                                onclick="regenerateApiKey()"
+                                class="px-3 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 
                                        dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white transition-colors 
                                        flex items-center gap-2">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -155,6 +155,8 @@
                             <span class="hidden lg:block">Regenerate</span>
                         </button>
                     </div>
+                    {{-- can reset --}}
+                    <div id="next-reset" class="text-sm text-gray-500"></div>
                 </div>
             </div>
             @endauth
