@@ -135,28 +135,38 @@ function handleButtonRelease() {
     sendCommand('stop');
 }
 
-// Attach event listeners
-document.getElementById('connect-button').addEventListener('click', connectToESP32);
-document.getElementById('forward-button').addEventListener('mousedown', () => handleButtonPress('forward'));
-document.getElementById('forward-button').addEventListener('mouseup', handleButtonRelease);
-document.getElementById('forward-button').addEventListener('touchstart', () => handleButtonPress('forward'));
-document.getElementById('forward-button').addEventListener('touchend', handleButtonRelease);
-document.getElementById('left-button').addEventListener('mousedown', () => handleButtonPress('left'));
-document.getElementById('left-button').addEventListener('mouseup', handleButtonRelease);
-document.getElementById('left-button').addEventListener('touchstart', () => handleButtonPress('left'));
-document.getElementById('left-button').addEventListener('touchend', handleButtonRelease);
-document.getElementById('stop-button').addEventListener('mousedown', () => handleButtonPress('stop'));
-document.getElementById('stop-button').addEventListener('mouseup', handleButtonRelease);
-document.getElementById('stop-button').addEventListener('touchstart', () => handleButtonPress('stop'));
-document.getElementById('stop-button').addEventListener('touchend', handleButtonRelease);
-document.getElementById('right-button').addEventListener('mousedown', () => handleButtonPress('right'));
-document.getElementById('right-button').addEventListener('mouseup', handleButtonRelease);
-document.getElementById('right-button').addEventListener('touchstart', () => handleButtonPress('right'));
-document.getElementById('right-button').addEventListener('touchend', handleButtonRelease);
-document.getElementById('backward-button').addEventListener('mousedown', () => handleButtonPress('backward'));
-document.getElementById('backward-button').addEventListener('mouseup', handleButtonRelease);
-document.getElementById('backward-button').addEventListener('touchstart', () => handleButtonPress('backward'));
-document.getElementById('backward-button').addEventListener('touchend', handleButtonRelease);
-document.getElementById('motorSlider').addEventListener('input', (event) => {
-    updateMotorSpeed(event.target.value);
+// Attach functions to window for HTML access
+window.connectToESP32 = connectToESP32;
+window.sendCommand = sendCommand;
+window.updateMotorSpeed = updateMotorSpeed;
+window.handleButtonPress = handleButtonPress;
+window.handleButtonRelease = handleButtonRelease;
+
+// Wrap event listeners in DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    const connectButton = document.getElementById('connect-button');
+    if (connectButton) connectButton.addEventListener('click', connectToESP32);
+
+    const robotControls = [
+        { id: 'forward-button', command: 'forward' },
+        { id: 'left-button', command: 'left' },
+        { id: 'stop-button', command: 'stop' },
+        { id: 'right-button', command: 'right' },
+        { id: 'backward-button', command: 'backward' }
+    ];
+    robotControls.forEach(btn => {
+        const el = document.getElementById(btn.id);
+        if (!el) return;
+        el.addEventListener('mousedown', () => handleButtonPress(btn.command));
+        el.addEventListener('mouseup', handleButtonRelease);
+        el.addEventListener('touchstart', () => handleButtonPress(btn.command));
+        el.addEventListener('touchend', handleButtonRelease);
+    });
+
+    const motorSlider = document.getElementById('motorSlider');
+    if (motorSlider) {
+        motorSlider.addEventListener('input', (event) => {
+            updateMotorSpeed(event.target.value);
+        });
+    }
 });

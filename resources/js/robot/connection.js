@@ -67,40 +67,25 @@ window.connectToESP32 = async function(method) {
                 throw new Error("Invalid IP format");
             }
 
-            // Test connection to ESP32
-            const testResponse = await fetch(`http://${ip}/status`);
-            if (!testResponse.ok) {
+            // Use proxy route instead of direct HTTP request
+            const response = await fetch(`/robot/proxy?target=${ip}`);
+            const data = await response.json();
+            
+            if (!data.success) {
                 throw new Error("Cannot reach ESP32");
             }
 
-            // Initialize WebSocket connection
-            initWebSocket(ip);
+            // Store IP for future requests
+            window.esp32IP = ip;
             
-        } else if (method === 'api') {
-            const apiKey = document.getElementById('api-key').value.trim();
-            if (!apiKey) throw new Error("API key is required");
-
-            const response = await fetch('/api/robot/connect', {
-                headers: {
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error("Invalid API key");
-            }
+            // Initialize WebSocket if needed
+            initWebSocket(ip);
         }
 
         // Show success state
         spinner.classList.add('hidden');
         success.classList.remove('hidden');
         disconnectBtn.classList.remove('hidden');
-
-        // Disable other connection method
-        const other = method === 'wifi' ? 'api' : 'wifi';
-        document.getElementById(`${other}-card`).classList.add('disabled');
 
         currentConnection = method;
 
@@ -110,6 +95,25 @@ window.connectToESP32 = async function(method) {
         overlay.classList.add('hidden');
     }
 };
+
+// Update command function to use proxy
+function sendCommand(command) {
+    if (!window.esp32IP) {
+        alert("Please connect to the ESP32 first.");
+        return;
+    }
+
+    fetch(`/robot/proxy?target=${window.esp32IP}&command=${command}`)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) throw new Error(data.error);
+            console.log(`Command sent: ${command}`);
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Command failed. Check ESP32 connection.");
+        });
+}
 
 function disconnect(method) {
     const overlay = document.getElementById(`${method}-overlay`);
@@ -158,6 +162,22 @@ async function loadApiKey() {
     }
 }
 
+// Add clipboard functionality
+window.copyToClipboard = async function() {
+    const apiKey = document.getElementById('api-key').value;
+    try {
+        await navigator.clipboard.writeText(apiKey);
+        // Update Alpine.js state through global event
+        window.dispatchEvent(new CustomEvent('api-copied', { detail: true }));
+        setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('api-copied', { detail: false }));
+        }, 2000);
+    } catch (err) {
+        alert('Failed to copy API key to clipboard');
+    }
+};
+
+// Update regenerateApiKey function
 window.regenerateApiKey = async function() {
     try {
         const response = await fetch('/api/robot/generate-key', {
@@ -174,27 +194,15 @@ window.regenerateApiKey = async function() {
             return;
         }
         
-        // Reload API key after generation
-        await loadApiKey();
+        // Update API key display
+        document.getElementById('api-key').value = data.api_key;
+        
+        // Show success state
+        const nextResetSpan = document.getElementById('next-reset');
+        if (nextResetSpan && data.next_reset) {
+            nextResetSpan.textContent = `Next reset available: ${new Date(data.next_reset).toLocaleDateString()}`;
+        }
     } catch (error) {
-        console.error(error);
         alert('Failed to regenerate API key');
     }
 };
-
-function copyApiKey() {
-    const apiKeyInput = document.getElementById('api-key');
-    apiKeyInput.select();
-    document.execCommand('copy');
-    alert('API key copied to clipboard!');
-}
-
-async function connectWithApiKey() {
-    const apiKey = document.getElementById('api-key').value;
-    if (!apiKey || apiKey === 'No API key generated') {
-        alert('Please generate an API key first');
-        return;
-    }
-    
-    connectToESP32('api');
-}

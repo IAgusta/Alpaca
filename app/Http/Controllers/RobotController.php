@@ -131,12 +131,39 @@ class RobotController extends Controller
     public function getApiKey()
     {
         $user = Auth::user();
-        $robot = robot::firstOrCreate(['user_id' => $user->id]);
+        $robot = Robot::firstOrCreate(['user_id' => $user->id]);
+
+        $nextReset = $robot->api_key_last_reset ? 
+            $robot->api_key_last_reset->addWeek()->format('Y-m-d\TH:i:s\Z') : 
+            null;
 
         return response()->json([
             'api_key' => $robot->api_key,
             'can_reset' => $robot->canResetApiKey(),
-            'next_reset' => $robot->api_key_last_reset?->addWeek()
+            'next_reset' => $nextReset
         ]);
+    }
+
+    public function proxyRequest(Request $request)
+    {
+        $target = $request->query('target');
+        $command = $request->query('command', 'status');
+        
+        if (!$target) {
+            return response()->json(['error' => 'No target IP provided'], 400);
+        }
+
+        try {
+            $response = Http::timeout(5)->get("http://{$target}/{$command}");
+            return response()->json([
+                'success' => true,
+                'data' => $response->json() ?? $response->body()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

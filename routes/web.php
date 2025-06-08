@@ -21,6 +21,14 @@ Route::middleware(['auth'])->prefix('robot')->group(function () {
     Route::get('/speed', [RobotController::class, 'setSpeed'])->name('robot.speed');
     Route::get('/key', [RobotController::class, 'getApiKey'])->name('robot.key');
     Route::post('/generate-key', [RobotController::class, 'generateApiKey'])->name('robot.generate-key');
+    Route::get('/proxy', [RobotController::class, 'proxyRequest'])->name('robot.proxy');
+});
+
+// Add API routes for robot key and generate-key
+Route::middleware(['auth'])->prefix('api/robot')->group(function () {
+    Route::get('/key', [RobotController::class, 'getApiKey']);
+    Route::post('/generate-key', [RobotController::class, 'generateApiKey']);
+    Route::get('/connect', [RobotController::class, 'connect']);
 });
 
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');

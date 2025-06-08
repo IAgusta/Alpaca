@@ -2,12 +2,10 @@
     activeMode: null,
     isWifiConnected: false,
     isApiConnected: false,
-    connect(type) {
-        connectToESP32(type);
-    },
-    showLoginModal() {
-        document.getElementById('accessModal').classList.remove('hidden');
-        document.getElementById('modalBackdrop').classList.remove('hidden');
+    apiKeyVisible: false,
+    justCopied: false,
+    init() {
+        window.addEventListener('api-copied', (e) => this.justCopied = e.detail);
     }
 }">
     <h2 class="text-xl font-bold text-center dark:text-white">Connect to Your ESP32</h2>
@@ -113,50 +111,50 @@
                     {{-- Display, Copy, Regenerate, and Connect API key (one line flex) --}}
                     <div class="w-full flex flex-wrap items-center gap-2">
                         <div class="relative flex-1 min-w-0">
-                            <label for="api-key" class="sr-only">API Key</label>
                             <input id="api-key" type="text" 
                                 class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg 
-                                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
-                                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 
-                                    dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                value="Your API key here"
+                                       focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 
+                                       dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400"
+                                :class="{ 'blur-sm select-none': !apiKeyVisible }"
                                 readonly
-                                disabled
-                                onclick="event.stopPropagation();"
+                                @click.stop="apiKeyVisible = !apiKeyVisible"
+                                value="{{ auth()->user()->robot?->api_key ?? 'No API key generated' }}"
                             >
-                            <button onclick="event.stopPropagation(); copyApiKey()" 
-                                    aria-label="Copy API Key"
-                                    class="absolute end-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 
-                                        hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg p-2 inline-flex 
-                                        items-center justify-center">
-                                <!-- Default copy icon -->
-                                <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
-                                    <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z"/>
-                                </svg>
-                                <!-- Success icon - toggle visibility as needed -->
-                                <svg class="w-3.5 h-3.5 text-blue-700 dark:text-blue-500 hidden" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12" id="success-icon">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-                                </svg>
-                            </button>
-                            <!-- Tooltip -->
-                            <div id="tooltip-copy-api-key" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                                <span id="default-tooltip-message">Copy to clipboard</span>
-                                <span id="success-tooltip-message" class="hidden">Copied!</span>
-                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            <div class="absolute right-0 top-1/2 -translate-y-1/2 flex items-center">
+                                <!-- Eye Icon -->
+                                <button type="button" 
+                                        @click.stop="apiKeyVisible = !apiKeyVisible"
+                                        class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400">
+                                </button>
+                                <!-- Copy Button -->
+                                <button type="button"
+                                        @click.stop="copyToClipboard()"
+                                        class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400">
+                                    <!-- Copy Icon -->
+                                    <svg x-show="!justCopied" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560h-80v120H280v-120h-80v560Zm280-560q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z"/>
+                                    </svg>
+                                    <!-- Success/Checkmark Icon -->
+                                    <svg x-show="justCopied" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" class="text-green-600">
+                                        <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
-                        <button id="regenerate-api" onclick="event.stopPropagation(); regenerateApiKey()"
-                                class="text-black px-3 py-2 rounded-lg dark:text-white hover:bg-gray-300 transition-colors flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor" class="w-6 h-6">
-                                <path d="M204-318q-22-38-33-78t-11-82q0-134 93-228t227-94h7l-64-64 56-56 160 160-160 160-56-56 64-64h-7q-100 0-170 70.5T240-478q0 26 6 51t18 49l-60 60ZM481-40 321-200l160-160 56 56-64 64h7q100 0 170-70.5T720-482q0-26-6-51t-18-49l60-60q22 38 33 78t11 82q0 134-93 228t-227 94h-7l64 64-56 56Z"/>
+                        <!-- Regenerate Button -->
+                        <button type="button"
+                                @click.stop="regenerateApiKey()"
+                                id="regenerate-api"
+                                class="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 
+                                       dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white transition-colors 
+                                       flex items-center gap-2">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
-                        </button>
-                        <button onclick="event.stopPropagation(); connectWithApiKey()" 
-                                class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center">
-                            Connect
+                            <span class="hidden lg:block">Regenerate</span>
                         </button>
                     </div>
-                    <span id="next-reset" class="text-sm text-gray-500 dark:text-gray-200"></span>
                 </div>
             </div>
             @endauth
@@ -207,5 +205,9 @@
         0% { transform: scale(0.7); opacity: 0; }
         50% { transform: scale(1.2); opacity: 1; }
         100% { transform: scale(1); }
+    }
+    .blur-sm {
+        filter: blur(4px);
+        user-select: none;
     }
 </style>

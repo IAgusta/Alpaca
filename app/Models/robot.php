@@ -16,6 +16,11 @@ class robot extends Model
         'user_id'
     ];
 
+    protected $casts = [
+        'api_key_last_reset' => 'datetime',
+        'status' => 'boolean'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
