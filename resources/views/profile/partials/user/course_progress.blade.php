@@ -1,4 +1,4 @@
-<div x-data="{ showMore: false }">
+<div x-data="{ showMore: false }" class="space-y-6 p-2 lg:p-7">
     <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Enrolled Courses</h3>
     @php
         $enrolledCourses = \App\Models\UserCourse::where('user_id', $user->id)
@@ -14,7 +14,7 @@
             <p class="text-gray-500 text-center">No enrolled courses</p>
         </div>
     @else
-        <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="mt-3 grid grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($initialCourses as $userCourse)
                 <a href="{{ route('user.course.detail', ['slug' => Str::slug($userCourse->course->slug),'courseId' => $userCourse->course->id]) }}" class="block">
                     <div class="border p-3 rounded-lg shadow-md bg-white dark:bg-gray-800 dark:border-gray-600 flex flex-col group hover:bg-slate-500">

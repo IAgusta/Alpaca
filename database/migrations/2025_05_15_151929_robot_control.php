@@ -20,6 +20,14 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->timestamps();
         });
+
+        Schema::create('robot_sensor_logs', function (Blueprint $table){
+            $table->id();
+            $table->foreignId('robot_id')->constrained()->onDelete('cascade');
+            $table->string('sensor_type');
+            $table->string('value');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -28,5 +36,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('robot');
+        Schema::dropIfExists('robot_sensor_logs');
     }
 };

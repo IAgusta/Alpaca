@@ -1,5 +1,5 @@
 <div class="p-6 mb-7">
-    <h2 class="text-xl font-bold text-center dark:text-white mb-2">Configure Your Robot</h2>
+    <h2 class="text-xl font-bold text-center dark:text-white">Configure Your Robot</h2>
     <p class="text-center text-gray-600 dark:text-gray-300 mb-6">Choose your controller and add components:</p>
     <div x-data="robotBuilder()" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-3">
         <div class="mx-auto justify-start space-y-6 p-2 lg:p-7">
@@ -112,16 +112,25 @@
             </div>
 
             <!-- Public Checkbox & Save -->
-            <div class="p-1 flex justify-end gap-4 items-center mt-7 mb-3 space-x-4">
+            <div class="flex gap-4 mt-7 mb-3 space-x-4 justify-between items-center">
                 <div class="flex items-center">
-                    <input type="checkbox" x-model="!isPublic" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-300 border-gray-300 focus:ring-blue-500">
-                    <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Make this configuration private</label>
+                    <button id="skip-button" 
+                            @click="window.navigateToTab(2)"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+                        Skip
+                    </button>
                 </div>
-                <button type="button" @click="saveConfiguration"
-                        :disabled="!components.length"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
-                    Next
-                </button>
+                <div class="p-1 flex justify-end gap-4 items-center">
+                    <div class="flex items-center">
+                        <input type="checkbox" x-model="!isPublic" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-300 border-gray-300 focus:ring-blue-500">
+                        <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Make this configuration private</label>
+                    </div>
+                    <button type="button" @click="saveConfiguration"
+                            :disabled="!components.length"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+                        Next
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -251,6 +260,7 @@
                     if (!response.ok) throw new Error('Failed to save configuration');
 
                     alert('Configuration saved successfully!');
+                    window.navigateToTab(2);
                 } catch (error) {
                     console.error('Error saving configuration:', error);
                     alert('Failed to save configuration');

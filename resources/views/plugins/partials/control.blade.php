@@ -1,4 +1,4 @@
-<div x-data="{ 
+<div class="p-6 mb-7" x-data="{ 
     activeMode: null,
     isLineActive: false,
     isWallActive: false,
@@ -12,7 +12,7 @@
 }" class="p-4 mb-7">
     <div class="relative">
         <h2 class="text-xl font-bold text-center dark:text-white">Select Mode</h2>
-        <p class="text-center text-gray-600 mb-3 dark:text-gray-300">Choose the job you want your robot to do:</p>
+        <p class="text-center text-gray-600 mb-6 dark:text-gray-300">Choose the job you want your robot to do:</p>
         <!-- Grid Container -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Line Follower Card -->
@@ -23,8 +23,8 @@
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300">
                 <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'line' ? null : 'line'">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 rounded-lg bg-green-100">
-                            <img src="/icons/car.svg" class="w-8 h-8" alt="Line Follower">
+                        <div class="p-3 rounded-lg bg-green-300">
+                            <img src="/icons/car.svg" class="w-8 h-8 invert" alt="Line Follower">
                         </div>
                         <div>
                             <h3 class="font-semibold text-lg dark:text-white">Line Follower</h3>
@@ -97,8 +97,8 @@
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300">
                 <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'wall' ? null : 'wall'">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 rounded-lg bg-blue-100">
-                            <img src="/icons/sensor.svg" class="w-8 h-8" alt="Wall Avoider">
+                        <div class="p-3 rounded-lg bg-blue-400">
+                            <img src="/icons/sensor.svg" class="w-8 h-8 invert" alt="Wall Avoider">
                         </div>
                         <div>
                             <h3 class="font-semibold text-lg dark:text-white">Wall Avoider</h3>
@@ -217,8 +217,8 @@
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300">
                 <div class="p-4 cursor-pointer flex items-center justify-between" @click="activeMode = activeMode === 'manual' ? null : 'manual'">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 rounded-lg bg-purple-100">
-                            <img src="/icons/control.svg" class="w-8 h-8" alt="Manual Control">
+                        <div class="p-3 rounded-lg bg-purple-400">
+                            <img src="/icons/control.svg" class="w-8 h-8 invert" alt="Manual Control">
                         </div>
                         <div>
                             <h3 class="font-semibold text-lg dark:text-white">Manual Control</h3>
@@ -265,43 +265,53 @@
                     </div>
 
                     <!-- Direction Controls -->
-                    <div class="grid grid-cols-3 gap-3 max-w-xs mx-auto justify-center items-center">
-                        <div></div>
-                        <button @click="event.stopPropagation(); sendCommand('forward')" 
-                                class="p-4 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
-                            <svg class=" w-8 h-8 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
-                            </svg>
-                        </button>
-                        <div></div>
-                        
-                        <button @click="event.stopPropagation(); sendCommand('left')" 
-                                class="p-4 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
-                            <svg class=" w-8 h-8 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                            </svg>
-                        </button>
-                        <button @click="event.stopPropagation(); sendCommand('stop')" 
-                                class="p-4 rounded-full hover:bg-red-200 active:bg-red-300 transition-colors duration-150">
-                            <svg class=" w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                        <button @click="event.stopPropagation(); sendCommand('right')" 
-                                class="p-4 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
-                            <svg class=" w-8 h-8 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                            </svg>
-                        </button>
-                        
-                        <div></div>
-                        <button @click="event.stopPropagation(); sendCommand('backward')" 
-                                class="p-4 rounded-full hover:bg-gray-200 active:bg-gray-300 transition-colors duration-150">
-                            <svg class=" w-8 h-8 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                            </svg>
-                        </button>
-                        <div></div>
+                    <div class="grid grid-cols-3 gap-4 lg:gap-7 max-w-xs mx-auto p-7">
+                        <!-- Left Column -->
+                        <div class="flex justify-start items-center">
+                            <button @click="event.stopPropagation(); sendCommand('left')"
+                                class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Center Column -->
+                        <div class="flex flex-col gap-4 justify-center items-center">
+                            <!-- Forward -->
+                            <button @click="event.stopPropagation(); sendCommand('forward')"
+                                class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5l7 7m-7-7l-7 7" />
+                                </svg>
+                            </button>
+
+                            <!-- Stop -->
+                            <button @click="event.stopPropagation(); sendCommand('stop')"
+                                class="bg-red-500 hover:bg-red-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16L16 8M8 8l8 8" />
+                                </svg>
+                            </button>
+
+                            <!-- Backward -->
+                            <button @click="event.stopPropagation(); sendCommand('backward')"
+                                class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l7-7m-7 7l-7-7" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="flex justify-end items-center">
+                            <button @click="event.stopPropagation(); sendCommand('right')"
+                                class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -314,8 +324,8 @@
                 class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300">
                 <div class="p-4 flex cursor-pointer items-center justify-between" @click="activeMode = activeMode === 'soon' ? null : 'soon'">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 rounded-lg bg-gray-100">
-                            <img src="/icons/question.svg" class="w-8 h-8" alt="Coming Soon">
+                        <div class="p-3 rounded-lg bg-gray-300">
+                            <img src="/icons/question.svg" class="w-8 h-8 invert" alt="Coming Soon">
                         </div>
                         <div>
                             <h3 class="font-semibold text-lg dark:text-white">Coming Soon</h3>

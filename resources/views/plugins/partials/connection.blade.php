@@ -1,4 +1,4 @@
-<div x-data="{ 
+<div class="p-6 mb-7" x-data="{ 
     activeMode: null,
     isWifiConnected: false,
     isApiConnected: false,
@@ -9,8 +9,8 @@
     }
 }">
     <h2 class="text-xl font-bold text-center dark:text-white">Connect to Your ESP32</h2>
-    <p class="text-center text-gray-600 dark:text-gray-300 mb-3">Choose a connection method below:</p>
-    <div id="connect-options" class="grid-cols-none grid lg:grid-cols-2 gap-4 p-4 mb-7">
+    <p class="text-center text-gray-600 dark:text-gray-300 mb-6">Choose a connection method below:</p>
+    <div id="connect-options" class="grid-cols-none grid lg:grid-cols-2 gap-4 mb-3">
         <!-- Wi-Fi Card -->
         <div id="wifi-card" 
              class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300"
@@ -131,11 +131,11 @@
                                         @click.stop="copyToClipboard()"
                                         class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400">
                                     <!-- Copy Icon -->
-                                    <svg x-show="!justCopied" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                                    <svg x-show="!justCopied" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg 0 -960 960 960" width="24px" fill="currentColor">
                                         <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h167q11-35 43-57.5t70-22.5q40 0 71.5 22.5T594-840h166q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560h-80v120H280v-120h-80v560Zm280-560q17 0 28.5-11.5T520-800q0-17-11.5-28.5T480-840q-17 0-28.5 11.5T440-800q0 17 11.5 28.5T480-760Z"/>
                                     </svg>
                                     <!-- Success/Checkmark Icon -->
-                                    <svg x-show="justCopied" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" class="text-green-600">
+                                    <svg x-show="justCopied" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg 0 -960 960 960" width="24px" fill="currentColor" class="text-green-600">
                                         <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"/>
                                     </svg>
                                 </button>
@@ -177,6 +177,18 @@
             </div>
         </div>
     </div>
+    @auth()
+    <div class="flex justify-end gap-4 items-center my-3 space-x-4">
+        <span class="text-sm text-gray-500 dark:text-gray-300">Press Skip Button if You want to connect via API Key:</span>
+        <div class="flex text-center py-4">
+            <button id="skip-button" 
+                    @click="window.navigateToTab(3)"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+                Skip
+            </button>
+        </div>
+    </div>
+    @endauth
 </div>
 
 <style>

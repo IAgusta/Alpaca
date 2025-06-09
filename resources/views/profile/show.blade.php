@@ -84,22 +84,39 @@
                                     Courses
                                 </button>
                             </li>
+                            <li class="me-2 lg:ml-2 lg:me-0 lg:my-2" role="presentation">
+                                <button class="w-full p-3 text-start lg:rounded-l-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors" 
+                                    id="robot-tab" 
+                                    data-tabs-target="#robot" 
+                                    type="button" 
+                                    role="tab" 
+                                    aria-controls="robot" 
+                                    aria-selected="false">
+                                    Robot
+                                </button>
+                            </li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Tab Content -->
                 <div id="profile-show-tab-content" class="flex-grow mb-7">
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow"  
+                    <div class="hidden p-4 lg:rounded-lg rounded-none  lg:rounded-tl-none bg-white dark:bg-gray-800 shadow"  
                     id="information" role="tabpanel" aria-labelledby="information-tab">
                         <!-- User Details Display -->
                         @include('profile.partials.user_information')
                     </div>
 
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
+                    <div class="hidden p-4 lg:rounded-lg rounded-none lg:rounded-tl-none bg-white dark:bg-gray-800 shadow" 
                     id="courses" role="tabpanel" aria-labelledby="courses-tab">
                         <!-- Courses Section -->
                         @include('profile.partials.user_course_information')
+                    </div>
+
+                    <div class="hidden p-4 lg:rounded-lg rounded-none lg:rounded-tl-none bg-white dark:bg-gray-800 shadow" 
+                    id="robot" role="tabpanel" aria-labelledby="robot-tab">
+                        <!-- Robot Section -->
+                        @include('profile.partials.robot_information')
                     </div>
                 </div>
             </div>

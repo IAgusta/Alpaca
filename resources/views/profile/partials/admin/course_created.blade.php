@@ -1,4 +1,4 @@
-<div class="space-y-6">
+<div class="space-y-6 p-2 lg:p-7">
     @php
         if (isset($user)) {
             $url = in_array($user->role, ['user', 'trainer'])
@@ -13,15 +13,26 @@
 
     <div class="flex justify-between">
         <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Created Courses</h3>
-        <a href="{{ $url }}">
-            <span class="material-symbols-outlined">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="dark:fill-white">
-                    <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
-                </svg>
-            </span>
-        </a>
+        @if(isset($user) && in_array($user->role, ['admin', 'trainer', 'owner']))
+            <a href="{{ $url }}">
+                <span class="material-symbols-outlined">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" class="dark:fill-white">
+                        <path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z"/>
+                    </svg>
+                </span>
+            </a>
+        @endif
     </div>
 
+    @if(!isset($user) || !in_array($user->role, ['admin', 'trainer', 'owner']))
+        <div class="p-4">
+            <p class="text-gray-500 text-center">This user cannot create courses</p>
+        </div>
+    @elseif ($createdCourses->isEmpty())
+        <div class="p-4">
+            <p class="text-gray-500 text-center">No active courses found</p>
+        </div>
+    @else
     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         @forelse ($createdCourses as $course)
             <a href="{{ route('user.course.detail', ['slug' => Str::slug($course->slug), 'courseId' => $course->id]) }}"
@@ -59,12 +70,15 @@
             </a>
         @empty
             <div class="p-4">
-                <p class="text-gray-500 text-center">No courses created yet</p>
+                <p class="text-gray-500 text-center">No created courses</p>
             </div>
         @endforelse
     </div>
+    @endif
 
-    <div class="mt-4">
-        {{ $createdCourses->links() }}
-    </div>
+    @if(isset($createdCourses) && $createdCourses->hasPages())
+        <div class="mt-4">
+            {{ $createdCourses->links() }}
+        </div>
+    @endif
 </div>
