@@ -9,7 +9,7 @@
             ws.send(JSON.stringify({ type: 'command', value: command }));
         }
     }
-}" class="p-4">
+}" class="p-4 mb-7">
     <div class="relative">
         <h2 class="text-xl font-bold text-center dark:text-white">Select Mode</h2>
         <p class="text-center text-gray-600 mb-3 dark:text-gray-300">Choose the job you want your robot to do:</p>

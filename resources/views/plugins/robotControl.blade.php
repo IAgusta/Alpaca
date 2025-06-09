@@ -9,6 +9,11 @@
     <div class="py-6">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="overflow-hidden">
+                
+                @auth
+                    @include('plugins.partials.type')    
+                @endauth
+                
                 @include('plugins.partials.connection')
                   
                 @include('plugins.partials.control')

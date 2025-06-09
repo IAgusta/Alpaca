@@ -7,6 +7,7 @@ use App\Http\Controllers\RobotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\RobotConfigController;
 
 // Include all route files
 require __DIR__.'/auth.php';
@@ -26,6 +27,8 @@ Route::middleware(['auth'])->prefix('robot')->group(function () {
 
 // Add API routes for robot key and generate-key
 Route::middleware(['auth'])->prefix('api/robot')->group(function () {
+    Route::post('/configuration', [RobotConfigController::class, 'store'])->name('robot.config.store');
+    Route::get('/configuration', [RobotConfigController::class, 'show'])->name('robot.config.show');
     Route::get('/key', [RobotController::class, 'getApiKey']);
     Route::post('/generate-key', [RobotController::class, 'generateApiKey']);
     Route::get('/connect', [RobotController::class, 'connect']);
@@ -60,4 +63,4 @@ Route::get('/api/all-users', [ProfileController::class, 'getAllUsers'])->name('a
 // Profile route - should be last as it's a catch-all route
 Route::get('/{username}', [ProfileController::class, 'show'])
     ->name('profile.show')
-    ->where('username', '^(?!.*[0-9]+$)(?!dashboard$|slug$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$).*$');
+    ->where('username', '^(?!.*[0-9]+$)(?!dashboard$|slug$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$|api$).*$');

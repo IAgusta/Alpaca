@@ -1,6 +1,19 @@
 let currentConnection = null;
 let ws = null;
 
+window.showLoginModal = function() {
+    const modal = document.getElementById('accessModal');
+    modal.classList.remove('hidden');
+    modal.classList.remove('scale-95');
+    modal.classList.add('scale-110');
+    setTimeout(() => {
+        modal.classList.remove('scale-110');
+        modal.classList.add('scale-100');
+    }, 120);
+    document.getElementById('modalBackdrop').classList.remove('hidden');
+};
+
+
 window.addEventListener("DOMContentLoaded", () => {
     ['wifi', 'api'].forEach(type => {
         const overlay = document.getElementById(`${type}-overlay`);
