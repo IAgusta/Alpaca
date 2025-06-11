@@ -11,8 +11,10 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\CourseController;
 
+/*
+    Guest Account Routes before Login -- Auth = null
+*/
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
@@ -37,6 +39,9 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
+/*
+Basic Route for user Authentification
+*/
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
@@ -60,13 +65,22 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
+/*
+Route for profile User
+*/
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    
     Route::patch('/profile/update-links', [ProfileController::class, 'updateSocialMediaLinks'])->name('profile.update.link');
+    
     Route::post('/profile/update-images', [ProfileController::class, 'updateProfileImage'])->name('profile.update.images');
+
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/profile/section/{section}', [ProfileController::class, 'section'])
         ->name('profile.section');
 });

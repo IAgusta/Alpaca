@@ -14,12 +14,15 @@ require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/course.php';
 
-// Robot control routes
-Route::middleware(['auth'])->prefix('robot')->group(function () {
-    Route::get('/key', [RobotController::class, 'getApiKey'])->name('robot.key');
-    Route::post('/generate-key', [RobotController::class, 'generateApiKey'])->name('robot.generate-key');
-});
+/* 
+    fuck you genAI Shit.
+    Your Crawler shit doesnt dying even after got block on robot.txt
+*/
+Route::get('/block.txt', fn () => abort(403));
 
+/* 
+Route for Controlling ESP32 via Websocket
+*/
 Route::prefix('robot')->group(function(){
     Route::post('/set-esp32-ip', [RobotController::class, 'setEsp32Ip'])->name('robot.set-ip');
     Route::get('/connect', [RobotController::class, 'connect'])->name('robot.connect');
@@ -28,7 +31,9 @@ Route::prefix('robot')->group(function(){
     Route::get('/proxy', [RobotController::class, 'proxyRequest'])->name('robot.proxy');
 });
 
-// Add API routes for robot key and generate-key
+/*
+Route for API Generated and Config for each auth user.
+*/
 Route::middleware(['auth'])->prefix('api/robot')->group(function () {
     Route::post('/configuration', [RobotConfigController::class, 'store'])->name('robot.config.store');
     Route::get('/configuration', [RobotConfigController::class, 'show'])->name('robot.config.show');
@@ -38,7 +43,9 @@ Route::middleware(['auth'])->prefix('api/robot')->group(function () {
 
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');
 
-// Basic pages - order matters, put these before the dynamic username route
+/*
+Basic Web Route
+*/
 Route::get('/', [DashboardController::class, 'index'])->name('home');
 Route::get('/about', [LandingPageController::class, 'index'])->name('about');
 Route::get('/contact', function () { return view('contact');})->name('contact');
@@ -58,7 +65,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-// Profile route - should be last as it's a catch-all route
+/*
+This Route is essensial for search by username via route
+*/
 Route::get('/{username}', [ProfileController::class, 'show'])
     ->name('profile.show')
     ->where('username', '^(?!.*[0-9]+$)(?!dashboard$|slug$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$|api$).*$');

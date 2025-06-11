@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__.'/auth.php';
 
+/* 
+Routes that Admin only ( Owner, Admin, Trainer ) can accesses
+As Course management or User Management
+*/
 Route::middleware(['auth', 'only.admin'])->group(function () {
     Route::get('/admin/manage-user', [AdminController::class, 'manageUsers'])->name('admin.manage-user');
     Route::put('/admin/users/{id}', [AdminController::class, 'updateUser'])->name('admin.updateUser');
