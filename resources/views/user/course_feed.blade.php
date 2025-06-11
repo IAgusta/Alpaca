@@ -52,10 +52,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Pagination -->
-                <div class="mt-6">
-                    {{ $availableCourses->links() }}
-                </div>
             </div>
         </div>
     </div>
@@ -67,12 +63,43 @@ document.addEventListener('DOMContentLoaded', async function() {
     const searchForm = document.querySelector('form');
     const sortLinks = document.querySelectorAll('[data-sort]');
 
-    async function loadCourses(url = '{{ route('courses.section') }}') {
+    async function loadCourses(url = null) {
         try {
-            const response = await fetch(url);
+            if (!url) url = '{{ route('course.feed') }}' + window.location.search;
+            
+            // Show loading spinner
+            container.innerHTML = `
+                <div class="flex items-center justify-center w-full h-full">
+                    <div class="flex items-center gap-2 text-gray-500">
+                        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Loading courses...</span>
+                    </div>
+                </div>
+            `;
+            
+            const response = await fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
             if (!response.ok) throw new Error('Failed to load courses');
             container.innerHTML = await response.text();
+
+            // Re-initialize Flowbite components
+            if (window.initFlowbite) window.initFlowbite();
+
+            // Update URL if it's different
+            if (url !== window.location.href) {
+                history.pushState({}, '', url);
+            }
+
+            // Attach pagination listeners
+            attachPaginationListeners();
         } catch (error) {
+            console.error('Error:', error);
             container.innerHTML = `
                 <div class="text-red-500 text-center w-full">
                     Failed to load courses. Please try again.
@@ -81,15 +108,23 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // Initial load
-    loadCourses();
+    function attachPaginationListeners() {
+        container.querySelectorAll('.pagination a').forEach(link => {
+            link.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await loadCourses(link.href);
+                window.scrollTo(0, 0);
+            });
+        });
+    }
 
     // Handle search form submission
     searchForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(searchForm);
-        const url = `{{ route('courses.section') }}?${new URLSearchParams(formData)}`;
-        await loadCourses(url);
+        const url = new URL(window.location.href);
+        formData.forEach((value, key) => url.searchParams.set(key, value));
+        await loadCourses(url.toString());
     });
 
     // Handle sort clicks
@@ -98,6 +133,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             e.preventDefault();
             await loadCourses(link.href);
         });
+    });
+
+    // Initial load
+    loadCourses();
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', () => {
+        loadCourses(window.location.href);
     });
 });
 </script>

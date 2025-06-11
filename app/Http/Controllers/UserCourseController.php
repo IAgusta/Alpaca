@@ -82,6 +82,11 @@ class UserCourseController extends Controller
         }
 
         $availableCourses = $query->paginate(12);
+
+        if ($request->ajax()) {
+            return view('user.component.available_course', compact('availableCourses'))->render();
+        }
+
         return view('user.course_feed', compact('availableCourses', 'search', 'sort', 'direction'));
     }
 
@@ -514,6 +519,6 @@ class UserCourseController extends Controller
         }
 
         $availableCourses = $query->paginate(12);
-        return view('user.component.available_course', compact('availableCourses'))->render();
+        return view('user.component.available_course', compact('availableCourses'));
     }
 }
