@@ -16,12 +16,15 @@ require __DIR__.'/course.php';
 
 // Robot control routes
 Route::middleware(['auth'])->prefix('robot')->group(function () {
-    Route::post('/set-esp32-ip', [RobotController::class, 'setEsp32Ip'])->name('robot.set-ip');
-    Route::get('/connect', [RobotController::class, 'connect'])->name('robot.connect');
-    Route::get('/command/{command}', [RobotController::class, 'sendCommand'])->name('robot.command');
-    Route::get('/speed', [RobotController::class, 'setSpeed'])->name('robot.speed');
     Route::get('/key', [RobotController::class, 'getApiKey'])->name('robot.key');
     Route::post('/generate-key', [RobotController::class, 'generateApiKey'])->name('robot.generate-key');
+});
+
+Route::prefix('robot')->group(function(){
+    Route::post('/set-esp32-ip', [RobotController::class, 'setEsp32Ip'])->name('robot.set-ip');
+    Route::get('/connect', [RobotController::class, 'connect'])->name('robot.connect');
+    Route::get('/command/send/{command}', [RobotController::class, 'sendCommand'])->name('robot.command');
+    Route::get('/speed', [RobotController::class, 'setSpeed'])->name('robot.speed');
     Route::get('/proxy', [RobotController::class, 'proxyRequest'])->name('robot.proxy');
 });
 
@@ -31,7 +34,6 @@ Route::middleware(['auth'])->prefix('api/robot')->group(function () {
     Route::get('/configuration', [RobotConfigController::class, 'show'])->name('robot.config.show');
     Route::get('/key', [RobotController::class, 'getApiKey']);
     Route::post('/generate-key', [RobotController::class, 'generateApiKey']);
-    Route::get('/connect', [RobotController::class, 'connect']);
 });
 
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');
@@ -55,10 +57,6 @@ Route::get('/forum', function(){ return view('plugins.forum');})->name('forum');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
-
-// API routes
-Route::get('/api/search-users', [ProfileController::class, 'search'])->name('api.users.search');
-Route::get('/api/all-users', [ProfileController::class, 'getAllUsers'])->name('api.users.all');
 
 // Profile route - should be last as it's a catch-all route
 Route::get('/{username}', [ProfileController::class, 'show'])

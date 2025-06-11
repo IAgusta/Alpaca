@@ -4,9 +4,37 @@
     isWallActive: false,
     globalSpeed: 50,
     avoidDistance: 25,
+    init() {
+        @auth
+            if ('{{ auth()->check() ? auth()->user()->robot?->api_key : "" }}') {
+                window.robotConnection = {
+                    mode: 'api',
+                    key: '{{ auth()->check() ? auth()->user()->robot?->api_key : "" }}',
+                    active: true
+                };
+            }
+        @endauth
+    },
     sendCommand(command) {
+        if (!window.robotConnection?.active) {
+            if (@json(auth()->check()) && window.robotConnection?.mode === 'api') {
+                // Re-initialize API connection if user is authenticated
+                window.robotConnection = {
+                    mode: 'api',
+                    key: '{{ auth()->check() ? auth()->user()->robot?->api_key : "" }}',
+                    active: true
+                };
+            } else if (window.robotConnection?.mode === 'proxy' && window.robotConnection?.target) {
+                window.robotConnection.active = true;
+            } else {
+                alert('Please connect to the robot first');
+                return;
+            }
+        }
         if (ws && ws.readyState === WebSocket.OPEN) {
             ws.send(JSON.stringify({ type: 'command', value: command }));
+        } else {
+            window.sendCommand(command);
         }
     }
 }" class="p-4 mb-7">

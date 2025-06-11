@@ -9,6 +9,8 @@ Route::middleware(['auth'])->group(function () {
     // User course routes
     Route::get('/courses', [UserCourseController::class, 'index'])->name('user.course');
     Route::get('/courses/feed', [UserCourseController::class, 'feed'])->name('course.feed');
+    Route::get('/courses/section', [UserCourseController::class, 'section'])
+        ->name('courses.section');
     Route::get('/courses/library', [UserCourseController::class, 'userFeed'])->name('user.course.library');
     Route::post('/courses/add/{courseId}', [UserCourseController::class, 'add'])->name('user.course.add');
     

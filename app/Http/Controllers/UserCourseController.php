@@ -477,4 +477,43 @@ class UserCourseController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function section(Request $request)
+    {
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'updated_at');
+        $direction = $request->input('direction', 'desc');
+
+        $query = Course::query()
+            ->when(auth::user()->role === 'user', function ($query) {
+                $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
+            });
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%')
+                  ->orWhere('theme', 'like', '%' . $search . '%')
+                  ->orWhereHas('authorUser', function($q) use ($search) {
+                      $q->where('name', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        switch ($sort) {
+            case 'popularity':
+                $query->orderBy('popularity', $direction);
+                break;
+            case 'name':
+            case 'created_at':
+            case 'updated_at':
+                $query->orderBy($sort, $direction);
+                break;
+            default:
+                $query->orderBy('name', 'asc');
+        }
+
+        $availableCourses = $query->paginate(12);
+        return view('user.component.available_course', compact('availableCourses'))->render();
+    }
 }

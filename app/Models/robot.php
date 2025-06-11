@@ -18,7 +18,7 @@ class robot extends Model
 
     protected $casts = [
         'api_key_last_reset' => 'datetime',
-        'status' => 'boolean'
+        'status' => 'integer'
     ];
 
     public function user()

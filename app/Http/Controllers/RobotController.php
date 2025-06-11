@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use App\Models\robot;
+use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Str;
 
 class RobotController extends Controller
@@ -144,17 +145,73 @@ class RobotController extends Controller
         ]);
     }
 
+    public function getPendingCommand($apiKey)
+    {
+        // Retrieve the robot that matches the given API key
+        $robot = Robot::where('api_key', $apiKey)->first();
+
+        // Check if the robot exists
+        if (!$robot) {
+            return response()->json(['error' => 'Invalid API Key'], 404);
+        }
+
+        // Check if there's a pending command (status = 0)
+        if ($robot->status == 0 && $robot->command !== null) {
+            // Mark it as "processing"
+            $robot->status = 1;
+            $robot->save();
+
+            // Return the command as JSON
+            return response()->json([
+                json_decode($robot->command)
+            ]);
+        }
+
+        return response()->json(['message' => 'No pending commands'], 204);
+    }
+
+    public function updateCommandStatusByKey(Request $request, $apiKey)
+    {
+        $request->validate([
+            'status' => 'required|integer|in:0,1,2'
+        ]);
+
+        $robot = Robot::where('api_key', $apiKey)->first();
+
+        if (!$robot) {
+            return response()->json(['error' => 'Invalid API key'], 404);
+        }
+
+        $robot->status = (int) $request->status;
+
+        if ($robot->status === 2) {
+            $robot->command = null;
+        }
+
+        $robot->save();
+
+        return response()->json([
+            'message' => 'Status updated',
+            'status' => $robot->status
+        ]);
+    }
+
     public function proxyRequest(Request $request)
     {
         $target = $request->query('target');
-        $command = $request->query('command', 'status');
+        $command = $request->query('command');
         
         if (!$target) {
             return response()->json(['error' => 'No target IP provided'], 400);
         }
 
         try {
-            $response = Http::timeout(5)->get("http://{$target}/{$command}");
+            // Parse command string into endpoint and parameters
+            [$endpoint, $params] = $this->parseCommand($command);
+            
+            // Make request to ESP32
+            $response = Http::timeout(5)->get("http://{$target}/{$endpoint}", $params);
+            
             return response()->json([
                 'success' => true,
                 'data' => $response->json() ?? $response->body()
@@ -164,6 +221,30 @@ class RobotController extends Controller
                 'success' => false,
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    private function parseCommand($command)
+    {
+        if (!$command) return ['status', []];
+
+        $parts = explode(':', $command);
+        
+        switch ($parts[0]) {
+            case 'move':
+                return ['move', ['dir' => $parts[1] ?? 'stop']];
+            case 'line':
+                return ['line', ['active' => $parts[1] === 'on' ? 1 : 0]];
+            case 'wall':
+                return ['wall', ['active' => $parts[1] === 'on' ? 1 : 0]];
+            case 'speed':
+                return ['speed', ['value' => $parts[1] ?? 100]];
+            case 'wallspeed':
+                return ['speed', ['value' => $parts[1] ?? 100, 'mode' => 'wall']];
+            case 'distance':
+                return ['distance', ['value' => $parts[1] ?? 25]];
+            default:
+                return ['status', []];
         }
     }
 }

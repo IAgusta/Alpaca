@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('api_key')->unique()->nullable();
             $table->timestamp('api_key_last_reset')->nullable();
             $table->string('command')->nullable();
-            $table->boolean('status')->default(0);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
 

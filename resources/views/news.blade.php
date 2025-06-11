@@ -2,11 +2,11 @@
     @section('title', 'Our News - '. config('app.name'))
 
     <div class="py-7">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden sm:rounded-lg p-6">
-                <h2 class="text-2xl font-bold mb-6">What's Changed?</h2>
+        <div class="max-w-7xl mx-auto p-3 lg:p-7">
+            <div class="bg-white dark:bg-gray-600 overflow-hidden sm:rounded-lg p-6">
+                <h2 class="text-2xl font-bold mb-6 dark:text-white">What's Changed?</h2>
                 
-                <ol class="relative border-l border-gray-200 dark:border-gray-700">
+                <ol class="relative border-l border-gray-900 dark:border-gray-200">
                     @forelse ($updates as $update)
                         <li class="mb-10 ml-4">
                             <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
@@ -26,8 +26,8 @@
                         </li>
                     @empty
                         <li class="mb-10 ml-4">
-                            <p class="text-gray-500">No updates available for now. The developer is still working on it.</p>
-                            <p class="text-gray-500">The Github Webhook was still doesn't properly connected to the website</p>
+                            <p class="text-gray-500 dark:text-gray-200">No updates available for now. The developer is still working on it.</p>
+                            <p class="text-gray-500 dark:text-gray-200">The Github Webhook was still doesn't properly connected to the website</p>
                         </li>
                     @endforelse
                 </ol>

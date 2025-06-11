@@ -14,6 +14,7 @@ use App\Models\UserDetail;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use App\Models\Course;
+use App\Models\robot;
 
 class ProfileController extends Controller
 {
@@ -236,12 +237,21 @@ class ProfileController extends Controller
                 ->appends(['tab' => 'courses']);
         }
 
+        $hasRobot = robot::where('user_id', $user->id)->first();
+        if ($hasRobot) {
+            $robot = $hasRobot;  // Use the already fetched record
+            $robot->image = json_decode($robot->image, true);
+        } else {
+            $robot = null;
+        }
+
         return view('profile.show', [
             'user' => $user,
             'details' => $details,
             'images' => $images,
             'accountage' => $accountage,
             'createdCourses' => $createdCourses,
+            'robot' => $robot,
         ]);
     }
 
@@ -317,5 +327,24 @@ class ProfileController extends Controller
             });
     
         return response()->json($users);
+    }
+
+    public function section(Request $request, string $section)
+    {
+        $validSections = [
+            'update-profile' => 'profile.partials.update-profile-information-form',
+            'update-profile-pictures' => 'profile.partials.update-profile-pictures',
+            'update-link-account' => 'profile.partials.social-media-profile-information-modal',
+            'update-password' => 'profile.partials.update-password-form',
+            'delete-account' => 'profile.partials.delete-user-form'
+        ];
+
+        if (!array_key_exists($section, $validSections)) {
+            abort(404);
+        }
+
+        return view($validSections[$section], [
+            'user' => $request->user()
+        ]);
     }
 }

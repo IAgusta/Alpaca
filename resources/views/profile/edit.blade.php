@@ -82,28 +82,11 @@
 
                 <!-- Tab Content -->
                 <div id="profile-tab-content" class="flex-grow">
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
-                    id="update-profile" role="tabpanel" aria-labelledby="update-profile-tab">
-                        @include('profile.partials.update-profile-information-form')
-                    </div> 
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
-                    id="update-profile-pictures" role="tabpanel" aria-labelledby="update-profile-pictures-tab">
-                        @include('profile.partials.update-profile-pictures')
-                    </div>
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
-                    id="update-link-account" role="tabpanel" aria-labelledby="update-link-account">
-                        @include('profile.partials.social-media-profile-information-modal')
-                    </div>
-                    <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
-                    id="update-password" role="tabpanel" aria-labelledby="update-password-tab">
-                        @include('profile.partials.update-password-form')
-                    </div>
-                    @unless(auth()->user()->role === 'owner')
-                        <div class="hidden p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow" 
-                        id="delete-account" role="tabpanel" aria-labelledby="delete-account-tab">
-                            @include('profile.partials.delete-user-form')
+                    <div id="tab-content" class="p-4 rounded-lg rounded-tl-none bg-white dark:bg-gray-800 shadow">
+                        <div class="flex items-center justify-center text-gray-500 dark:text-gray-400">
+                            Select a tab to load content
                         </div>
-                    @endunless
+                    </div>
                 </div>
             </div>
         </div>
@@ -112,7 +95,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('[data-tabs-target]');
-            const tabContent = document.querySelectorAll('[role="tabpanel"]');
+            const tabContent = document.getElementById('tab-content');
             const activeTabKey = 'activeProfileTab';
             const dropdown = document.getElementById('dropdown');
             const dropdownButton = document.getElementById('dropdownDefaultButton');
@@ -131,6 +114,34 @@
             });
 
             // Initialize tabs
+            const loadTabContent = async (targetId) => {
+                const section = targetId.substring(1); // Remove # from targetId
+                
+                // Show loading state
+                tabContent.innerHTML = `
+                    <div class="rounded-lg bg-white dark:bg-gray-800 p-6 shadow space-y-6 min-h-[200px] flex items-center justify-center text-sm text-gray-600 dark:text-gray-300">
+                        <svg class="animate-spin h-5 w-5 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span>Loading section...</span>
+                    </div>
+                `;
+
+                try {
+                    const response = await fetch(`/profile/section/${section}`);
+                    if (!response.ok) throw new Error('Failed to load section');
+                    const html = await response.text();
+                    tabContent.innerHTML = html;
+                } catch (error) {
+                    tabContent.innerHTML = `
+                        <div class="text-red-500 text-center">
+                            Failed to load content. Please try again.
+                        </div>
+                    `;
+                }
+            };
+
             const initializeTabs = (targetId = null) => {
                 const savedTabId = targetId || localStorage.getItem(activeTabKey) || tabs[0]?.getAttribute('data-tabs-target');
                 if (!savedTabId) return;
@@ -147,10 +158,7 @@
                     }
                 });
 
-                tabContent.forEach(content => {
-                    content.classList.toggle('hidden', content.id !== savedTabId.substring(1));
-                });
-
+                loadTabContent(savedTabId);
                 dropdown?.classList.add('hidden');
             };
 

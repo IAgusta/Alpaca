@@ -163,7 +163,7 @@
                         <img id="avatarButton" type="button" 
                             data-dropdown-toggle="userDropdown"
                             data-dropdown-placement="bottom-start"
-                            class="w-10 h-10 rounded-full cursor-pointer transition-all duration-200 border-1 border-gray-400 dark:border-gray-800" 
+                            class="w-9 h-9 rounded-full cursor-pointer transition-all duration-200 border-1 border-gray-400 dark:border-gray-800" 
                             src="{{ asset('storage/profiles/guest-avatar.png') }}" 
                             alt="Guest User">
 

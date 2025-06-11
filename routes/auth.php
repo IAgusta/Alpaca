@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\CourseController;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -66,4 +67,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/update-links', [ProfileController::class, 'updateSocialMediaLinks'])->name('profile.update.link');
     Route::post('/profile/update-images', [ProfileController::class, 'updateProfileImage'])->name('profile.update.images');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/section/{section}', [ProfileController::class, 'section'])
+        ->name('profile.section');
 });
