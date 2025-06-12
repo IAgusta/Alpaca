@@ -1,4 +1,8 @@
-<section>
+<section x-data x-init="() => {
+    $nextTick(() => {
+        if (window.initSocialMediaForm) window.initSocialMediaForm();
+    });
+}">
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ __('Social Media Profile Information') }}
@@ -147,6 +151,7 @@
                                 @change="saveLink()"
                                 class="border-gray-300 dark:bg-gray-600 dark:border-slate-500 dark:placeholder:text-gray-400 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 rounded-r-md shadow-sm flex-1 px-3 py-1.5 text-sm min-w-0 max-w-full"
                                 style="overflow-x: auto;"
+                                autocomplete="off"
                             >
                         </div>
                     </div>

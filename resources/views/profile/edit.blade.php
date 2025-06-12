@@ -38,7 +38,7 @@
                             </li>
                             @unless(auth()->user()->role === 'owner')
                                 <li>
-                                    <button data-tabs-target="#delete-account" class="w-full px-4 py-2 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-600 text-start">Delete Account</button>
+                                    <button data-tabs-target="#delete-account" class="w-full px-4 py-2 hover:bg-gray-100 dark:text-red-600 dark:hover:bg-gray-600 text-start">Delete Account</button>
                                 </li>
                             @endunless
                         </ul>
@@ -115,32 +115,61 @@
 
             // Initialize tabs
             const loadTabContent = async (targetId) => {
-                const section = targetId.substring(1); // Remove # from targetId
-                
-                // Show loading state
-                tabContent.innerHTML = `
-                    <div class="rounded-lg bg-white dark:bg-gray-800 p-6 shadow space-y-6 min-h-[200px] flex items-center justify-center text-sm text-gray-600 dark:text-gray-300">
-                        <svg class="animate-spin h-5 w-5 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span>Loading section...</span>
-                    </div>
-                `;
+                const section = targetId.substring(1);
+                showLoadingState();
 
                 try {
                     const response = await fetch(`/profile/section/${section}`);
                     if (!response.ok) throw new Error('Failed to load section');
                     const html = await response.text();
                     tabContent.innerHTML = html;
+
+                    // Dispatch event so JS can re-initialize for this section
+                    document.dispatchEvent(new CustomEvent('tabContentLoaded', { detail: { section } }));
+
+                    // Optionally, call legacy initializers for backward compatibility
+                    if (section === 'update-profile-pictures' && window.initCropperModal) {
+                        window.initCropperModal();
+                    } else if (section === 'update-link-account' && window.initSocialMediaForm) {
+                        window.initSocialMediaForm();
+                    }
                 } catch (error) {
-                    tabContent.innerHTML = `
-                        <div class="text-red-500 text-center">
-                            Failed to load content. Please try again.
-                        </div>
-                    `;
+                    console.error('Error loading section:', error);
+                    showError();
                 }
             };
+
+            function showNotification(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = `fixed bottom-4 right-4 p-4 rounded-lg shadow-lg ${
+                    type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                } text-white`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                setTimeout(() => notification.remove(), 3000);
+            }
+
+            function showLoadingState() {
+                tabContent.innerHTML = `
+                    <div class="rounded-lg bg-white dark:bg-gray-800 p-6 shadow space-y-6 min-h-[250px] flex items-center justify-center text-sm text-gray-600 dark:text-gray-300">
+                        <div class="flex flex-col items-center justify-center">
+                            <svg class="animate-spin h-10 w-10 text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>Loading section...</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function showError() {
+                tabContent.innerHTML = `
+                    <div class="text-red-500 text-center p-4">
+                        Failed to load content. Please try again.
+                    </div>
+                `;
+            }
 
             const initializeTabs = (targetId = null) => {
                 const savedTabId = targetId || localStorage.getItem(activeTabKey) || tabs[0]?.getAttribute('data-tabs-target');
@@ -174,5 +203,28 @@
                 });
             });
         });
+
+        // Add these utility functions at the top of your script
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                if (document.querySelector(`script[src="${src}"]`)) {
+                    resolve();
+                    return;
+                }
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        function loadStylesheet(href) {
+            if (document.querySelector(`link[href="${href}"]`)) return;
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            document.head.appendChild(link);
+        }
     </script>
 </x-app-layout>

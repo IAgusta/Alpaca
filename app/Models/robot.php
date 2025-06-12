@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class robot extends Model
 {
-    protected $table = 'robot';
+    protected $table = 'robots';
     protected $fillable = [
         'command',
         'status',
@@ -44,5 +44,10 @@ class robot extends Model
     {
         if (!$this->api_key_last_reset) return true;
         return $this->api_key_last_reset->addWeek()->isPast();
+    }
+
+    public function robotDetail()
+    {
+        return $this->hasOne(robotDetail::class, 'robot_id');
     }
 }

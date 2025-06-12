@@ -1,4 +1,8 @@
-<section>
+<section x-data x-init="() => { 
+    $nextTick(() => {
+        if (window.initCropperModal) window.initCropperModal();
+    });
+}">
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-white">
             {{ __('Profile Pictures') }}
@@ -9,7 +13,7 @@
         </p>
     </header>
 
-    <form method="post" action="{{ route('profile.update.images') }}" enctype="multipart/form-data" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('profile.update.images') }}" enctype="multipart/form-data" class="mt-6 space-y-6" id="profile-images-form">
         @csrf
 
         <div class="flex flex-col gap-3">
@@ -100,4 +104,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.0.7/compressor.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" />
     @vite('resources/js/profile/profile-images.js')
+
+    <script>
+    // Prevent form submit if cropper modal is open
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('profile-images-form');
+        const modal = document.getElementById('cropper-modal');
+        if (form && modal) {
+            form.addEventListener('submit', function(e) {
+                if (!modal.classList.contains('hidden')) {
+                    e.preventDefault();
+                    alert('Please finish cropping your image or close the cropper modal before saving.');
+                }
+            });
+        }
+    });
+    </script>
 </section>
