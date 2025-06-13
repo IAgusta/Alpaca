@@ -124,10 +124,12 @@
                     const html = await response.text();
                     tabContent.innerHTML = html;
 
-                    // Dispatch event so JS can re-initialize for this section
-                    document.dispatchEvent(new CustomEvent('tabContentLoaded', { detail: { section } }));
+                    // Dispatch custom event for tab content loaded
+                    document.dispatchEvent(new CustomEvent('tabContentLoaded', { 
+                        detail: { section } 
+                    }));
 
-                    // Optionally, call legacy initializers for backward compatibility
+                    // Initialize components if needed
                     if (section === 'update-profile-pictures' && window.initCropperModal) {
                         window.initCropperModal();
                     } else if (section === 'update-link-account' && window.initSocialMediaForm) {

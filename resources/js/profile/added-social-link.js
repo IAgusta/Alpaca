@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('tabContentLoaded', function () {
     // Elements
     const form = document.getElementById('social-media-form');
     const socialMediaInput = document.getElementById('social-media-input');

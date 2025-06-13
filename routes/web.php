@@ -70,4 +70,4 @@ This Route is essensial for search by username via route
 */
 Route::get('/{username}', [ProfileController::class, 'show'])
     ->name('profile.show')
-    ->where('username', '^(?!.*[0-9]+$)(?!dashboard$|slug$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$|api$).*$');
+    ->where('username', '^(?!dashboard$|slug$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$|api$).*$');
