@@ -49,7 +49,7 @@ class RobotConfigController extends Controller
             'data' => [
                 'user_id' => $userId,
                 'controller' => $validated['controller'],
-                'show' => !$validated['isPublic'],
+                'isPublic' => $validated['isPublic'],
                 'component' => json_decode($components, true)
             ],
         ]);
@@ -77,7 +77,7 @@ class RobotConfigController extends Controller
             'data' => [
                 'user_id' => $userId,
                 'controller' => $detail->controller,
-                'show' => !$detail->isPublic,
+                'show' => $detail->isPublic,
                 'component' => json_decode($detail->components, true)
             ],
         ]);

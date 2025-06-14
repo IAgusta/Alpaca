@@ -122,8 +122,13 @@
                 </div>
                 <div class="p-1 flex justify-end gap-4 items-center">
                     <div class="flex items-center">
-                        <input type="checkbox" x-model="!isPublic" class="w-4 h-4 text-blue-600 rounded dark:bg-gray-300 border-gray-300 focus:ring-blue-500">
-                        <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">Make this configuration private</label>
+                        <input type="checkbox"
+                            :checked="isPublic == 0"
+                            @change="isPublic = $event.target.checked ? 0 : 1"
+                            class="w-4 h-4 text-blue-600 rounded dark:bg-gray-300 border-gray-300 focus:ring-blue-500">
+                        <label class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                            Make this configuration private
+                        </label>
                     </div>
                     <button type="button" @click="saveConfiguration"
                             :disabled="!components.length"
@@ -143,7 +148,7 @@
             isAddingComponent: false,
             tempComponent: { type: '', pins: {} },
             components: [],
-            isPublic: true,  // Default to true (public)
+            isPublic: 1,
             validationMessage: '',
             componentTypes: [
                 'Servo',
@@ -280,7 +285,7 @@
                     if (!data) return;
 
                     this.selectedController = data.controller;
-                    this.isPublic = data.show;  // Load the public state directly
+                    this.isPublic = Number(data.show);
                     const components = [];
                     
                     for (const [type, pins] of Object.entries(data.component)) {
