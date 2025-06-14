@@ -8,7 +8,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto px-6 lg:px-8">
             <form id="settingsForm" class="space-y-6">
                 <!-- UI Language -->
                 <div class="bg-white dark:text-white dark:bg-gray-800 shadow rounded-lg p-6">

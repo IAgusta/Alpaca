@@ -21,9 +21,9 @@
 
             <!-- Desktop Navigation Links -->
             <div class="hidden lg:flex space-x-8 sm:-my-px sm:ms-10 items-center">
-                <!-- Dashboard Link -->
+                <!-- home Link -->
                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')" @click="loading = true" class="dark:text-gray-300 dark:hover:text-white">
-                    {{ __('Dashboard') }}
+                    {{ __('Home') }}
                 </x-nav-link>
 
                 <!-- Courses Link -->

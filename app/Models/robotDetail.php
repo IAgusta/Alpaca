@@ -16,6 +16,11 @@ class robotDetail extends Model
         'isPublic',
     ];
 
+    protected $casts = [
+        'components' => 'array',
+        'isPublic' => 'boolean',
+    ];
+
     public function robot()
     {
         return $this->belongsTo(robot::class, 'robot_id');

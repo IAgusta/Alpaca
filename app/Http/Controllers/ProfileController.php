@@ -15,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use App\Models\Course;
 use App\Models\robot;
+use App\Models\robotDetail;
 
 class ProfileController extends Controller
 {
@@ -226,7 +227,7 @@ class ProfileController extends Controller
         $details = $user->details ?? new \App\Models\UserDetail(['user_id' => $user->id]);
         $images = $details->image ? json_decode($details->image, true) : [];
         $accountage = $user->created_at->diffForHumans();
-    
+
         $createdCourses = null;
         if (in_array($user->role, ['admin', 'trainer', 'owner'])) {
             $createdCourses = Course::where('author', $user->id)->where('name', 'not like', '%test%')
@@ -237,12 +238,14 @@ class ProfileController extends Controller
                 ->appends(['tab' => 'courses']);
         }
 
-        $hasRobot = robot::where('user_id', $user->id)->first();
-        if ($hasRobot) {
-            $robot = $hasRobot;  // Use the already fetched record
-            $robot->image = json_decode($robot->image, true);
-        } else {
-            $robot = null;
+        $robot = null;
+        $userRobot = robot::where('user_id', $user->id)->first();
+        if ($userRobot) {
+            $robotDetails = robotDetail::where('robot_id', $userRobot->id)->first();
+            if ($robotDetails) {
+                $robot = $robotDetails;
+                $robot->robot = $userRobot; // Add the robot model for updated_at timestamp
+            }
         }
 
         return view('profile.show', [

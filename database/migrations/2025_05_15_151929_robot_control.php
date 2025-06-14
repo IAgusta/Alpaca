@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('robot_image')->nullable();
             $table->enum('controller', ['ESP32', 'ESP8266']);
             $table->json('components')->nullable();
-            $table->boolean('isPublic')->default(1);
+            $table->boolean('isPublic')->default(true);
             $table->timestamps();
         });
 

@@ -143,7 +143,7 @@
             isAddingComponent: false,
             tempComponent: { type: '', pins: {} },
             components: [],
-            isPublic: false, // Changed default to false (private)
+            isPublic: true,  // Default to true (public)
             validationMessage: '',
             componentTypes: [
                 'Servo',
@@ -253,7 +253,7 @@
                         body: JSON.stringify({
                             controller: this.selectedController,
                             components: this.components,
-                            isPublic: !this.isPublic // Invert the value when sending to backend
+                            isPublic: this.isPublic
                         })
                     });
 
@@ -280,6 +280,7 @@
                     if (!data) return;
 
                     this.selectedController = data.controller;
+                    this.isPublic = data.show;  // Load the public state directly
                     const components = [];
                     
                     for (const [type, pins] of Object.entries(data.component)) {
@@ -298,7 +299,6 @@
                     }
 
                     this.components = components;
-                    this.isPublic = data.show;
 
                 } catch (error) {
                     console.error('Error loading configuration:', error);

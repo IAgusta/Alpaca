@@ -18,10 +18,10 @@
     <!-- Make scrollable content -->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <div class="pt-2 pb-3 space-y-1">
-            <!-- Dashboard Link -->
+            <!-- homepage Link -->
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" 
                 class="block px-4 py-2 text-base font-medium dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-900" @click="loading = true">
-                {{ __('Dashboard') }}
+                {{ __('Home') }}
             </x-responsive-nav-link>
             <!-- Courses Link -->
             <x-responsive-nav-link :href="auth()->check() && in_array(auth()->user()->role, ['admin', 'trainer', 'owner'])
