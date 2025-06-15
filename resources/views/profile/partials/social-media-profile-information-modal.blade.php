@@ -1,4 +1,4 @@
-<section x-data x-init="() => {
+<section class="p-3 lg:p-8" x-data x-init="() => {
     $nextTick(() => {
         if (window.initSocialMediaForm) window.initSocialMediaForm();
     });

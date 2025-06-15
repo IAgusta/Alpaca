@@ -3,6 +3,9 @@
         <div class="dark:bg-gray-900 rounded-xl shadow-lg p-6 max-w-md mx-auto">
             <div class="text-center">
                 @if (!$robot)
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4 text-gray-400" viewBox="0 -960 960 960" fill="currentColor">
+                        <path d="M700-480q-25 0-42.5-17.5T640-540q0-25 17.5-42.5T700-600q25 0 42.5 17.5T760-540q0 25-17.5 42.5T700-480Zm-334 0Zm-86 120v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80ZM160-240q-33 0-56.5-23.5T80-320v-320q0-34 24-57.5t58-23.5h77l81 81H160v320h366L55-791l57-57 736 736-57 57-185-185H160Zm720-80q0 26-14 46t-37 29l-29-29v-366H434l-80-80h446q33 0 56.5 23.5T880-640v320ZM617-457Z"/>
+                    </svg>
                     <p class="text-sm text-gray-800 dark:text-gray-400 mb-3">
                         🚫 The user is not using any controller yet.
                     </p>
@@ -65,7 +68,7 @@
             <!-- Last Time Used -->
             <div>
                 <div class="flex items-center gap-2 mb-1">
-                    <svg class="w-5 h-5" fill="#B89230" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6" fill="#B89230" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="10"/>
                         <path d="M12 8v4l3 3"/>
                     </svg>

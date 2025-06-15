@@ -22,15 +22,15 @@
 
             <!-- Course Name -->
             <div>
-                <x-input-label class="mb-3" for="name" :value="__('Nama Kelas')" />
+                <x-input-label class="mb-3" for="name" :value="__('Nama Kelas *')" />
                 <x-text-input id="main-name" class="block mt-1 w-full" type="text" name="main_name" :value="old('main_name', old('name'))" required autofocus autocomplete="name" />
                 <x-input-error :messages="$errors->get('name')" class="mt-2" />
             </div>
 
             <!-- Alternative Title -->
             <div class="mt-4">
-                <x-input-label for="alt-title" :value="__('Nama Alternative')" />
-                <x-text-input id="alt-title" class="block mt-1 w-full" type="text" name="alt_title" :value="old('alt_title')" autocomplete="off" />
+                <x-input-label for="alt-title" :value="__('Nama Alternative (Optional)')" />
+                <x-text-input id="alt-title" class="block mt-1 w-full placeholder-gray-400" type="text" name="alt_title" :value="old('alt_title')" autocomplete="off" pLaceholder="Ignore this if doesnt want to input anything." />
             </div>
 
             <!-- Checkboxes for Testing and Manga -->
@@ -59,7 +59,7 @@
 
             <!-- Description -->
             <div class="mt-4">
-                <x-input-label for="description" :value="__('Deskripsi')" />
+                <x-input-label for="description" :value="__('Deskripsi (Optional)')" />
                     <textarea id="description" name="description" rows="5"
                     class="mt-1 block w-full border border-gray-300 dark:bg-gray-600 dark:text-white dark:border-gray-800 rounded-md shadow-sm focus:ring focus:ring-indigo-200 resize-none placeholder-gray-400"
                     placeholder="Description is an optional, you can just ignore it if doesn't want to make the description">{{ old('description') }}</textarea>
@@ -68,7 +68,7 @@
 
             <!-- Course Theme Selection -->
             <div class="my-4">
-                <x-input-label for="theme-create" :value="__('Tema')" />
+                <x-input-label for="theme-create" :value="__('Tema (Optional)')" />
 
                 <!-- Selected Themes + New Button -->
                 <div id="selected-themes-create" class="flex flex-wrap items-center gap-2">
@@ -94,7 +94,7 @@
 
             <!-- Courses Image -->
             <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">{{ "Upload file (Optional)" }}</label>
                 <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                         aria-describedby="file_input_course"
                         id="file_input" 

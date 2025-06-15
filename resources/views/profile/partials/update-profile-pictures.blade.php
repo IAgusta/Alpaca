@@ -1,4 +1,4 @@
-<section x-data x-init="() => { 
+<section class="p-3 lg:p-8" x-data x-init="() => { 
     $nextTick(() => {
         if (window.initCropperModal) window.initCropperModal();
     });
@@ -18,7 +18,7 @@
 
         <div class="flex flex-col gap-3">
             <!-- Banner Section -->
-            <div class="relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <div class="relative bg-white dark:bg-gray-800 rounded-lg">
                 <h3 class="font-medium mb-3 dark:text-white">Banner Previews</h3>
                 <x-input-error class="mt-2" :messages="$errors->get('banner_image')" />
                 <div class="relative w-full h-48 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
@@ -39,7 +39,7 @@
             </div>
 
             <!-- Avatar Preview Section -->
-            <div class="relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+            <div class="relative bg-white dark:bg-gray-800 rounded-lg">
                 <h3 class="font-medium mb-3 dark:text-white">Avatar Previews</h3>
                 <label for="profile_image" class="absolute top-4 right-4 bg-white dark:bg-gray-700 p-2 rounded-lg shadow-md cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-5 h-5 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100" viewBox="0 0 16 16">

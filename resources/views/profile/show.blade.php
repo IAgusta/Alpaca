@@ -1,7 +1,7 @@
 <x-app-layout>
     @section('title',$user->name . ' Profile - ' . config('app.name'))
     <div class="py-3">
-        <div class="max-w-5xl min-h-screen mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-5xl min-h-screen mx-auto sm:px-6 lg:px-8 space-y-6 mb-5">
             <!-- Banner Section -->
             <div class="relative w-full h-52 rounded-xl overflow-hidden mt-6">
                 <img 
@@ -100,7 +100,7 @@
                 </div>
 
                 <!-- Tab Content -->
-                <div id="profile-show-tab-content" class="flex-grow mb-7">
+                <div id="profile-show-tab-content" class="flex-grow mb-2">
                     <div class="hidden p-4 lg:rounded-lg rounded-none  lg:rounded-tl-none bg-white dark:bg-gray-800 shadow"  
                     id="information" role="tabpanel" aria-labelledby="information-tab">
                         <!-- User Details Display -->
@@ -119,6 +119,10 @@
                         @include('profile.partials.robot_information')
                     </div>
                 </div>
+            </div>
+            <div class="flex mb-5 gap-5 lg:justify-end justify-center items-center">
+                <x-primary-button>Blokir</x-primary-button>
+                <x-primary-button>Laporkan</x-primary-button>
             </div>
         </div>
     </div>

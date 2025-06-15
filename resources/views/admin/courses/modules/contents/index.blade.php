@@ -1,5 +1,5 @@
 <x-app-layout>
-    @section('title', 'Content | ' . $course->name . ' - ' .config('app.name') )
+    @section('title', 'Content | ' . $course->displayname . ' - ' .config('app.name') )
     <x-slot name="header">
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -147,7 +147,7 @@
                             <!-- Dropdown Button (Top-Right) -->
                             <div class="relative self-start">
                                 <button data-dropdown-toggle="contentDropdown-{{ $content->id }}" class="bg-transparent p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots-vertical dark:text-white" viewBox="0 0 16 16">
                                         <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a.5.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
                                     </svg>
                                 </button>
