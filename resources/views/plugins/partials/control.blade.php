@@ -5,36 +5,26 @@
     globalSpeed: 50,
     avoidDistance: 25,
     init() {
-        @auth
-            if ('{{ auth()->check() ? auth()->user()->robot?->api_key : "" }}') {
-                window.robotConnection = {
-                    mode: 'api',
-                    key: '{{ auth()->check() ? auth()->user()->robot?->api_key : "" }}',
-                    active: true
-                };
-            }
-        @endauth
+        @if(Auth::check() && Auth::user()->robot?->api_key)
+            window.robotConnection = {
+                mode: 'api',
+                key: '{{ Auth::user()->robot?->api_key }}',
+                active: true
+            };
+            // Pre-select manual mode for API users
+            this.activeMode = 'manual';
+        @endif
+
+        // Initialize speed and distance
+        updateAllSpeedSliders(this.globalSpeed);
+        updateDistanceSlider(this.avoidDistance);
     },
     sendCommand(command) {
-        if (!window.robotConnection?.active) {
-            if (@json(auth()->check()) && window.robotConnection?.mode === 'api') {
-                // Re-initialize API connection if user is authenticated
-                window.robotConnection = {
-                    mode: 'api',
-                    key: '{{ auth()->check() ? auth()->user()->robot?->api_key : "" }}',
-                    active: true
-                };
-            } else if (window.robotConnection?.mode === 'proxy' && window.robotConnection?.target) {
-                window.robotConnection.active = true;
-            } else {
-                alert('Please connect to the robot first');
-                return;
-            }
-        }
-        if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'command', value: command }));
-        } else {
+        // Handle both movement and parameter commands
+        if (window.sendCommand) {
             window.sendCommand(command);
+        } else {
+            console.error('Command handler not initialized');
         }
     }
 }" class="p-4 mb-7">
@@ -508,6 +498,7 @@
     </style>
 
     <script>
+        // Single script section at the end
         function updateAllSpeedSliders(value) {
             const percentage = value;
             document.querySelectorAll('input[type="range"]:not(.distance-slider)').forEach(input => {
@@ -529,6 +520,12 @@
             });
         }
 
+        // Initialize on both load and Alpine init
+        function initializeSliders() {
+            updateAllSpeedSliders(50);
+            updateDistanceSlider(25);
+        }
+
         document.addEventListener('input', (e) => {
             if (e.target.type === 'range') {
                 if (e.target.classList.contains('distance-slider')) {
@@ -539,13 +536,7 @@
             }
         });
 
-        window.addEventListener('load', () => {
-            updateAllSpeedSliders(50);
-            updateDistanceSlider(25);
-        });
-
-        window.addEventListener('alpine:initialized', () => {
-            updateDistanceSlider(25);
-        });
+        window.addEventListener('load', initializeSliders);
+        window.addEventListener('alpine:initialized', initializeSliders);
     </script>
 </div>

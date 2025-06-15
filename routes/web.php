@@ -24,11 +24,19 @@ Route::get('/block.txt', fn () => abort(403));
 Route for Controlling ESP32 via Websocket
 */
 Route::prefix('robot')->group(function(){
+    // Public routes
     Route::post('/set-esp32-ip', [RobotController::class, 'setEsp32Ip'])->name('robot.set-ip');
     Route::get('/connect', [RobotController::class, 'connect'])->name('robot.connect');
     Route::get('/command/send/{command}', [RobotController::class, 'sendCommand'])->name('robot.command');
     Route::get('/speed', [RobotController::class, 'setSpeed'])->name('robot.speed');
     Route::get('/proxy', [RobotController::class, 'proxyRequest'])->name('robot.proxy');
+
+    // Protected routes
+    Route::middleware(['auth'])->group(function() {
+        Route::get('/key', [RobotController::class, 'getApiKey'])->name('robot.key');
+        Route::post('/generate-key', [RobotController::class, 'generateApiKey'])->name('robot.generate-key');
+        Route::post('/command', [RobotController::class, 'storeCommand'])->name('robot.store-command');
+    });
 });
 
 /*
@@ -37,8 +45,6 @@ Route for API Generated and Config for each auth user.
 Route::middleware(['auth'])->prefix('api/robot')->group(function () {
     Route::post('/configuration', [RobotConfigController::class, 'store'])->name('robot.config.store');
     Route::get('/configuration', [RobotConfigController::class, 'show'])->name('robot.config.show');
-    Route::get('/key', [RobotController::class, 'getApiKey']);
-    Route::post('/generate-key', [RobotController::class, 'generateApiKey']);
 });
 
 Route::post('/upload-image', [ImageController::class, 'uploadImage'])->name('upload.image');

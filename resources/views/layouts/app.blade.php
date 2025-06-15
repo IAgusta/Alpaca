@@ -16,7 +16,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/layout/main.js', 'resources/js/settings/main.js'])
     </head>
-    <body class="font-sans antialiased pt-16 bg-white dark:bg-gray-900">
+    <body class="{{ Auth::check() ? 'auth-user' : '' }} font-sans antialiased pt-16 bg-white dark:bg-gray-900">
         <div class="min-h-screen flex flex-col">
             @include('layouts.navigation')
             @guest

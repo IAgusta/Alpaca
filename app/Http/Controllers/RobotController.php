@@ -147,24 +147,16 @@ class RobotController extends Controller
 
     public function getPendingCommand($apiKey)
     {
-        // Retrieve the robot that matches the given API key
         $robot = Robot::where('api_key', $apiKey)->first();
 
-        // Check if the robot exists
         if (!$robot) {
             return response()->json(['error' => 'Invalid API Key'], 404);
         }
 
-        // Check if there's a pending command (status = 0)
         if ($robot->status == 0 && $robot->command !== null) {
-            // Mark it as "processing"
             $robot->status = 1;
             $robot->save();
-
-            // Return the command as JSON
-            return response()->json([
-                json_decode($robot->command)
-            ]);
+            return response()->json(['command' => json_decode($robot->command)]);
         }
 
         return response()->json(['message' => 'No pending commands'], 204);
@@ -246,5 +238,30 @@ class RobotController extends Controller
             default:
                 return ['status', []];
         }
+    }
+
+    public function storeCommand(Request $request)
+    {
+        $user = Auth::user();
+        $robot = Robot::where('user_id', $user->id)->first();
+
+        if (!$robot || !$robot->api_key) {
+            return response()->json(['error' => 'No robot or API key found'], 404);
+        }
+
+        $command = $request->input('command');
+        if (!isset($command['action'])) {
+            return response()->json(['error' => 'Invalid command format'], 400);
+        }
+
+        $robot->command = json_encode($command);
+        $robot->status = 0;
+        $robot->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Command stored successfully',
+            'command' => $command
+        ]);
     }
 }

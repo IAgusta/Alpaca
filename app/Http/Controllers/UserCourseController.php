@@ -28,17 +28,19 @@ class UserCourseController extends Controller
             }
         }
 
-        // Get paginated user courses (6 items per page)
+        // Get limited user courses (6 items)
         $userCourses = UserCourse::where('user_id', $userId)
             ->with('course')
-            ->paginate(6);
+            ->limit(6)
+            ->get();
 
-        // Get paginated available courses (12 items per page)
+        // Get limited available courses (12 items)
         $availableCourses = Course::whereNotIn('id', UserCourse::where('user_id', $userId)->pluck('course_id'))
             ->when(auth::user()->role === 'user', function ($query) {
                 $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
             })
-            ->paginate(12);
+            ->limit(12)
+            ->get();
 
         return view('user.course', compact('userCourses', 'availableCourses'));
     }

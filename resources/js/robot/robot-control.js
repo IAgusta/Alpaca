@@ -81,25 +81,70 @@ function connectToESP32() {
     });
 }
 
-// Function to send commands to ESP32
 function sendCommand(command) {
-    if (!esp32IP) {
-        alert("Please connect to the ESP32 first.");
-        return;
+    // Try to self-heal connection state for API mode
+    if (!window.robotConnection || !window.robotConnection.active) {
+        const apiKeyInput = document.getElementById('api-key');
+        const apiKey = apiKeyInput ? apiKeyInput.value : null;
+        const isAuthenticated = document.body.classList.contains('auth-user');
+        if (isAuthenticated && apiKey && apiKey !== 'No API key generated') {
+            window.robotConnection = {
+                mode: 'api',
+                key: apiKey,
+                active: true
+            };
+        } else {
+            alert("Please connect to the robot first using WiFi/IP");
+            return;
+        }
     }
 
-    fetch(`/robot/${command}?ip=${esp32IP}`, { method: 'GET' })
-    .then(response => {
-        if (response.ok) {
-            console.log(`Command sent: ${command}`);
-        } else {
-            throw new Error(`Failed to send command: ${command}`);
-        }
-    })
-    .catch(error => {
-        console.error(error);
-        alert("Command failed. Check ESP32 connection.");
-    });
+    // Now proceed as before...
+    const [action, value] = command.split(':');
+    let commandObj = { action };
+
+    if (action === 'speed' || action === 'wallspeed') {
+        commandObj.speed = parseInt(value) || 100;
+    } else if (action === 'distance') {
+        commandObj.distance = parseInt(value) || 25;
+    } else if (action === 'line' || action === 'wall') {
+        commandObj.status = value === 'on';
+    } else if (action === 'move') {
+        commandObj.direction = value;
+    }
+
+    if (window.robotConnection.mode === 'api') {
+        fetch(`/robot/command`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({ command: commandObj })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) throw new Error(data.error);
+            console.log(`Command stored via API: `, commandObj);
+        })
+        .catch(error => {
+            console.error(error);
+            alert("API command failed. Check your connection.");
+        });
+    } else if (window.robotConnection.mode === 'proxy' && window.robotConnection.target) {
+        fetch(`/robot/proxy?target=${window.robotConnection.target}&command=${command}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) throw new Error(data.error);
+                console.log(`Command sent: ${command}`);
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Command failed. Check robot connection.");
+            });
+    } else {
+        alert("Please connect to the robot first using WiFi/IP");
+    }
 }
 
 // Function to update motor speed
@@ -142,8 +187,20 @@ window.updateMotorSpeed = updateMotorSpeed;
 window.handleButtonPress = handleButtonPress;
 window.handleButtonRelease = handleButtonRelease;
 
-// Wrap event listeners in DOMContentLoaded
+// Initialize connection state on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Check for existing API key
+    const apiKey = document.getElementById('api-key')?.value;
+    const isAuthenticated = document.body.classList.contains('auth-user');
+    
+    if (isAuthenticated && apiKey && apiKey !== 'No API key generated') {
+        window.robotConnection = {
+            mode: 'api',
+            key: apiKey,
+            active: true  // Set active by default for API users
+        };
+    }
+
     const connectButton = document.getElementById('connect-button');
     if (connectButton) connectButton.addEventListener('click', connectToESP32);
 

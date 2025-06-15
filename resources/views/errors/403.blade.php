@@ -28,9 +28,9 @@
                             Courses
                         </a>
 
-                        <a href="{{ route('dashboard') }}" 
+                        <a href="{{ route('home') }}" 
                            class="text-sm font-semibold text-gray-900 dark:text-gray-300">
-                            Back to Dashboard<span aria-hidden="true">&rarr;</span>
+                            Back to Homepage<span aria-hidden="true">&rarr;</span>
                         </a>
                     </div>
                 </div>

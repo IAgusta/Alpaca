@@ -69,6 +69,8 @@
             </div>
     @endforeach
 </div>
-<div class="mt-6">
-    {{ $availableCourses->links() }}
-</div>
+@if(Route::currentRouteName() == 'course.feed')
+    <div class="mt-6">
+        {{ $availableCourses->links() }}
+    </div>
+@endif

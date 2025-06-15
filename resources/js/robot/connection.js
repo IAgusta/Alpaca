@@ -241,7 +241,7 @@ function sendCommand(command) {
 
 async function loadApiKey() {
     try {
-        const response = await fetch('/api/robot/key');
+        const response = await fetch('/robot/key');  // Updated path
         const data = await response.json();
         const apiKeyInput = document.getElementById('api-key');
         if (apiKeyInput) {
@@ -284,7 +284,7 @@ window.copyToClipboard = async function() {
 // Update regenerateApiKey function
 window.regenerateApiKey = async function() {
     try {
-        const response = await fetch('/api/robot/generate-key', {
+        const response = await fetch('/robot/generate-key', {  // Updated path
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

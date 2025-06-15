@@ -90,7 +90,9 @@
                         <!-- Email -->
                         <div>
                             <div class="flex items-center gap-2 mb-1">
-                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v16H4z" stroke="none"/><path d="M22 6l-10 7L2 6"/></svg>
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
                                 <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ __('Email') }}</h3>
                             </div>
                             <p class="text-gray-600 dark:text-gray-400">{{ $user->email }}</p>

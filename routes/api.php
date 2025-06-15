@@ -10,10 +10,17 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::prefix('robot')->group(function(){
+Route::prefix('robot')->group(function() {
+    // Send command (from frontend or dashboard)
+    Route::post('/command', [RobotController::class, 'storeCommand'])->name('robot.command.store');
+    
+    // Get pending command (for ESP32 to poll)
     Route::get('/command/{apiKey}', [RobotController::class, 'getPendingCommand']);
+    
+    // Update command status (from ESP32)
     Route::post('/command-status/{apiKey}', [RobotController::class, 'updateCommandStatusByKey']);
 });
+
 
 Route::get('/search-users', [ProfileController::class, 'search'])->name('api.users.search');
 Route::get('/all-users', [ProfileController::class, 'getAllUsers'])->name('api.users.all');
