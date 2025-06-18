@@ -13,7 +13,7 @@
     <div id="connect-options" class="grid-cols-none grid lg:grid-cols-2 gap-4 mb-3">
         <!-- Wi-Fi Card -->
         <div id="wifi-card" 
-             class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300"
+             class="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-300 relative"
              :class="{ 'col-span-full': activeMode === 'wifi' }"
              x-show="!activeMode || activeMode === 'wifi'"
              x-transition:enter="transition ease-out duration-300"
@@ -54,22 +54,20 @@
                 </div>
             </div>
 
-            <!-- Overlay with Spinner and Success -->
-            <div id="wifi-overlay" class="overlay absolute inset-0 bg-white/80 flex flex-col items-center justify-center z-10 hidden">
-                <!-- Spinner -->
-                <div id="wifi-spinner" class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-opacity-50 mb-4"></div>
+            <!-- Modified Overlay -->
+            <div id="wifi-overlay" class="absolute inset-0 bg-white/95 dark:bg-gray-800/95 flex flex-col items-center justify-center rounded-xl hidden">
+                <div id="wifi-spinner" class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-opacity-50 mb-4"></div>
         
-                <!-- Success Animation -->
                 <div id="wifi-success" class="hidden text-green-600 flex flex-col items-center">
-                    <svg class="w-16 h-16 text-green-500 animate-bounce" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                    <svg class="w-12 h-12 text-green-500 animate-bounce" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span class="mt-2 text-lg font-semibold">Connection Successful</span>
+                    <span class="mt-2 text-sm font-semibold">Connection Successful</span>
                 </div>
         
-                <!-- Disconnect Button -->
-                <button id="wifi-disconnect" onclick="disconnect('wifi'); event.stopPropagation()" class="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded hidden">
-                Disconnect
+                <button id="wifi-disconnect" onclick="disconnect('wifi'); event.stopPropagation()" 
+                        class="mt-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm hidden">
+                    Disconnect
                 </button>
             </div>
         </div>
@@ -160,21 +158,6 @@
                 </div>
             </div>
             @endauth
-
-            <!-- Overlay with Spinner and Success -->
-            <div id="api-overlay" class="overlay absolute inset-0 bg-white/80 flex flex-col items-center justify-center z-10 hidden">
-                <div id="api-spinner" class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-opacity-50 mb-4"></div>
-                <div id="api-success" class="hidden text-green-600 flex flex-col items-center">
-                    <svg class="w-16 h-16 text-green-500 animate-bounce" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span class="mt-2 text-lg font-semibold">Connection Successful</span>
-                </div>
-                <button id="api-disconnect" onclick="disconnect('api'); event.stopPropagation()" 
-                        class="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded hidden">
-                    Disconnect
-                </button>
-            </div>
         </div>
     </div>
     @auth()
@@ -197,17 +180,12 @@
         opacity: 0.5;
     }
     
-    .overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(255, 255, 255, 0.75);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
+    /* Remove or update the old overlay styles */
+    #wifi-overlay {
+        backdrop-filter: blur(2px);
     }
 
-    .overlay.hidden {
+    #wifi-overlay.hidden {
         display: none !important;
     }
     

@@ -94,23 +94,23 @@
                      x-transition:leave="transition-opacity ease-in duration-300"
                      x-transition:leave-start="opacity-100"
                      x-transition:leave-end="opacity-0"
-                     class="fixed inset-0 bg-black bg-opacity-50 z-40"
+                     class="fixed inset-0 bg-black bg-opacity-50 z-10"
                      @click="open = false">
                 </div>
 
                 <!-- Search Input -->
                 <div class="flex items-center">
                     <div class="relative flex items-center" 
-                         :class="{ 'w-48 transition-all duration-300 ease-in-out': !open, 'w-80 transition-all duration-300 ease-in-out': open }">
+                         :class="{ 'w-56 transition-all duration-300 ease-in-out': !open, 'w-96 transition-all duration-300 ease-in-out z-20': open }">
                         <input
                             @focus="open = true"
                             x-model="search"
                             @input.debounce.300ms="searchAll"
                             type="text"
-                            class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full text-sm leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                            class="w-full pr-10 pl-3 py-2 border border-gray-300 rounded-lg text-sm leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out dark:bg-gray-700 dark:text-white dark:border-gray-600"
                             placeholder="Search users or courses..."
                         >
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
@@ -121,7 +121,7 @@
                 <!-- Results Dropdown -->
                 <div x-show="open && search.length > 0" 
                      @click.away="open = false"
-                     class="absolute right-0 mt-12 w-96 bg-white rounded-lg shadow-lg py-1 z-50 dark:bg-gray-800">
+                     class="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-lg py-1 z-50 dark:bg-gray-800">
                     <!-- Loading State -->
                     <div x-show="loading" class="px-4 py-2 text-sm text-gray-500">
                         Loading...
