@@ -68,14 +68,85 @@
             </div>
         </div>
 
+        <div class="flex gap-3">
+            <!-- Mobile Search Button -->
+            <div x-data="mobileSearch()" class="lg:hidden flex justify-end items-center ml-2">
+                <button @click="open = true" class="p-2 text-gray-400 dark:text-white hover:text-white focus:outline-none">
+                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+
+                <!-- Fullscreen Overlay -->
+                <div x-show="open" x-transition class="fixed inset-0 z-40 bg-black bg-opacity-60" @click="close()"></div>
+
+                <!-- Search Modal -->
+                <div x-show="open" x-transition
+                    class="fixed top-0 left-0 right-0 z-50 bg-gray-900 text-white p-4">
+                    <div class="flex items-center space-x-2">
+                        <input
+                            type="text"
+                            x-model="query"
+                            onclick="event.stopPropagation();"
+                            @input.debounce.300ms="searchAll"
+                            placeholder="Enter a search query..."
+                            class="flex-1 px-4 py-2 bg-gray-800 rounded border border-gray-600 text-white placeholder-gray-400 focus:outline-none"
+                        >
+                        <button @click="close" class="text-gray-300 hover:text-white">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Search Results -->
+                    <div class="mt-4 space-y-2 max-h-[50vh] overflow-y-auto">
+                        <template x-if="loading">
+                            <div class="text-gray-400 text-sm">Loading...</div>
+                        </template>
+
+                        <template x-if="results.users.length">
+                            <div>
+                                <div class="text-sm font-semibold text-gray-400">Users</div>
+                                <template x-for="user in results.users" :key="user.id">
+                                    <a :href="'/' + user.username" class="block py-1 hover:underline">
+                                        <span x-text="user.name"></span>
+                                        <span class="text-xs text-gray-400">@<span x-text="user.username"></span></span>
+                                    </a>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template x-if="results.courses.length">
+                            <div>
+                                <div class="text-sm font-semibold text-gray-400 mt-2">Courses</div>
+                                <template x-for="course in results.courses" :key="course.id">
+                                    <a :href="course.url" class="block py-1 hover:underline">
+                                        <span x-text="course.name"></span>
+                                    </a>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template x-if="!loading && !results.users.length && !results.courses.length && query.length > 1">
+                            <div class="text-gray-400 text-sm">No results found</div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+
+
         <!-- Add this before the profile section -->
         <div class="hidden lg:flex items-center flex-1 justify-end mr-4">
-            <div class="relative" x-data="{ 
-                open: false, 
-                search: '', 
-                results: [], 
+            <div class="relative" x-data="{
+                open: false,
+                search: '',
+                results: [],
                 loading: false,
                 showOverlay: false,
+
                 init() {
                     this.$watch('open', value => {
                         this.showOverlay = value;
@@ -83,6 +154,33 @@
                             this.search = '';
                             this.results = [];
                         }
+                    });
+                },
+
+                searchAll() {
+                    const query = this.search.trim();
+                    if (query.length < 2) {
+                        this.results = [];
+                        this.loading = false;
+                        return;
+                    }
+
+                    this.loading = true;
+                    fetch(`{{ url('/search-global') }}?query=${encodeURIComponent(query)}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.results = data;
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        console.error('Search error:', error);
+                        this.loading = false;
                     });
                 }
             }">
@@ -104,6 +202,7 @@
                          :class="{ 'w-56 transition-all duration-300 ease-in-out': !open, 'w-96 transition-all duration-300 ease-in-out z-20': open }">
                         <input
                             @focus="open = true"
+                            onclick="event.stopPropagation();"
                             x-model="search"
                             @input.debounce.300ms="searchAll"
                             type="text"
@@ -293,38 +392,5 @@
             @endauth
         </div>
     </div>
+    </div>
 </div>
-
-<!-- Add this at the end of the file -->
-@push('scripts')
-<script>
-function searchAll() {
-    const search = this.search;
-    this.loading = true;
-    this.results = [];
-
-    if (search.length < 2) {
-        this.loading = false;
-        return;
-    }
-
-    fetch(`/api/search-global?query=${encodeURIComponent(search)}`, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json'
-        },
-        credentials: 'same-origin'
-    })
-    .then(response => response.json())
-    .then(data => {
-        this.results = data;
-        this.loading = false;
-        console.log('Search results:', data); // Debug line
-    })
-    .catch(error => {
-        console.error('Search error:', error);
-        this.loading = false;
-    });
-}
-</script>
-@endpush

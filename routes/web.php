@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\RobotConfigController;
+use App\Http\Controllers\SearchController;
 
 // Include all route files
 require __DIR__.'/auth.php';
@@ -72,9 +73,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
+// Globall Search Navigation
+Route::get('/search-global', [SearchController::class, 'globalSearch'])->name('search.global');
+
 /*
 This Route is essensial for search by username via route
 */
 Route::get('/{username}', [ProfileController::class, 'show'])
     ->name('profile.show')
-    ->where('username', '^(?!dashboard$|slug$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$|api$).*$');
+    ->where('username', '^(?!dashboard$|slug$|about$|contact$|price$|faq$|terms$|privacy-policy$|news$|documentation$|documentation-esp32$|documentation-esp8266$|plugins$|find-users$|courses$|profile$|admin$|manage$|email$|courses-index$|forum$|settings$|api$|search-global$).*$');

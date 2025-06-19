@@ -21,7 +21,6 @@ class SearchController extends Controller
             ]);
         }
 
-        // Search users
         $users = User::where('name', 'LIKE', "%{$query}%")
             ->orWhere('username', 'LIKE', "%{$query}%")
             ->with('details')
@@ -31,7 +30,7 @@ class SearchController extends Controller
                 $avatar = $user->details && $user->details->image 
                     ? json_decode($user->details->image, true)['profile'] ?? null 
                     : null;
-                    
+
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
@@ -40,16 +39,15 @@ class SearchController extends Controller
                 ];
             });
 
-        // Search courses
         $courses = Course::where(function($q) use ($query) {
             $q->where('name', 'like', '%' . $query . '%')
-              ->orWhere('description', 'like', '%' . $query . '%')
-              ->orWhere('theme', 'like', '%' . $query . '%')
-              ->orWhereHas('authorUser', function($q) use ($query) {
-                  $q->where('name', 'like', '%' . $query . '%');
-              });
+            ->orWhere('description', 'like', '%' . $query . '%')
+            ->orWhere('theme', 'like', '%' . $query . '%')
+            ->orWhereHas('authorUser', function($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            });
         })
-        ->when(Auth::user()->role === 'user', function ($query) {
+        ->when(Auth::check() && Auth::user()->role === 'user', function ($query) {
             $query->whereRaw("LOWER(name) NOT LIKE '%test%'");
         })
         ->limit(5)

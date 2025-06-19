@@ -27,6 +27,3 @@ Route::prefix('robot')->group(function() {
 
 Route::get('/search-users', [ProfileController::class, 'search'])->name('api.users.search');
 Route::get('/all-users', [ProfileController::class, 'getAllUsers'])->name('api.users.all');
-Route::get('/search-global', [SearchController::class, 'globalSearch'])
-    ->middleware('auth')
-    ->name('api.search.global');
