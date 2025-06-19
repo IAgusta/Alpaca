@@ -1,5 +1,4 @@
 let currentConnection = null;
-let ws = null;
 
 window.showLoginModal = function() {
     const modal = document.getElementById('accessModal');
@@ -12,7 +11,6 @@ window.showLoginModal = function() {
     }, 120);
     document.getElementById('modalBackdrop').classList.remove('hidden');
 };
-
 
 window.addEventListener("DOMContentLoaded", () => {
     ['wifi', 'api'].forEach(type => {
@@ -35,7 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Only initialize API connection if API key exists and user is authenticated
     const apiKey = document.getElementById('api-key')?.value;
-    const isAuthenticated = document.body.classList.contains('auth-user'); // Add this class in your layout
+    const isAuthenticated = document.body.classList.contains('auth-user');
     if (isAuthenticated && apiKey && apiKey !== 'No API key generated') {
         window.robotConnection = {
             mode: 'api',
@@ -43,44 +41,17 @@ window.addEventListener("DOMContentLoaded", () => {
             active: true
         };
     }
+
+    // Attach disconnect handlers for both wifi and api cards
+    ['wifi', 'api'].forEach(type => {
+        const disconnectBtn = document.getElementById(`${type}-disconnect`);
+        if (disconnectBtn) {
+            disconnectBtn.onclick = () => disconnect(type);
+        }
+    });
 });
 
-// Update initWebSocket to handle both proxy and direct modes
-function initWebSocket(ip, mode = 'proxy') {
-    if (mode === 'proxy') {
-        // Use secure WebSocket through backend proxy
-        ws = new WebSocket(`wss://${window.location.host}/ws/robot?target=${ip}`);
-    } else {
-        // Direct connection (local network only)
-        ws = new WebSocket(`ws://${ip}:81`);
-    }
-    
-    ws.onopen = function() {
-        console.log('Connected to Robot WebSocket');
-    };
-    
-    ws.onmessage = function(evt) {
-        const data = JSON.parse(evt.data);
-        handleRobotResponse(data);
-    };
-    
-    ws.onclose = function() {
-        console.log('WebSocket connection closed');
-        setTimeout(function() {
-            initWebSocket(ip, mode);
-        }, 2000);
-    };
-}
-
-function handleRobotResponse(data) {
-    if (data.type === 'sensor') {
-        updateSensorDisplay(data);
-    } else if (data.type === 'status') {
-        updateRobotStatus(data);
-    }
-}
-
-// Update connectToESP32 to handle both modes
+// Cleaned up connectToESP32
 window.connectToESP32 = async function(method) {
     const overlay = document.getElementById(`${method}-overlay`);
     const spinner = document.getElementById(`${method}-spinner`);
@@ -111,17 +82,26 @@ window.connectToESP32 = async function(method) {
             window.robotConnection = {
                 mode: 'proxy',
                 target: ip,
-                active: true  // Add active flag
+                active: true
             };
 
-            // Initialize WebSocket if needed
-            initWebSocket(ip, 'proxy');
+            // Store IP Address when successfully connected via Proxy
+            saveESP32IP(ip);
 
             // Disable API card if it exists
             const apiCard = document.getElementById('api-card');
             if (apiCard) {
                 apiCard.classList.add('opacity-50', 'pointer-events-none');
             }
+            
+            // *** Navigate to controller tab if user is authenticated ***
+            const isAuthenticated = document.body.classList.contains('auth-user');
+            if (isAuthenticated && typeof window.navigateToTab === 'function') {
+                setTimeout(() => {
+                    window.navigateToTab(3);
+                }, 1000); // 1000ms = 1 second delay
+            }
+
         } else if (method === 'api') {
             const apiKey = document.getElementById('api-key')?.value;
             
@@ -158,6 +138,33 @@ window.connectToESP32 = async function(method) {
     }
 };
 
+function saveESP32IP(ip) {
+    const ipData = {
+        ip,
+        savedAt: Date.now() // timestamp in milliseconds
+    };
+    localStorage.setItem('esp32IP', JSON.stringify(ipData));
+}
+
+function getSavedESP32IP(maxAgeHours = 12) {
+    const item = localStorage.getItem('esp32IP');
+    if (!item) return null;
+    try {
+        const data = JSON.parse(item);
+        const age = (Date.now() - data.savedAt) / (1000 * 60 * 60); // hours
+        if (age <= maxAgeHours) {
+            return data.ip;
+        } else {
+            localStorage.removeItem('esp32IP');
+            return null;
+        }
+    } catch {
+        localStorage.removeItem('esp32IP');
+        return null;
+    }
+}
+
+// Improved disconnect button logic (fixes cards and connection state)
 function disconnect(method) {
     const overlay = document.getElementById(`${method}-overlay`);
     const spinner = document.getElementById(`${method}-spinner`);
@@ -165,24 +172,15 @@ function disconnect(method) {
     const disconnectBtn = document.getElementById(`${method}-disconnect`);
     const input = document.getElementById(`${method}-${method === 'wifi' ? 'ip' : 'key'}`);
 
-    overlay.classList.add('hidden');
-    spinner.classList.add('hidden');
-    success.classList.add('hidden');
-    disconnectBtn.classList.add('hidden');
+    overlay?.classList.add('hidden');
+    spinner?.classList.add('hidden');
+    success?.classList.add('hidden');
+    disconnectBtn?.classList.add('hidden');
 
     if (input) {
         input.style.display = 'block';
         input.value = '';
     }
-
-    const other = method === 'wifi' ? 'api' : 'wifi';
-    document.getElementById(`${other}-card`).classList.remove('disabled');
-
-    // Reset robotConnection with active flag
-    window.robotConnection = window.robotConnection ? {
-        ...window.robotConnection,
-        active: false
-    } : null;
 
     // Enable both cards
     ['wifi-card', 'api-card'].forEach(id => {
@@ -192,10 +190,11 @@ function disconnect(method) {
         }
     });
 
+    // Remove connection state
+    window.robotConnection = null;
     currentConnection = null;
 }
 
-// Update sendCommand to use active flag
 function sendCommand(command) {
     if (!window.robotConnection?.active) {
         if (window.robotConnection?.mode === 'api' && window.robotConnection?.key) {
@@ -266,12 +265,11 @@ async function loadApiKey() {
     }
 }
 
-// Add clipboard functionality
+// Clipboard & regenerate API key handlers remain unchanged
 window.copyToClipboard = async function() {
     const apiKey = document.getElementById('api-key').value;
     try {
         await navigator.clipboard.writeText(apiKey);
-        // Update Alpine.js state through global event
         window.dispatchEvent(new CustomEvent('api-copied', { detail: true }));
         setTimeout(() => {
             window.dispatchEvent(new CustomEvent('api-copied', { detail: false }));
@@ -281,10 +279,9 @@ window.copyToClipboard = async function() {
     }
 };
 
-// Update regenerateApiKey function
 window.regenerateApiKey = async function() {
     try {
-        const response = await fetch('/robot/generate-key', {  // Updated path
+        const response = await fetch('/robot/generate-key', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -296,12 +293,10 @@ window.regenerateApiKey = async function() {
             alert(data.error);
             return;
         }
-        // Update API key display
         const apiKeyInput = document.getElementById('api-key');
         if (apiKeyInput) {
             apiKeyInput.value = data.api_key;
         }
-        // Show success state
         const nextResetSpan = document.getElementById('next-reset');
         if (nextResetSpan && data.next_reset) {
             nextResetSpan.textContent = `Next reset available: ${new Date(data.next_reset).toLocaleDateString()}`;

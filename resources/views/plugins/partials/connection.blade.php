@@ -41,12 +41,26 @@
                  x-transition:enter-end="opacity-100 transform translate-y-0"
                  class="p-4 border-t dark:border-gray-600">
                 <div class="flex gap-3 items-center">
-                    <input type="text" id="wifi-ip" placeholder="Enter ESP32 IP" 
+                    <input type="text" id="wifi-ip"
+                        placeholder="Enter ESP32 IP"
+                        x-init="
+                            (() => {
+                                try {
+                                    const item = localStorage.getItem('esp32IP');
+                                    if (item) {
+                                        const data = JSON.parse(item);
+                                        const age = (Date.now() - data.savedAt) / (1000*60*60);
+                                        if (age <= 12) $el.value = data.ip;
+                                    }
+                                } catch {}
+                            })()
+                        "
                         class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg 
-                                    focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
-                                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 
-                                    dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                        onclick="event.stopPropagation();">
+                                                        focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 
+                                                        dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 
+                                                        dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                        onclick="event.stopPropagation();"
+                    >
                     <button onclick="event.stopPropagation(); connectToESP32('wifi')" 
                             class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                         Connect
@@ -173,6 +187,53 @@
     </div>
     @endauth
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ipInput = document.getElementById('wifi-ip');
+        if (!ipInput) return;
+
+        let prevValue = '';
+
+        ipInput.addEventListener('input', function(e) {
+            let value = ipInput.value.replace(/[^0-9.]/g, '');
+            let octets = value.split('.');
+
+            // If any octet is longer than 3, split it, but only when new digit is typed
+            let newOctets = [];
+            for (let i = 0; i < octets.length; i++) {
+                while (octets[i].length > 3) {
+                    // Move extra digits to next octet
+                    newOctets.push(octets[i].slice(0, 3));
+                    octets[i] = octets[i].slice(3);
+                }
+                newOctets.push(octets[i]);
+            }
+
+            // Limit to 4 octets
+            newOctets = newOctets.slice(0, 4);
+            let result = newOctets.join('.');
+
+            // Edge case: If the last char was a dot and the user removed it, allow removing
+            if (prevValue.endsWith('.') && !result.endsWith('.') && prevValue.length > result.length) {
+                // User erased a dot manually, allow it
+            } else if (
+                // If user types a new digit and the octet is now length 4, insert the dot
+                newOctets.length < 4 &&
+                newOctets[newOctets.length - 1].length === 4 &&
+                !result.endsWith('.')
+            ) {
+                // Insert the dot after first 3 digits, move extra to next octet
+                let last = newOctets.pop();
+                newOctets.push(last.slice(0, 3), last.slice(3));
+                result = newOctets.slice(0, 4).join('.');
+            }
+
+            ipInput.value = result;
+            prevValue = result;
+        });
+    });
+</script>
 
 <style>
     .connection-card.disabled {

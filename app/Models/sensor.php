@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class sensor extends Model
+class Sensor extends Model
 {
     protected $table = 'robot_sensor_logs';
     protected $fillable = [
@@ -16,8 +16,9 @@ class sensor extends Model
 
     public function robot()
     {
-        return $this->belongsTo(robot::class, 'robot_id');
+        return $this->belongsTo(Robot::class, 'robot_id');
     }
+
     public static function getLatestByRobot($robotId, $limit = 10)
     {
         return static::where('robot_id', $robotId)
@@ -25,6 +26,7 @@ class sensor extends Model
             ->take($limit)
             ->get();
     }
+
     public static function getLatestByType($robotId, $sensorType, $limit = 10)
     {
         return static::where('robot_id', $robotId)
@@ -33,6 +35,7 @@ class sensor extends Model
             ->take($limit)
             ->get();
     }
+
     public static function getLatestByTypeAndValue($robotId, $sensorType, $value, $limit = 10)
     {
         return static::where('robot_id', $robotId)

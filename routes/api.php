@@ -19,6 +19,9 @@ Route::prefix('robot')->group(function() {
     
     // Update command status (from ESP32)
     Route::post('/command-status/{apiKey}', [RobotController::class, 'updateCommandStatusByKey']);
+
+    // Get sensor logs reading data (from ESP32)
+    Route::post('/robot/sensor-data', [RobotController::class, 'storeSensorData']);
 });
 
 

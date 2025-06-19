@@ -30,6 +30,7 @@ Route::prefix('robot')->group(function(){
     Route::get('/command/send/{command}', [RobotController::class, 'sendCommand'])->name('robot.command');
     Route::get('/speed', [RobotController::class, 'setSpeed'])->name('robot.speed');
     Route::get('/proxy', [RobotController::class, 'proxyRequest'])->name('robot.proxy');
+    Route::get('/proxy-sensor', [RobotController::class, 'proxySensor'])->name('robot.proxy-sensor');
 
     // Protected routes
     Route::middleware(['auth'])->group(function() {

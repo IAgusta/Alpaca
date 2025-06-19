@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 use App\Models\robot;
+use App\Models\Sensor;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Support\Str;
 
@@ -216,15 +217,40 @@ class RobotController extends Controller
         }
     }
 
+    public function proxySensor(Request $request)
+    {
+        $target = $request->query('target');
+        if (!$target) {
+            return response()->json(['error' => 'No target IP provided'], 400);
+        }
+        try {
+            // Assume your ESP32 exposes /sensor for sensor data as JSON
+            $response = Http::timeout(5)->get("http://{$target}/sensor");
+            return response($response->body(), $response->status())
+                    ->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     private function parseCommand($command)
     {
         if (!$command) return ['status', []];
 
         $parts = explode(':', $command);
-        
+
         switch ($parts[0]) {
+            // Support direct commands like "forward", "left", etc.
             case 'move':
                 return ['move', ['dir' => $parts[1] ?? 'stop']];
+            case 'forward':
+            case 'backward':
+            case 'left':
+            case 'right':
+            case 'stop':
+                return ['move', ['dir' => $parts[0]]];
+
+            // Complexities commands like "linefollower", "wall avoider", "speed", etc.
             case 'line':
                 return ['line', ['active' => $parts[1] === 'on' ? 1 : 0]];
             case 'wall':
@@ -263,5 +289,26 @@ class RobotController extends Controller
             'message' => 'Command stored successfully',
             'command' => $command
         ]);
+    }
+
+    public function storeSensorData(Request $request)
+    {
+        $apiKey = $request->input('api_key');
+        $sensorType = $request->input('sensor_type');
+        $value = $request->input('value');
+
+        $robot = Robot::where('api_key', $apiKey)->first();
+        if (!$robot) {
+            return response()->json(['error' => 'Invalid API key'], 403);
+        }
+
+        // Create new log entry
+        Sensor::create([
+            'robot_id' => $robot->id,
+            'sensor_type' => $sensorType,
+            'value' => $value
+        ]);
+
+        return response()->json(['success' => true]);
     }
 }
