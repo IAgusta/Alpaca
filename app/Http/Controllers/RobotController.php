@@ -256,9 +256,15 @@ class RobotController extends Controller
             case 'wall':
                 return ['wall', ['active' => $parts[1] === 'on' ? 1 : 0]];
             case 'speed':
-                return ['speed', ['value' => $parts[1] ?? 100]];
+                // Map speed from 0-100 to 0-255
+                $speedValue = isset($parts[1]) ? intval($parts[1]) : 100;
+                $mappedSpeed = round(($speedValue / 100) * 255);
+                return ['speed', ['value' => $mappedSpeed]];
             case 'wallspeed':
-                return ['speed', ['value' => $parts[1] ?? 100, 'mode' => 'wall']];
+                // Map speed from 0-100 to 0-255
+                $speedValue = isset($parts[1]) ? intval($parts[1]) : 100;
+                $mappedSpeed = round(($speedValue / 100) * 255);
+                return ['speed', ['value' => $mappedSpeed, 'mode' => 'wall']];
             case 'distance':
                 return ['distance', ['value' => $parts[1] ?? 25]];
             default:

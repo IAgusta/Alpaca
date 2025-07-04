@@ -286,7 +286,13 @@
                     <div class="grid grid-cols-3 gap-4 lg:gap-7 max-w-xs mx-auto p-7">
                         <!-- Left Column -->
                         <div class="flex justify-start items-center">
-                            <button @click="event.stopPropagation(); sendCommand('left')"
+                            <button
+                                x-data="{ isPressed: false }"
+                                @mousedown="if (!isPressed) { isPressed = true; sendCommand('left'); }"
+                                @mouseup="if (isPressed) { sendCommand('stop'); isPressed = false; }"
+                                @mouseleave="if (isPressed) { sendCommand('stop'); isPressed = false; }"
+                                @touchstart.prevent="if (!isPressed) { isPressed = true; sendCommand('left'); }"
+                                @touchend="if (isPressed) { sendCommand('stop'); isPressed = false; }"
                                 class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7 7-7" />
@@ -297,7 +303,13 @@
                         <!-- Center Column -->
                         <div class="flex flex-col gap-4 justify-center items-center">
                             <!-- Forward -->
-                            <button @click="event.stopPropagation(); sendCommand('forward')"
+                            <button
+                                x-data="{ isPressed: false }"
+                                @mousedown="if (!isPressed) { isPressed = true; sendCommand('forward'); }"
+                                @mouseup="if (isPressed) { sendCommand('stop'); isPressed = false; }"
+                                @mouseleave="if (isPressed) { sendCommand('stop'); isPressed = false; }"
+                                @touchstart.prevent="if (!isPressed) { isPressed = true; sendCommand('forward'); }"
+                                @touchend="if (isPressed) { sendCommand('stop'); isPressed = false; }"
                                 class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5l7 7m-7-7l-7 7" />
@@ -313,7 +325,13 @@
                             </button>
 
                             <!-- Backward -->
-                            <button @click="event.stopPropagation(); sendCommand('backward')"
+                            <button
+                                x-data="{ isPressed: false }"
+                                @mousedown="if (!isPressed) { isPressed = true; sendCommand('backward'); }"
+                                @mouseup="if (isPressed) { sendCommand('stop'); isPressed = false; }"
+                                @mouseleave="if (isPressed) { sendCommand('stop'); isPressed = false; }"
+                                @touchstart.prevent="if (!isPressed) { isPressed = true; sendCommand('backward'); }"
+                                @touchend="if (isPressed) { sendCommand('stop'); isPressed = false; }"
                                 class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l7-7m-7 7l-7-7" />
@@ -323,7 +341,13 @@
 
                         <!-- Right Column -->
                         <div class="flex justify-end items-center">
-                            <button @click="event.stopPropagation(); sendCommand('right')"
+                            <button
+                                x-data="{ isPressed: false }"
+                                @mousedown="if (!isPressed) { isPressed = true; sendCommand('right'); }"
+                                @mouseup="if (isPressed) { sendCommand('stop'); isPressed = false; }"
+                                @mouseleave="if (isPressed) { sendCommand('stop'); isPressed = false; }"
+                                @touchstart.prevent="if (!isPressed) { isPressed = true; sendCommand('right'); }"
+                                @touchend="if (isPressed) { sendCommand('stop'); isPressed = false; }"
                                 class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-md transition duration-200 hover:scale-105 active:scale-95 focus:outline-none">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7" />
