@@ -177,7 +177,7 @@
                                 </div>
                                 <input type="range" 
                                        x-model="globalSpeed" 
-                                       @input="sendCommand('wallspeed:' + globalSpeed)"
+                                       @input="sendCommand('speed:' + globalSpeed)"
                                        class="w-full accent-blue-600" 
                                        min="0" 
                                        max="100" 

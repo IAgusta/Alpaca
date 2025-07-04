@@ -286,6 +286,22 @@ class RobotController extends Controller
             return response()->json(['error' => 'Invalid command format'], 400);
         }
 
+        // Always map speed from 0-100 to 0-255 if present, regardless of action
+        if (isset($command['speed'])) {
+            $speedValue = intval($command['speed']);
+            $command['speed'] = round(($speedValue / 100) * 255);
+        }
+        // Also map 'value' if present and action is 'speed' (for compatibility)
+        if ($command['action'] === 'speed' && isset($command['value'])) {
+            $speedValue = intval($command['value']);
+            $command['value'] = round(($speedValue / 100) * 255);
+        }
+
+        // Normalize action to 'speed' if it was 'wallspeed'
+        if ($command['action'] === 'wallspeed') {
+            $command['action'] = 'speed';
+        }
+
         $robot->command = json_encode($command);
         $robot->status = 0;
         $robot->save();
