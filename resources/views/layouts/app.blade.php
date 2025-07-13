@@ -55,5 +55,6 @@
         @include('layouts.footer')
         <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.0/flowbite.min.js"></script>
+        <script src="https://unpkg.com/instant.page@5.2.0" type="module" defer></script>
     </body>
 </html>

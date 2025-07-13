@@ -42,6 +42,21 @@ window.addEventListener("DOMContentLoaded", () => {
         };
     }
 
+    // Restore proxy connection from localStorage if valid
+    const savedProxy = getSavedProxyConnection();
+    if (savedProxy) {
+        window.robotConnection = {
+            mode: 'proxy',
+            target: savedProxy.target,
+            active: true
+        };
+        // Optionally, disable API card if proxy is active
+        const apiCard = document.getElementById('api-card');
+        if (apiCard) {
+            apiCard.classList.add('opacity-50', 'pointer-events-none');
+        }
+    }
+
     // Attach disconnect handlers for both wifi and api cards
     ['wifi', 'api'].forEach(type => {
         const disconnectBtn = document.getElementById(`${type}-disconnect`);
@@ -78,15 +93,14 @@ window.connectToESP32 = async function(method) {
                 throw new Error("Cannot reach ESP32");
             }
 
-            // Store connection info and disable API mode if it was active
             window.robotConnection = {
                 mode: 'proxy',
                 target: ip,
                 active: true
             };
 
-            // Store IP Address when successfully connected via Proxy
-            saveESP32IP(ip);
+            // Persist proxy connection in localStorage
+            saveProxyConnection(ip);
 
             // Disable API card if it exists
             const apiCard = document.getElementById('api-card');
@@ -135,6 +149,8 @@ window.connectToESP32 = async function(method) {
         console.error(err);
         alert(err.message);
         overlay.classList.add('hidden');
+        // Remove proxy connection from localStorage only on error
+        removeProxyConnection();
     }
 };
 
@@ -162,6 +178,35 @@ function getSavedESP32IP(maxAgeHours = 12) {
         localStorage.removeItem('esp32IP');
         return null;
     }
+}
+
+function saveProxyConnection(ip) {
+    localStorage.setItem('proxyConnection', JSON.stringify({
+        target: ip,
+        savedAt: Date.now()
+    }));
+}
+
+function getSavedProxyConnection(maxAgeHours = 12) {
+    const item = localStorage.getItem('proxyConnection');
+    if (!item) return null;
+    try {
+        const data = JSON.parse(item);
+        const age = (Date.now() - data.savedAt) / (1000 * 60 * 60);
+        if (age <= maxAgeHours) {
+            return data;
+        } else {
+            localStorage.removeItem('proxyConnection');
+            return null;
+        }
+    } catch {
+        localStorage.removeItem('proxyConnection');
+        return null;
+    }
+}
+
+function removeProxyConnection() {
+    localStorage.removeItem('proxyConnection');
 }
 
 // Improved disconnect button logic (fixes cards and connection state)
@@ -193,6 +238,11 @@ function disconnect(method) {
     // Remove connection state
     window.robotConnection = null;
     currentConnection = null;
+
+    // Remove proxy connection from localStorage on disconnect
+    if (method === 'wifi') {
+        removeProxyConnection();
+    }
 }
 
 function sendCommand(command) {

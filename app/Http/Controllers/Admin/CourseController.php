@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class CourseController extends Controller
 {
@@ -19,22 +20,25 @@ class CourseController extends Controller
         $search = $request->input('search');
         $sort = $request->input('sort', 'name');
         $direction = $request->input('direction', 'asc');
-
-        // Generate a unique cache key based on the query parameters and page
         $page = $request->input('page', 1);
-        $cacheKey = "courses.list.{$search}.{$sort}.{$direction}.{$page}." . Auth::id();
+        $perPage = 11;
 
-        $courses = Cache::tags(['courses'])->remember($cacheKey, now()->addMinutes(30), function () use ($search, $sort, $direction) {
-            $query = Course::with(['authorUser', 'userProgress'])->withCount('userProgress');
-            
+        // Generate a unique cache key based on search, sort, and user
+        $cacheKey = "courses.list.{$search}.{$sort}.{$direction}." . Auth::id();
+
+        // Cache the full filtered result (not paginated)
+        $results = Cache::tags(['courses'])->remember($cacheKey, now()->addMinutes(30), function () use ($search, $sort, $direction) {
+            $query = Course::with(['authorUser', 'userProgress'])
+                        ->withCount('userProgress');
+
             if ($search) {
                 $query->where(function($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%')
-                      ->orWhere('description', 'like', '%' . $search . '%')
-                      ->orWhere('theme', 'like', '%' . $search . '%')
-                      ->orWhereHas('authorUser', function($q) use ($search) {
-                          $q->where('name', 'like', '%' . $search . '%');
-                      });
+                    $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('theme', 'like', "%{$search}%")
+                    ->orWhereHas('authorUser', function($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
                 });
             }
 
@@ -42,11 +46,22 @@ class CourseController extends Controller
                 $query->where('author', Auth::id());
             }
 
-            return $query->orderBy($sort, $direction)->paginate(11)->withQueryString();
+            return $query->orderBy($sort, $direction)->get();
         });
-        
+
+        // Manual pagination from cached results
+        $paged = $results->forPage($page, $perPage)->values(); // reindex the collection
+
+        $courses = new LengthAwarePaginator(
+            $paged,
+            $results->count(),
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+        // AJAX load (pagination or search/filter updates)
         if ($request->ajax()) {
-            // Include new course button in the AJAX response
             $html = view('admin.courses.component.available_course', compact('courses'))->render();
             $createButton = view('admin.courses.component.create_button')->render();
             return $createButton . $html;
@@ -78,10 +93,12 @@ class CourseController extends Controller
             'author' => Auth::id(),
             'theme' => $request->input('theme'),
         ]);
-
         // Clear relevant caches
         Cache::tags(['courses'])->flush();
-
+        // Optionally, prewarm cache for admin
+        if (Auth::user()->role === 'admin') {
+            $this->prewarmCache($request);
+        }
         return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
     }
 
@@ -136,10 +153,11 @@ class CourseController extends Controller
         }
     
         $course->save();
-
         // Clear relevant caches
         Cache::tags(['courses'])->flush();
-    
+        if (Auth::user()->role === 'admin') {
+            $this->prewarmCache($request);
+        }
         return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
     }
 
@@ -157,10 +175,11 @@ class CourseController extends Controller
 
         // Soft delete the course
         $course->delete();
-
         // Clear relevant caches
         Cache::tags(['courses'])->flush();
-
+        if (Auth::user()->role === 'admin') {
+            $this->prewarmCache($request);
+        }
         // Redirect with a success message
         return redirect()->route('admin.courses.index')->with('success', 'Course moved to Trash Bin.');
     }
@@ -181,7 +200,10 @@ class CourseController extends Controller
 
         // Permanently delete the course
         $course->forceDelete();
-
+        // Optionally, prewarm cache for admin
+        if (Auth::user()->role === 'admin') {
+            $this->prewarmCache(new Request());
+        }
         return redirect()->route('admin.courses.index')->with('success', 'Course permanently deleted.');
     }
 
@@ -195,7 +217,9 @@ class CourseController extends Controller
         }
 
         $course->restore();
-
+        if (Auth::user()->role === 'admin') {
+            $this->prewarmCache(new Request());
+        }
         return redirect()->route('admin.courses.index')->with('success', 'Course restored successfully.');
     }
 
@@ -215,7 +239,11 @@ class CourseController extends Controller
             'is_locked' => true,
             'lock_password' => Crypt::encryptString($password), // Encrypt password
         ]);
-    
+        // Clear relevant caches
+        Cache::tags(['courses'])->flush();
+        if (Auth::user()->role === 'admin') {
+            $this->prewarmCache($request);
+        }
         return redirect()->route('admin.courses.index')->with('success', 'Course locked successfully. Password: ' . $password);
     }
 
@@ -244,5 +272,39 @@ class CourseController extends Controller
         } else {
             return redirect()->route('admin.courses.index')->with('error', 'Incorrect password.');
         }
+    }
+
+    // Prewarm the cache for the course list (admin only)
+    public function prewarmCache(Request $request)
+    {
+        if (Auth::user()->role !== 'admin') {
+            abort(403, 'Unauthorized');
+        }
+
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'name');
+        $direction = $request->input('direction', 'asc');
+        $cacheKey = "courses.list.{$search}.{$sort}.{$direction}." . Auth::id();
+
+        // Warm up the cache with eager loading to avoid N+1
+        Cache::tags(['courses'])->forget($cacheKey);
+        $query = Course::with(['authorUser', 'userProgress']) // eager load relations
+            ->withCount('userProgress');
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%")
+                ->orWhere('theme', 'like', "%{$search}%")
+                ->orWhereHas('authorUser', function($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+            });
+        }
+        if (Auth::user()->role === 'trainer') {
+            $query->where('author', Auth::id());
+        }
+        $query->orderBy($sort, $direction)->get();
+        // The cache is now prewarmed
+        return response()->json(['status' => 'cache prewarmed']);
     }
 }

@@ -44,5 +44,6 @@
                 @include('layouts.footer')
             </div>
         </div>
+        <script src="https://unpkg.com/instant.page@5.2.0" type="module" defer></script>
     </body>
 </html>

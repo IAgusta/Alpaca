@@ -174,11 +174,27 @@
             }
 
             const initializeTabs = (targetId = null) => {
-                const savedTabId = targetId || localStorage.getItem(activeTabKey) || tabs[0]?.getAttribute('data-tabs-target');
-                if (!savedTabId) return;
+                // Get saved tab info from localStorage
+                let savedTabInfo = null;
+                try {
+                    savedTabInfo = JSON.parse(localStorage.getItem(activeTabKey));
+                } catch {}
+                let savedTabId = null;
+                if (savedTabInfo && savedTabInfo.id && savedTabInfo.timestamp) {
+                    const now = Date.now();
+                    // 30 minutes = 1800000 ms
+                    if (now - savedTabInfo.timestamp < 1800000) {
+                        savedTabId = savedTabInfo.id;
+                    } else {
+                        localStorage.removeItem(activeTabKey);
+                    }
+                }
+                // Use provided targetId, or valid savedTabId, or default to first tab
+                const tabIdToUse = targetId || savedTabId || tabs[0]?.getAttribute('data-tabs-target');
+                if (!tabIdToUse) return;
 
                 tabs.forEach(tab => {
-                    const isActive = tab.getAttribute('data-tabs-target') === savedTabId;
+                    const isActive = tab.getAttribute('data-tabs-target') === tabIdToUse;
                     tab.setAttribute('aria-selected', isActive);
                     tab.classList.toggle('bg-gray-50', isActive);
                     tab.classList.toggle('dark:bg-gray-700', isActive);
@@ -189,7 +205,7 @@
                     }
                 });
 
-                loadTabContent(savedTabId);
+                loadTabContent(tabIdToUse);
                 dropdown?.classList.add('hidden');
             };
 
@@ -200,7 +216,11 @@
             tabs.forEach(tab => {
                 tab.addEventListener('click', function () {
                     const targetId = this.getAttribute('data-tabs-target');
-                    localStorage.setItem(activeTabKey, targetId);
+                    // Save tab id and current timestamp
+                    localStorage.setItem(activeTabKey, JSON.stringify({
+                        id: targetId,
+                        timestamp: Date.now()
+                    }));
                     initializeTabs(targetId);
                 });
             });
