@@ -67,6 +67,10 @@ function connectToESP32() {
             robotControls.classList.remove('opacity-50', 'pointer-events-none');
             connectButton.disabled = false;
             connectButton.textContent = "Connect";
+            // Set global variable and notify Alpine
+            window.esp32IP = esp32IP;
+            document.getElementById('esp32-ip-hidden')?.setAttribute('value', esp32IP);
+            window.dispatchEvent(new CustomEvent('esp32-ip-set', { detail: esp32IP }));
         } else {
             throw new Error("Failed to connect to ESP32");
         }

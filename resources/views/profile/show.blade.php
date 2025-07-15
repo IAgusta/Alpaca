@@ -121,7 +121,7 @@
                 </div>
             </div>
             <div class="flex mb-5 gap-5 lg:justify-end justify-center items-center">
-                <x-primary-button>Blokir</x-primary-button>
+                <x-primary-button class="{{ Auth::check() ? 'block' : 'hidden' }}">Blokir</x-primary-button>
                 <x-primary-button>Laporkan</x-primary-button>
             </div>
         </div>

@@ -40,6 +40,25 @@ return new class extends Migration
             $table->string('value');
             $table->timestamps();
         });
+
+        Schema::create('make_control', function(Blueprint $table){
+            $table->id()->unique();
+            $table->string('author');
+            $table->string('name');
+            $table->json('design');
+            $table->string('command');
+            $table->boolean('isPublic')->default(true);
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('control_library', function(Blueprint $table){
+            $table->id()->unique();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('make_control_id')->constrained()->onDelete('cascade');
+            $table->softDeletes();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -50,5 +69,7 @@ return new class extends Migration
         Schema::dropIfExists('robot');
         Schema::dropIfExists('robot_detail');
         Schema::dropIfExists('robot_sensor_logs');
+        Schema::dropIfExists('make_control');
+        Schema::dropIfExists('control_library');
     }
 };

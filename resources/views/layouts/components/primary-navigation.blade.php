@@ -10,13 +10,18 @@
                     </svg>
                 </button>
             </div>
-            <!-- Logo -->
+            <!-- Desktop Logo -->
             <div class="shrink-0 flex items-center">
-                <a href="{{ route('home') }}"
-                    class="flex items-center space-x-2" @click="loading = true">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                        <span class="text-gray-800 dark:text-white font-semibold">Alpaca</span>
-                    </a>
+                <a href="{{ route('home') }}" class="flex items-center space-x-2" @click="loading = true">
+                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <div class="flex flex-col">
+                        <span class="text-gray-800 dark:text-white font-semibold text-lg">AlpacaLabs</span>
+                        <div id="subBrand" class="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-300 tracking-wider font-medium hidden">
+                            <span class="block flex-grow h-[1px] bg-gray-500"></span>
+                            <span>Finder</span>
+                        </div>
+                    </div>
+                </a>
             </div>
 
             <!-- Desktop Navigation Links -->

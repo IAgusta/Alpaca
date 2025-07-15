@@ -4,17 +4,23 @@
     
     <!-- Logo and Close Button Row -->
     <div class="flex items-center justify-between px-4 py-3 lg:hidden border-b border-gray-500 dark:border-gray-300">
-        <a href="{{ route('home') }}"
-            class="flex items-center space-x-2" @click="loading = true">
-                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                <span class="text-gray-800 dark:text-white font-semibold">Alpaca</span>
-            </a>
+        <a href="{{ route('home') }}" class="flex items-center space-x-2" @click="loading = true">
+            <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+            <div class="flex flex-col leading-tight text-sm">
+                <span class="text-gray-800 dark:text-white font-semibold text-base leading-none">AlpacaLabs</span>
+                <div id="subBrandMobile" class="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-300 tracking-wider font-medium hidden leading-tight mt-0.5">
+                    <span class="block flex-grow h-[1px] bg-gray-500"></span>
+                    <span>Finder</span>
+                </div>
+            </div>
+        </a>
         <button @click="open = false" class="p-2 rounded-md text-gray-400 dark:text-white hover:text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none transition">
             <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
         </button>
     </div>
+
     <!-- Make scrollable content -->
     <div class="flex-1 flex flex-col overflow-y-auto">
         <div class="pt-2 pb-3 space-y-1">

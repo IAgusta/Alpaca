@@ -4,6 +4,23 @@
     isWallActive: false,
     globalSpeed: 50,
     avoidDistance: 25,
+    sensor: { left: 0, mid: 0, right: 0 },
+    esp32IP: null,
+    pollSensor() {
+        // Only poll if line mode is active
+        if (this.activeMode === 'line' && this.esp32IP) {
+            fetch(`/robot/proxy-sensor?target=${this.esp32IP}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.left !== undefined && data.mid !== undefined && data.right !== undefined) {
+                        this.sensor.left = data.left;
+                        this.sensor.mid = data.mid;
+                        this.sensor.right = data.right;
+                    }
+                })
+                .catch(() => {});
+        }
+    },
     init() {
         @if(Auth::check() && Auth::user()->robot?->api_key)
             window.robotConnection = {
@@ -18,6 +35,15 @@
         // Initialize speed and distance
         updateAllSpeedSliders(this.globalSpeed);
         updateDistanceSlider(this.avoidDistance);
+
+        // Try to get IP from window.esp32IP if available
+        if (window.esp32IP) this.esp32IP = window.esp32IP;
+        // Listen for IP changes from JS
+        window.addEventListener('esp32-ip-set', e => {
+            this.esp32IP = e.detail;
+        });
+
+        setInterval(() => { this.pollSensor(); }, 1000);
     },
     sendCommand(command) {
         // Handle both movement and parameter commands
@@ -66,12 +92,28 @@
                      class="p-4 border-t dark:border-gray-600">
                     <div class="space-y-4">
                         <div class="grid grid-cols-3 gap-4 dark:text-white">
-                            <template x-for="sensor in ['Left', 'Center', 'Right']">
-                                <div class="flex flex-col items-center">
-                                    <div class="w-4 h-4 rounded-full transition-colors duration-300"
-                                         :class="sensor === 'Center' ? 'bg-green-500' : 'bg-gray-300'"></div>
-                                    <span class="text-sm mt-2" x-text="sensor"></span>
-                                </div>
+                            <!-- Dynamic sensor dots -->
+                            <div class="flex flex-col items-center">
+                                <div class="w-4 h-4 rounded-full transition-colors duration-300"
+                                     :class="sensor.left ? 'bg-green-500' : 'bg-gray-300'"></div>
+                                <span class="text-sm mt-2">Left</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="w-4 h-4 rounded-full transition-colors duration-300"
+                                     :class="sensor.mid ? 'bg-green-500' : 'bg-gray-300'"></div>
+                                <span class="text-sm mt-2">Center</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="w-4 h-4 rounded-full transition-colors duration-300"
+                                     :class="sensor.right ? 'bg-green-500' : 'bg-gray-300'"></div>
+                                <span class="text-sm mt-2">Right</span>
+                            </div>
+                        </div>
+                        <!-- Debug sensor values -->
+                        <div class="text-xs text-gray-400 mt-2">
+                            Sensor: <span x-text="JSON.stringify(sensor)"></span>
+                            <template x-if="!esp32IP">
+                                <span class="text-red-500 ml-2">[No ESP32 IP set]</span>
                             </template>
                         </div>
                         <div class="space-y-2">
@@ -426,6 +468,9 @@
             </template>
         </div>
     </div>
+
+    <!-- Add hidden input for ESP32 IP (for debugging/Alpine) -->
+    <input type="hidden" id="esp32-ip-hidden" x-model="esp32IP">
 
     <style>
         .radar-sweep {
