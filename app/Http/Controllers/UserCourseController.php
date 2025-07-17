@@ -315,7 +315,16 @@ class UserCourseController extends Controller
             $this->updateCourseProgress($userId, $courseId);
         }
 
-        return view('user.course_open', ['course' => $course, 'module' => $module]);
+        // Changed 'order' to 'position' in the orderBy clause
+        $allModules = $course->modules()->orderBy('position')->get();
+        $currentIndex = $allModules->search(function($item) use ($module) {
+            return $item->id === $module->id;
+        });
+
+        $previousModule = $currentIndex > 0 ? $allModules[$currentIndex - 1] : null;
+        $nextModule = $currentIndex < $allModules->count() - 1 ? $allModules[$currentIndex + 1] : null;
+
+        return view('user.course_open', compact('course', 'module', 'previousModule', 'nextModule'));
     }
 
     private function updateCourseProgress($userId, $courseId)

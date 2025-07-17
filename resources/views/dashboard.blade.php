@@ -1,5 +1,5 @@
 <x-app-layout>
-    @section('title', 'Dashboard - ' . config('app.name'))
+    @section('title',   config('app.name'))
     <!-- Full-Width Top Courses -->
     <div class="w-full">
         @include('user.component.top_courses')

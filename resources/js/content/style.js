@@ -103,7 +103,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         height: 'auto',
                     },
                 }),
-                YouTube,
+                YouTube.configure({
+                    width: 800,
+                    height: 450,
+                    HTMLAttributes: {
+                        class: 'youtube-video',
+                        frameborder: 0,
+                        allowfullscreen: 'true',
+                        allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+                    },
+                }),
             ],
             content: content, // Set the content
             editable: false, // Make the editor read-only

@@ -24,6 +24,10 @@ export default defineConfig({
                 'resources/js/animations/starfield.js',
                 'resources/js/content/exercise-form.js',
             ],
+            server: {
+                host: '0.0.0.0',
+                port: 5173,
+            },
             refresh: true,
         }),
     ],

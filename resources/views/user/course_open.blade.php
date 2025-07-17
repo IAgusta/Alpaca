@@ -152,6 +152,42 @@
                     <h2 class="text-xl dark:text-white font-semibold mb-4">{{ __('Kelas Terbaru dari Author yang sama') }}</h2>
                 </div>
             </div>
+            <!-- Navigation Buttons -->
+            <div class="mt-6 mb-2 flex justify-between items-center px-4">
+                {{-- Previous Button on the left --}}
+                <div>
+                    @if($previousModule)
+                        <a href="{{ route('course.module.open', ['slug' => Str::slug($course->slug), 'courseId' => $course->id, 'moduleTitle' => Str::slug($previousModule->title), 'moduleId' => $previousModule->id]) }}"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 rotate-180" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                            </svg>
+                            <span>{{ __('Previous') }}</span>
+                        </a>
+                    @endif
+                </div>
+
+                {{-- Next or Return Button on the right --}}
+                <div>
+                    @if($nextModule)
+                        <a href="{{ route('course.module.open', ['slug' => Str::slug($course->slug), 'courseId' => $course->id, 'moduleTitle' => Str::slug($nextModule->title), 'moduleId' => $nextModule->id]) }}"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-800">
+                            <span>{{ __('Next') }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+                            </svg>
+                        </a>
+                    @else
+                        <a href="{{ route('user.course.detail', ['slug' => Str::slug($course->slug), 'courseId' => $course->id]) }}"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:bg-gray-700 dark:hover:bg-gray-800">
+                            <span>{{ __('Return to Menu') }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                            </svg>
+                        </a>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
     @vite(['resources/js/content/style.js', 'resources/js/content/exercise-form.js'])

@@ -7,11 +7,11 @@
     sensor: { left: 0, mid: 0, right: 0 },
     esp32IP: null,
     pollSensor() {
-        // Only poll if line mode is active
-        if (this.activeMode === 'line' && this.esp32IP) {
+        if (this.esp32IP) {
             fetch(`/robot/proxy-sensor?target=${this.esp32IP}`)
                 .then(res => res.json())
                 .then(data => {
+                    console.log('Sensor Data:', data); // Add this line
                     if (data.left !== undefined && data.mid !== undefined && data.right !== undefined) {
                         this.sensor.left = data.left;
                         this.sensor.mid = data.mid;
@@ -22,28 +22,33 @@
         }
     },
     init() {
+        const self = this;
+
         @if(Auth::check() && Auth::user()->robot?->api_key)
             window.robotConnection = {
                 mode: 'api',
                 key: '{{ Auth::user()->robot?->api_key }}',
                 active: true
             };
-            // Pre-select manual mode for API users
-            this.activeMode = 'manual';
+            self.activeMode = 'manual';
         @endif
 
-        // Initialize speed and distance
-        updateAllSpeedSliders(this.globalSpeed);
-        updateDistanceSlider(this.avoidDistance);
+        updateAllSpeedSliders(self.globalSpeed);
+        updateDistanceSlider(self.avoidDistance);
 
-        // Try to get IP from window.esp32IP if available
-        if (window.esp32IP) this.esp32IP = window.esp32IP;
-        // Listen for IP changes from JS
+        setTimeout(() => {
+            if (window.robotConnection?.target) {
+                self.esp32IP = window.robotConnection.target;
+                console.log('ESP32 IP set to:', self.esp32IP);
+            }
+        }, 100);
+
         window.addEventListener('esp32-ip-set', e => {
-            this.esp32IP = e.detail;
+            self.esp32IP = e.detail;
+            console.log('ESP32 IP set via event:', self.esp32IP);
         });
 
-        setInterval(() => { this.pollSensor(); }, 1000);
+        setInterval(() => { self.pollSensor(); }, 1000);
     },
     sendCommand(command) {
         // Handle both movement and parameter commands
@@ -108,13 +113,6 @@
                                      :class="sensor.right ? 'bg-green-500' : 'bg-gray-300'"></div>
                                 <span class="text-sm mt-2">Right</span>
                             </div>
-                        </div>
-                        <!-- Debug sensor values -->
-                        <div class="text-xs text-gray-400 mt-2">
-                            Sensor: <span x-text="JSON.stringify(sensor)"></span>
-                            <template x-if="!esp32IP">
-                                <span class="text-red-500 ml-2">[No ESP32 IP set]</span>
-                            </template>
                         </div>
                         <div class="space-y-2">
                             <div class="flex justify-between items-center">

@@ -71,7 +71,16 @@ window.addEventListener('load', function() {
                     height: 'auto',
                 },
             }),
-            YouTube,
+            YouTube.configure({
+                width: 800,
+                height: 450,
+                HTMLAttributes: {
+                    class: 'youtube-video',
+                    frameborder: 0,
+                    allowfullscreen: 'true',
+                    allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+                },
+            }),
         ],
         content: initialContent, // Set initial content here
         editorProps: {
@@ -155,13 +164,27 @@ window.addEventListener('load', function() {
     
     document.getElementById('addVideoButton').addEventListener('click', () => {
         const url = window.prompt('Enter YouTube URL:', '');
+
         if (url) {
+            // Extract the video ID from the URL
+            const videoIdMatch = url.match(
+                /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+            );
+            const videoId = videoIdMatch ? videoIdMatch[1] : null;
+
+            if (!videoId) {
+                alert('Invalid YouTube URL');
+                return;
+            }
+
             editor.chain().focus().insertContent({
                 type: 'youtube',
                 attrs: {
-                    src: url,
-                    width: 800, // Default width
-                    height: 450, // Default height
+                    videoId: videoId,
+                    width: 800,
+                    height: 450,
+                    start: 0,
+                    controls: true,
                 },
             }).setNode('paragraph', { textAlign: 'center' }).run();
         }
